@@ -22,15 +22,15 @@
         }
         
         .kop-surat img {
-            width: 80px;
+            width: 100px;
             height: auto;
             position: absolute;
             left: 20px;
-            top: 15px;
+            top: 5px; /* Memindahkan logo lebih ke atas */
         }
         
         .kop-surat h1 {
-            margin: 0;
+            margin: 5px 0;
             font-size: 22px;
             text-transform: uppercase;
             font-weight: bold;
@@ -108,10 +108,12 @@
 <body>
 
     <div class="kop-surat">
-        <img src="{{ asset('assets/img/kasir.png') }}" alt="Logo">
-        <h1>Cash Caffe POS</h1>
-        <p>Jl. Merdeka Belajar No. 10, Kota Bandung, Jawa Barat - Indonesia</p>
-        <p>Email: info@CashPOS.com | Telp: (021) 123456</p>
+        <img src="{{ asset('assets/img/logoitem.png') }}" alt="Logo">
+        <div class="kop-text">
+            <h1>Cash Caffe POS</h1>
+            <p>Jl. Merdeka Belajar No. 10, Kota Bandung, Jawa Barat - Indonesia</p>
+            <p>Email: info@CashPOS.com | Telp: (021) 123456</p>
+        </div>
     </div>
     <div class="garis"></div>
 
@@ -119,7 +121,6 @@
     <p style="text-align: center; font-weight: bold;">
         Periode: {{ $periode ?? date('F Y') }}
     </p>
-
     <table>
         <thead>
             <tr>

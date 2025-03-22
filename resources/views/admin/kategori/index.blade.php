@@ -72,11 +72,19 @@
         </div>
     </div>    
     
-    <div class="d-flex justify-content-end">
-        <button class="btn btn-custom" data-toggle="modal" data-target="#tambahKategoriModal" style="width: 150px; margin-bottom: 15px; border-radius: 5px; margin-top: -55px;">
+    <div class="d-flex justify-content-end align-items-center gap-2" style="margin-bottom: 15px;">
+        <button class="btn btn-custom" data-toggle="modal" data-target="#tambahKategoriModal" style="border-radius: 5px;">
             <i class="fas fa-plus"></i> Tambah Kategori
         </button>
-    </div>        
+        <a href="{{ route('kategori.exportExcel') }}" class="btn btn-success btn-sm">
+            <i class="fas fa-file-excel"></i> Export Excel
+        </a>
+        
+        <a href="{{ route('kategori.exportPDF') }}" class="btn btn-danger btn-sm">
+            <i class="fas fa-file-pdf"></i> Export PDF
+        </a>
+    </div>
+    
     <div class="card table-container">
         <div class="card-body">
             <div class="table-responsive">

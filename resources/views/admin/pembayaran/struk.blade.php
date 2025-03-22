@@ -5,58 +5,72 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Struk Pembayaran</title>
     <style>
-        body { 
-            font-family: 'Courier New', Courier, monospace; 
-            font-size: 12px; 
-            text-align: center; 
-        }
-        .container { 
-            width: 72mm; /* Lebih kecil dari 80mm agar tidak terpotong */
-            margin: auto; 
-            padding: 5px;
-        }
-        .title { 
-            font-size: 14px; 
-            font-weight: bold; 
-        }
-        .line { 
-            border-top: 1px dashed black; 
-            margin: 5px 0; 
-        }
-        table { 
-            width: 100%; 
-            text-align: left; 
+        /* Pastikan elemen struk berada di tengah */
+        body {
+            font-family: 'Courier New', Courier, monospace;
             font-size: 11px;
-        }
-        td { 
-            vertical-align: top; 
+            text-align: center;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh; /* Pusatkan vertikal */
         }
 
-        /* Atur ukuran cetak */
+        .container {
+            width: 58mm; /* Lebar kertas thermal */
+            padding: 5px;
+            text-align: center;
+            border: 1px solid transparent; /* Untuk memastikan tidak ada clipping */
+        }
+
+        .title {
+            font-size: 13px;
+            font-weight: bold;
+        }
+
+        .line {
+            border-top: 1px dashed black;
+            margin: 5px 0;
+        }
+
+        table {
+            width: 100%;
+            text-align: left;
+            font-size: 10px;
+        }
+
+        td {
+            vertical-align: top;
+        }
+
+        .right {
+            text-align: right;
+        }
+
+        .bold {
+            font-weight: bold;
+        }
+
+        /* 🔥 Pengaturan cetak thermal */
         @media print {
             @page {
-                size: 80mm 80mm; /* Ukuran kertas thermal */
-                margin: 0; /* Hapus margin agar sesuai */
+                size: 58mm auto; /* Ukuran kertas thermal */
+                margin: 0; /* Hapus margin kosong */
             }
+
             body {
-                font-size: 12px; 
-                width: 80mm; 
+                width: 58mm;
+                height: auto;
+                display: flex;
+                justify-content: center;
+                align-items: center;
             }
+
             .container {
-                width: 72mm; /* Lebar lebih kecil agar tidak terpotong */
-                padding: 5px;
-            }
-            .title {
-                font-size: 14px;
-            }
-            .line {
-                border-top: 1px dashed black;
-            }
-            table {
-                font-size: 11px;
-            }
-            td {
-                vertical-align: top;
+                width: 58mm;
+                height: auto;
             }
         }
     </style>
@@ -64,33 +78,44 @@
 <body onload="window.print(); setTimeout(() => window.close(), 1000);">  
     <div class="container">
         <p class="title">Kasir Caffe</p>
-        <p>Jalan Merdeka Belajar No.12<br>Bandung - Jawa Barat</p>
+        <p>Jl. Merdeka Belajar No.12<br>Bandung - Jawa Barat</p>
         <div class="line"></div>
 
         @if(isset($transaksi) && isset($detail_penjualan))
-            <p>No Faktur: {{ $transaksi->no_faktur ?? 'Tidak tersedia' }}</p>
-            <p>Tanggal: {{ isset($transaksi->created_at) ? date('d-m-Y H:i', strtotime($transaksi->created_at)) : 'Tidak tersedia' }}</p>
+            <p class="bold">No Faktur: {{ $transaksi->no_faktur ?? '-' }}</p>
+            <p class="bold">Tanggal: {{ isset($transaksi->created_at) ? date('d-m-Y H:i', strtotime($transaksi->created_at)) : '-' }}</p>
             <div class="line"></div>
 
             <table>
                 @foreach ($detail_penjualan as $detail)
                     <tr>
-                        <td>{{ $detail->produk->nama_produk ?? 'Produk Tidak Ditemukan' }}</td>
-                        <td>{{ $detail->jumlah }} x Rp {{ number_format($detail->sub_total / max($detail->jumlah, 1), 0, ',', '.') }}</td>
+                        <td>{{ $detail->produk->nama_produk ?? '-' }}</td>
+                        <td class="right">{{ $detail->jumlah }} x Rp {{ number_format($detail->sub_total / max($detail->jumlah, 1), 0, ',', '.') }}</td>
                     </tr>
                 @endforeach
             </table>
 
             <div class="line"></div>
-            <p><strong>Total: Rp {{ number_format($transaksi->total_bayar, 0, ',', '.') }}</strong></p>
-            <p>Bayar: Rp {{ number_format($transaksi->total_bayar, 0, ',', '.') }}</p>
-            <p>Kembalian: Rp 0</p>
+            <table>
+                <tr>
+                    <td><strong>Total</strong></td>
+                    <td class="right"><strong>Rp {{ number_format($transaksi->total_bayar, 0, ',', '.') }}</strong></td>
+                </tr>
+                <tr>
+                    <td>Bayar</td>
+                    <td class="right">Rp {{ number_format($transaksi->jumlah_bayar ?? 0, 0, ',', '.') }}</td>
+                </tr>
+                <tr>
+                    <td>Kembalian</td>
+                    <td class="right">Rp {{ number_format(max(($transaksi->jumlah_bayar ?? 0) - $transaksi->total_bayar, 0), 0, ',', '.') }}</td>
+                </tr>
+            </table>
+
+            <div class="line"></div>
+            <p>Terima Kasih atas kunjungan Anda!<br>~ Kasir Caffe ~</p>
         @else
             <p>Data tidak tersedia.</p>
         @endif
-        
-        <div class="line"></div>
-        <p>Terima Kasih atas kunjungan Anda!<br>~ Kasir Caffe ~</p>
     </div>
 </body>
 </html>

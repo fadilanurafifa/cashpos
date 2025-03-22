@@ -22,7 +22,10 @@ class HistoryPenjualanController extends Controller
             ->get() // Mengambil semua data transaksi dari tabel Penjualan
             ->keyBy('id'); // Menjadikan ID sebagai key untuk akses lebih mudah
         
+            $penjualan = Penjualan::with('detailTransaksi.produk')->get();
+            
         // Menampilkan view 'admin.history-penjualan.index' dengan data transaksi dan detail transaksi
         return view('admin.history-penjualan.index', compact('detailTransaksi', 'transaksi'));
+
     }
 }

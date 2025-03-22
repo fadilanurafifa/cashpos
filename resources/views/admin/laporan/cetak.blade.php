@@ -11,6 +11,7 @@
             font-size: 12px;
             background-color: #f4f4f4;
             padding: 20px;
+            text-align: center;
         }
         
         /* Kop Surat */
@@ -22,15 +23,21 @@
         }
         
         .kop-surat img {
-            width: 80px;
+            width: 100px;
             height: auto;
             position: absolute;
             left: 20px;
-            top: 15px;
+            top: 5px; /* Memindahkan logo lebih ke atas */
         }
         
+        .kop-text {
+            display: inline-block;
+            text-align: center;
+            width: 100%;
+        }
+
         .kop-surat h1 {
-            margin: 0;
+            margin: 5px 0;
             font-size: 22px;
             text-transform: uppercase;
             font-weight: bold;
@@ -68,6 +75,7 @@
         th, td {
             border: 1px solid #ddd;
             padding: 10px;
+            text-align: center;
         }
 
         /* Header Tabel */
@@ -89,30 +97,41 @@
             background-color: #f1f1f1;
             transition: 0.3s;
         }
-            @media print {
-        th {
-            background: #aec3c7 !important; /* Warna tetap dicetak */
-            color: #333 !important;
-            -webkit-print-color-adjust: exact;
-            print-color-adjust: exact;
-        }
+
+        /* Warna tetap saat dicetak */
+        @media print {
+            body {
+                background-color: white;
+                padding: 0;
+                margin: 0;
+            }
+            .kop-surat {
+                margin-bottom: 10px;
+            }
+            th {
+                background: #aec3c7 !important;
+                color: #333 !important;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
         }
     </style>
     <script>
         window.onload = function() {
             window.print();
         };
-        
     </script>
 </head>
 <body>
 
     <!-- KOP SURAT -->
     <div class="kop-surat">
-        <img src="{{ asset('assets/img/kasir.png') }}" alt="Logo">
-        <h1>Cash Caffe POS</h1>
-        <p>Jl. Merdeka Belajar No. 10, Kota Bandung, Jawa Barat - Indonesia</p>
-        <p>Email: info@CashPOS.com | Telp: (021) 123456</p>
+        <img src="{{ asset('assets/img/logoitem.png') }}" alt="Logo">
+        <div class="kop-text">
+            <h1>Cash Caffe POS</h1>
+            <p>Jl. Merdeka Belajar No. 10, Kota Bandung, Jawa Barat - Indonesia</p>
+            <p>Email: info@CashPOS.com | Telp: (021) 123456</p>
+        </div>
     </div>
     <div class="garis"></div>
 
@@ -122,7 +141,7 @@
     </p>    
     <table>
         <thead>
-            <tr class="bg-secondary text-white">
+            <tr>
                 <th>Nama Produk</th>
                 <th>Stok Awal</th>
                 <th>Terjual</th>

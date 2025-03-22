@@ -10,7 +10,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
 
-    <title> Cash POS - @yield('title')</title>
+    <title> Temu Rasa - @yield('title')</title>
 
     <link rel="stylesheet" href="{{ asset('assets/css/custom.css') }}">
 
@@ -208,12 +208,12 @@
 
             <!-- Sidebar - Brand -->
             <a class="sidebar-brand d-flex align-items-center justify-content-center" href="#">
-                <div class="sidebar-brand-icon rotate-n-15">
-                    <i class="fas fa-laugh-wink"></i>
+                <div class="sidebar-brand-icon">
+                    <img src="{{ asset('assets/img/logo.png') }}" alt="Logo" style="width: 70px; height: 70px;">
                 </div>
-                <div class="sidebar-brand-text mx-3">Cash POS</div>
+                <div class="sidebar-brand-text" style="margin-right: 10px;">Temu Rasa</div>
             </a>
-
+            
             <!-- Divider -->
             <hr class="sidebar-divider my-0">
 

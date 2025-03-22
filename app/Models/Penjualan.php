@@ -59,6 +59,11 @@ class Penjualan extends Model
         return $this->hasOne(Order::class, 'penjualan_id');
     }
 
+    public function detailTransaksi()
+{
+    return $this->hasMany(detailPenjualan::class, 'penjualan_id');
+}
+
 }
 
 

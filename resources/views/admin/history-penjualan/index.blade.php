@@ -42,6 +42,37 @@
     .hidden {
         display: none;
     }
+    .struk-container {
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 11px;
+    text-align: center;
+    width: 58mm;
+    padding: 5px;
+    }
+
+    .title {
+        font-size: 13px;
+        font-weight: bold;
+    }
+
+    .line {
+        border-top: 1px dashed black;
+        margin: 5px 0;
+    }
+
+    table {
+        width: 100%;
+        text-align: left;
+        font-size: 10px;
+    }
+
+    .right {
+        text-align: right;
+    }
+
+    .bold {
+        font-weight: bold;
+    }
 </style>
 @endpush
 @section('content')
@@ -75,17 +106,15 @@
             </button>
         </div>
         <!-- Box Total Income (Kanan) -->
-        <div class="card shadow-sm border-0" style="background: white; border-radius: 10px; padding: 15px; border-left: 4px solid #28a745; min-width: 250px;">
-            <div class="d-flex align-items-center">
-                <div class="me-3">
-                    <i class="fas fa-wallet fa-lg text-success"></i>
-                </div>
-                <div>
-                    <h6 class="mb-1 text-muted" style="font-size: 14px;">Total Pemasukan</h6>
-                    <h4 class="fw-bold m-0 text-dark">Rp {{ number_format($totalIncome, 0, ',', '.') }}</h4>
-                </div>
+        <div class="d-flex align-items-center">
+            <i class="fas fa-coins me-3 fa-2x"></i>
+
+            <div>
+                <h6 class="mb-1 text-muted" style="font-size: 14px;">Total Pemasukan :</h6>
+                <h4 class="fw-bold m-0 text-dark">Rp.{{ number_format($totalIncome, 0, ',', '.') }}</h4>
             </div>
         </div>
+        
     </div>    
     <div class="card table-container">
         <div class="card-body">
@@ -170,12 +199,116 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">Tutup</button>
+                <!-- Tombol untuk menampilkan struk -->
+                <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#modalStruk{{ $penjualan_id }}">
+                    <i class="fas fa-print"></i> Cetak Struk
+                </button>
             </div>
         </div>
     </div>
 </div>
 @endif
 @endforeach
+
+{{-- modal struk --}}
+@foreach($transaksi as $penjualan)
+<div class="modal fade" id="modalStruk{{ $penjualan->id }}" tabindex="-1" aria-labelledby="modalStrukLabel" aria-hidden="true">
+    <div class="modal-dialog" style="max-width: 350px;">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div id="struk{{ $penjualan->id }}" class="struk-container">
+                    <div class="text-center">
+                        <p class="title">Kasir Caffe</p>
+                        <p>Jl. Merdeka Belajar No.12<br>Bandung - Jawa Barat</p>
+                        <div class="line"></div>
+                        <p class="bold">No Faktur: {{ $penjualan->id }}</p>
+                        <p class="bold">Tanggal: {{ $penjualan->created_at->format('d-m-Y H:i') }}</p>
+                        <div class="line"></div>
+                    </div>
+
+                    <table style="width: 100%; font-size: 12px;">
+                        <tbody>
+                            @foreach($penjualan->detailTransaksi ?? [] as $detail)
+                            <tr>
+                                <td>{{ $detail->produk->nama_produk ?? 'Produk Tidak Ditemukan' }}</td>
+                                <td class="right">{{ $detail->jumlah }} x Rp {{ number_format($detail->sub_total / max($detail->jumlah, 1), 0, ',', '.') }}</td>
+                            </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+
+                    <div class="line"></div>
+                    <table style="width: 100%; font-size: 12px;">
+                        <tr>
+                            <td><strong>Total</strong></td>
+                            <td class="right"><strong>Rp {{ number_format($penjualan->total_harga, 0, ',', '.') }}</strong></td>
+                        </tr>
+                        <tr>
+                            <td>Bayar</td>
+                            <td class="right">Rp {{ number_format($penjualan->jumlah_bayar ?? 0, 0, ',', '.') }}</td>
+                        </tr>
+                        <tr>
+                            <td>Kembalian</td>
+                            <td class="right">Rp {{ number_format(max(($penjualan->jumlah_bayar ?? 0) - $penjualan->total_harga, 0), 0, ',', '.') }}</td>
+                        </tr>
+                    </table>
+
+                    <div class="line"></div>
+                    <p>Terima Kasih atas kunjungan Anda!<br>~ Kasir Caffe ~</p>
+                </div>
+
+                <!-- Tombol Cetak -->
+                <button class="btn btn-success btn-sm w-100 mt-2" onclick="printStruk('struk{{ $penjualan->id }}')">
+                    <i class="fas fa-print"></i> Cetak
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+@endforeach
+
+
+{{-- @foreach($detailTransaksi as $penjualan_id => $details)
+@php $penjualan = $transaksi[$penjualan_id] ?? null; @endphp
+@if($penjualan)
+<div class="modal fade" id="modalDetail{{ $penjualan_id }}" tabindex="-1" aria-labelledby="modalDetailLabel" aria-hidden="true">
+    <div class="modal-dialog" style="max-width: 500px;">
+        <div class="modal-content" style="padding: 10px;">
+            <div class="modal-header">
+                <h5 class="modal-title">Detail Transaksi</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <table class="table table-sm">
+                    <thead>
+                        <tr>
+                            <th>Produk</th>
+                            <th>Jumlah</th>
+                            <th>Subtotal</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach($details as $detail)
+                        <tr>
+                            <td>{{ optional($detail->produk)->nama_produk ?? 'Produk Tidak Ditemukan' }}</td>
+                            <td>{{ $detail->jumlah }}</td>
+                            <td>Rp {{ number_format($detail->sub_total, 0, ',', '.') }}</td>
+                        </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+                <p class="mt-2" style="font-size: 14px; background-color: #d1ecf1; padding: 6px 12px; border-radius: 5px; color: #0c5460; font-weight: bold;">
+                    <strong>Status Pembayaran :</strong> {{ ucfirst($penjualan->status_pembayaran) }}
+                </p>                              
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">Tutup</button>
+            </div>
+        </div>
+    </div>
+</div>
+@endif
+@endforeach --}}
 @endsection
 
 @push('script')
@@ -223,29 +356,44 @@ function filterTable(type) {
     }
 }
 </script>
+<script>
+    function printStruk(id) {
+        var content = document.getElementById(id).innerHTML;
+        var originalContent = document.body.innerHTML;
+        
+        document.body.innerHTML = content;
+        window.print();
+        document.body.innerHTML = originalContent;
+        location.reload(); // Reload halaman setelah cetak agar tetap normal
+    }
+</script>
+{{-- cetak struk --}}
+<script>
+    function printStruk(id) {
+        var content = document.getElementById(id).innerHTML;
+        var printWindow = window.open('', '', 'width=350,height=500');
+        printWindow.document.write('<html><head><title>Struk Pembayaran</title>');
+        printWindow.document.write('<style>');
+        printWindow.document.write(`
+            body { font-family: 'Courier New', Courier, monospace; font-size: 11px; align-items: center; }
+            .title { font-size: 13px; font-weight: bold; }
+            .line { border-top: 1px dashed black; margin: 5px 0; }
+            table { width: 100%; text-align: left; font-size: 10px; }
+            .right { text-align: right; }
+            .bold { font-weight: bold; }
+            @media print {
+                @page { size: 58mm auto; margin: 0; }
+                body { width: 58mm; height: auto; }
+            }
+        `);
+        printWindow.document.write('</style></head><body>');
+        printWindow.document.write(content);
+        printWindow.document.write('</body></html>');
+        printWindow.document.close();
+        printWindow.print();
+        printWindow.close();
+    }
+    </script>
+    
 @endpush
 
-
-{{-- @push('script')
-<script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
-<script src="https://cdn.datatables.net/1.10.25/js/dataTables.bootstrap4.min.js"></script>
-<script>
-$(document).ready(function() {
-    $('#memberTable').DataTable();
-    $('#nonMemberTable').DataTable();
-
-    // Tambahkan placeholder "Cari Transaksi" pada input search DataTables
-    $('.dataTables_filter input').attr("placeholder", "Cari Transaksi...");
-});
-
-function showTable(tableId) {
-    if (tableId === 'memberTable') {
-        $('#memberTableContainer').removeClass('hidden');
-        $('#nonMemberTableContainer').addClass('hidden');
-    } else {
-        $('#memberTableContainer').addClass('hidden');
-        $('#nonMemberTableContainer').removeClass('hidden');
-    }
-}
-</script>
-@endpush --}}

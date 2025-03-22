@@ -66,9 +66,18 @@ class PengajuanExport implements FromCollection, WithHeadings, WithMapping, Shou
     {
         return [
             AfterSheet::class => function (AfterSheet $event) {
-                // Membuat teks header (A1 sampai F1) menjadi tebal
-                $event->sheet->getStyle('A1:F1')->getFont()->setBold(true);
+                $sheet = $event->sheet;
+    
+                // Membuat teks header (A1 sampai F1) menjadi bold
+                $sheet->getStyle('A1:F1')->getFont()->setBold(true);
+    
+                // Memberi warna latar belakang header (A1:F1) dengan biru muda
+                $sheet->getStyle('A1:F1')->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
+                    ->getStartColor()->setARGB('ADD8E6'); // Warna biru muda (light blue)
+    
+                // Membuat teks header rata tengah
+                $sheet->getStyle('A1:F1')->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
             },
         ];
-    }
+    }    
 }

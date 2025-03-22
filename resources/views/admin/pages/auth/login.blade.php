@@ -11,8 +11,8 @@
 
     <div class="bg-[#2c3e50] p-8 rounded-lg shadow-lg w-96">
         <div class="text-center mb-6">
-            <div class="w-20 h-20 mx-auto flex items-center justify-center bg-gray-700 rounded-full">
-                <i class="fa-solid fa-face-grin-wink text-white text-6xl"></i>
+            <div class="w-32 h-32 mx-auto flex items-center justify-center">
+                <img src="{{ asset('assets/img/logo.png') }}" alt="Logo" style="width: 140px; height: 120px;">
             </div>
             <h2 class="text-2xl font-semibold text-white">Selamat Datang!</h2>
             <p class="text-gray-300 text-sm">Masuk sekarang untuk melanjutkan</p>

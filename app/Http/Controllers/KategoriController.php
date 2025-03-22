@@ -1,9 +1,11 @@
 <?php
 namespace App\Http\Controllers;
 
+use App\Exports\KategoriExport;
 use App\Models\Kategori;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel;
 
 class KategoriController extends Controller
 {
@@ -53,4 +55,16 @@ class KategoriController extends Controller
             ], 500);
         }
     }   
+
+        public function exportExcel()
+    {
+        return Excel::download(new KategoriExport, 'kategori.xlsx');
+    }
+    public function exportPDF()
+    {
+        $kategori = Kategori::all();
+        $pdf = Pdf::loadView('admin.kategori.pdf', compact('kategori'));
+    
+        return $pdf->stream('kategori.pdf'); // Langsung membuka halaman print
+    }
 }

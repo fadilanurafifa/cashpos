@@ -69,6 +69,7 @@
             input:checked+.slider:before {
                 transform: translateX(20px);
             }
+
             /* Menghilangkan border pada input pencarian saat diklik */
             .dataTables_filter input {
                 outline: none !important;
@@ -76,7 +77,7 @@
                 background-color: #f8f9fa;
                 padding: 5px 10px;
                 border-radius: 5px;
-                
+
             }
 
             /* Menghapus garis bawah di kolom terakhir */
@@ -89,6 +90,7 @@
             #PengajuanTable tbody tr:last-child td {
                 border-bottom: none;
             }
+
             /* Menghilangkan garis bawah tabel */
             #PengajuanTable {
                 border-bottom: none !important;
@@ -103,6 +105,7 @@
             #PengajuanTable tbody tr:last-child td {
                 border-bottom: none !important;
             }
+
             /* Styling input search agar sesuai dengan gambar */
             .dataTables_filter input {
                 border: 1px solid #ccc !important;
@@ -124,7 +127,7 @@
                 font-weight: bold;
             }
         </style>
-          <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
+        <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
     @endpush
     <div class="container">
         @if (session('success'))
@@ -160,20 +163,19 @@
                     <a href="#" class="text-custom text-decoration-none">Manajemen Pengajuan Menu</a>
                 </p>
             </div>
-            <div class="d-flex justify-content-end gap-2">
-                <button class="btn btn-custom" data-bs-toggle="modal" data-bs-target="#addModal">
+            <div class="d-flex justify-content-end align-items-center gap-2">
+                <button class="btn btn-custom btn-sm" data-bs-toggle="modal" data-bs-target="#addModal">
                     <i class="fas fa-plus"></i> Tambah Pengajuan
                 </button>
-                <div class="d-flex justify-content-end gap-2">
-                    <a href="{{ route('pengajuan.export.excel') }}" class="btn btn-success btn-sm">
-                        <i class="fas fa-file-excel"></i> Export Excel
-                    </a>
-                    <a href="{{ route('pengajuan.export.pdf') }}" class="btn btn-danger btn-sm">
-                        <i class="fas fa-file-pdf"></i> Export PDF
-                    </a>
-                </div>
-            </div>
-
+                
+                <a href="{{ route('pengajuan.export.excel') }}" class="btn btn-success btn-sm">
+                    <i class="fas fa-file-excel"></i> Export Excel
+                </a>
+                
+                <a href="{{ route('pengajuan.export.pdf') }}" class="btn btn-danger btn-sm">
+                    <i class="fas fa-file-pdf"></i> Export PDF
+                </a>
+            </div>            
         </div>
         <div class="card table-container">
             <div class="card-body">
@@ -279,13 +281,15 @@
                     <form id="editForm" method="POST" action="">
                         @csrf
                         @method('PUT')
+        
                         <div class="modal-header">
                             <h5 class="modal-title">Edit Pengajuan</h5>
                             <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                         </div>
+        
                         <div class="modal-body">
                             <input type="hidden" id="edit_id" name="id">
-
+        
                             <label for="edit_pelanggan_id">Nama Pengaju:</label>
                             <select id="edit_pelanggan_id" name="pelanggan_id" class="form-control" required>
                                 <option value="">Pilih Nama Pengaju</option>
@@ -293,18 +297,17 @@
                                     <option value="{{ $pelanggan->id }}">{{ $pelanggan->nama }}</option>
                                 @endforeach
                             </select>
-
+        
                             <label for="edit_nama_barang">Nama Barang:</label>
-                            <input type="text" id="edit_nama_barang" name="nama_barang" class="form-control mt-2"
-                                required>
-
+                            <input type="text" id="edit_nama_barang" name="nama_barang" class="form-control mt-2" required>
+        
                             <label for="edit_tanggal_pengajuan">Tanggal Pengajuan:</label>
-                            <input type="date" id="edit_tanggal_pengajuan" name="tanggal_pengajuan"
-                                class="form-control mt-2" required>
-
+                            <input type="date" id="edit_tanggal_pengajuan" name="tanggal_pengajuan" class="form-control mt-2" required>
+        
                             <label for="edit_qty">Quantity:</label>
                             <input type="number" id="edit_qty" name="qty" class="form-control mt-2" required>
                         </div>
+        
                         <div class="modal-footer">
                             <button type="submit" class="btn btn-primary">Simpan Perubahan</button>
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
@@ -312,7 +315,7 @@
                     </form>
                 </div>
             </div>
-        </div>
+        </div>        
 
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
         <script src="https://code.jquery.com/jquery-3.6.0.min.js" defer></script>
@@ -337,28 +340,36 @@
             });
         </script>
         <script>
-            document.addEventListener("DOMContentLoaded", function() {
-                const editButtons = document.querySelectorAll(".editBtn");
-                const editForm = document.getElementById("editForm");
+         document.addEventListener("DOMContentLoaded", function () {
+            const editButtons = document.querySelectorAll(".editBtn");
+            const editForm = document.getElementById("editForm");
 
-                editButtons.forEach(button => {
-                    button.addEventListener("click", function() {
-                        const id = this.dataset.id;
+            editButtons.forEach(button => {
+                button.addEventListener("click", function () {
+                    const id = this.getAttribute("data-id");
+                    const pelanggan_id = this.getAttribute("data-pelanggan_id");
+                    const nama_barang = this.getAttribute("data-nama_barang");
+                    const tanggal_pengajuan = this.getAttribute("data-tanggal_pengajuan");
+                    const qty = this.getAttribute("data-qty");
+
+                    // Pastikan ID ditemukan sebelum mengatur form
+                    if (id) {
                         document.getElementById("edit_id").value = id;
-                        document.getElementById("edit_pelanggan_id").value = this.dataset.pelanggan_id;
-                        document.getElementById("edit_nama_barang").value = this.dataset.nama_barang;
-                        document.getElementById("edit_tanggal_pengajuan").value = this.dataset
-                            .tanggal_pengajuan;
-                        document.getElementById("edit_qty").value = this.dataset.qty;
-                        document.getElementById("edit_status").value = this.dataset.status;
+                        document.getElementById("edit_pelanggan_id").value = pelanggan_id;
+                        document.getElementById("edit_nama_barang").value = nama_barang;
+                        document.getElementById("edit_tanggal_pengajuan").value = tanggal_pengajuan;
+                        document.getElementById("edit_qty").value = qty;
 
-                        // Pastikan form action diperbarui dengan ID yang benar
+                        // Set action form agar mengarah ke URL yang benar
                         editForm.action = `/pengajuan/${id}`;
-                    });
+                    } else {
+                        console.error("ID tidak ditemukan di tombol edit");
+                    }
                 });
             });
+        });
         </script>
-        <script>
+        {{-- <script>
             function updateStatus(checkbox, url) {
                 let status = checkbox.checked ? 'terpenuhi' : 'tidak terpenuhi';
 
@@ -381,8 +392,8 @@
                         console.error('Error:', error);
                     });
             }
-        </script>
-        <script>
+        </script> --}}
+        {{-- <script>
             document.addEventListener("DOMContentLoaded", function() {
                 const deleteForms = document.querySelectorAll("form[action*='pengajuan.destroy']");
 
@@ -407,7 +418,7 @@
                     });
                 });
             });
-        </script>
+        </script> --}}
         <script>
             function updateStatus(element, url) {
                 let status = element.checked ? "terpenuhi" : "tidak terpenuhi";

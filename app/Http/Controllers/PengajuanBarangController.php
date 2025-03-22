@@ -59,18 +59,18 @@ class PengajuanBarangController extends Controller {
             'nama_barang' => 'required|string|max:255',
             'tanggal_pengajuan' => 'required|date',
             'qty' => 'required|integer|min:1',
-            'status' => 'required|in:terpenuhi,tidak terpenuhi',
         ]);
-
+    
         $pengajuan = PengajuanBarang::findOrFail($id);
         $oldData = $pengajuan->toArray();
-        $pengajuan->update($request->all());
-
+        $pengajuan->update($request->except(['id', '_token', '_method'])); // Hindari ID, token, dan method ikut terupdate
+    
         LogActivity::add('Update', 'pengajuan_barangs', $id, $oldData, $pengajuan->toArray());
-
+    
         return redirect()->route('admin.pengajuan.index')
             ->with('success', 'Pengajuan barang berhasil diperbarui.');
     }
+    
 
     // Perbarui status pengajuan barang
     public function updateStatus(Request $request, $id) {  

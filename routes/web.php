@@ -60,6 +60,8 @@ Route::get('admin/kategori', [KategoriController::class, 'index'])->name('katego
 Route::post('admin/kategori', [KategoriController::class, 'store'])->name('kategori.store');
 Route::delete('/admin/kategori/{id}', [KategoriController::class, 'destroy'])->name('kategori.destroy');
 Route::get('/admin/kategori/export/pdf', [KategoriController::class, 'exportPdf'])->name('kategori.export.pdf');
+Route::get('/admin/kategori/export-excel', [KategoriController::class, 'exportExcel'])->name('kategori.exportExcel');
+Route::get('/admin/kategori/export-pdf', [KategoriController::class, 'exportPDF'])->name('kategori.exportPDF');
 
 // Route::group(['middleware' => ['role:admin']], function () {
 // produk
@@ -105,6 +107,8 @@ Route::group(['middleware' => ['role:kasir,admin']], function () {
 Route::group(['middleware' => ['role:owner,admin']], function () {
 // history Transaksi
 Route::get('/admin/history-penjualan', [HistoryPenjualanController::class, 'index'])->name('history.penjualan');
+Route::get('/cetak-struk/{id}', [HistoryPenjualanController::class, 'cetakStruk'])->name('cetak.struk');
+
 
 // laporan penjualan
 Route::get('/admin/laporan-penjualan', [LaporanPenjualanController::class, 'index'])->name('admin.laporan.penjualan');
@@ -132,6 +136,7 @@ Route::put('/chef/update-order/{id}', [ChefController::class, 'updateOrder'])->n
 Route::get('/pengajuan', [PengajuanBarangController::class, 'index'])->name('admin.pengajuan.index');
 Route::post('/pengajuan', [PengajuanBarangController::class, 'store'])->name('admin.pengajuan.store');
 Route::put('/pengajuan/{id}', [PengajuanBarangController::class, 'update'])->name('admin.pengajuan.update');
+
 Route::delete('/pengajuan/{id}', [PengajuanBarangController::class, 'destroy'])->name('admin.pengajuan.destroy');
 Route::put('/pengajuan/updateStatus/{id}', [PengajuanBarangController::class, 'updateStatus'])->name('admin.pengajuan.updateStatus');
 

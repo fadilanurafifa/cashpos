@@ -3,33 +3,36 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Laporan Produk</title>
+    <title>Laporan Kategori</title>
     <style>
         /* Styling Umum */
         body {
             font-family: "Arial", sans-serif;
             font-size: 12px;
-            background-color: #f4f4f4;
+            background-color: #fff;
             padding: 20px;
         }
         
         /* Kop Surat */
         .kop-surat {
-            text-align: center;
-            margin-bottom: 20px;
-            position: relative;
-            padding: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 15px; /* Memberi jarak agar tidak terlalu atas */
         }
         
         .kop-surat img {
-            width: 100px;
+            width: 90px; /* Ukuran logo sedikit lebih kecil */
             height: auto;
-            position: absolute;
-            left: 20px;
-            top: 5px; /* Memindahkan logo lebih ke atas */
+            margin-right: 20px; /* Jarak antara logo dan teks */
         }
         
-        .kop-surat h1 {
+        .kop-text {
+            text-align: center;
+            flex-grow: 1;
+        }
+
+        .kop-text h1 {
             margin: 5px 0;
             font-size: 22px;
             text-transform: uppercase;
@@ -37,7 +40,7 @@
             color: #333;
         }
         
-        .kop-surat p {
+        .kop-text p {
             margin: 2px 0;
             font-size: 12px;
             color: #555;
@@ -62,7 +65,6 @@
             border-collapse: collapse;
             margin-top: 15px;
             background: #fff;
-            overflow: hidden;
         }
 
         th, td {
@@ -101,16 +103,17 @@
     </style>
     <script>
         window.onload = function() {
-            window.print();
-            setTimeout(() => window.close(), 1000);
+            setTimeout(() => {
+                window.print();
+                setTimeout(() => window.close(), 1000);
+            }, 500); // Delay agar logo muncul sebelum print
         };
     </script>
 </head>
 <body>
 
-    <!-- KOP SURAT -->
     <div class="kop-surat">
-        <img src="{{ asset('assets/img/logoitem.png') }}" alt="Logo">
+        <img src="{{ asset('pubassets/img/logoitem.png') }}" alt="Logo"> 
         <div class="kop-text">
             <h1>Cash Caffe POS</h1>
             <p>Jl. Merdeka Belajar No. 10, Kota Bandung, Jawa Barat - Indonesia</p>
@@ -119,44 +122,27 @@
     </div>
     <div class="garis"></div>
 
-    <h2>Laporan Data Produk</h2>
+    <h2>Laporan Kategori</h2>
     <p style="text-align: center; font-weight: bold;">
-        Periode: <span id="tanggal-laporan"></span>
+        Tanggal: {{ now()->format('d-m-Y H:i') }}
     </p>
-    
+
     <table>
         <thead>
             <tr>
-                <th>ID</th>
-                <th>Kategori</th>
-                <th>Nama Produk</th>
-                <th>Harga</th>
-                <th>Stok</th>
-                <th>Tanggal Dibuat</th>
-                <th>Tanggal Diperbarui</th>
+                <th>No</th>
+                <th>Nama Kategori</th>
             </tr>
         </thead>
         <tbody>
-            @foreach($produk as $item)
+            @foreach($kategori as $kat)
             <tr>
-                <td>{{ $item->id }}</td>
-                <td>{{ $item->kategori ? $item->kategori->nama_kategori : '-' }}</td> 
-                <td>{{ $item->nama_produk }}</td>
-                <td>Rp {{ number_format($item->harga, 2, ',', '.') }}</td>
-                <td>{{ $item->stok }}</td>
-                <td>{{ $item->created_at->format('d-m-Y H:i') }}</td>
-                <td>{{ $item->updated_at->format('d-m-Y H:i') }}</td>
+                <td>{{ $loop->iteration }}</td>
+                <td>{{ $kat->nama_kategori }}</td>
             </tr>
             @endforeach
         </tbody>
     </table>
-
-    <script>
-        // Tampilkan tanggal laporan saat ini
-        document.getElementById('tanggal-laporan').innerText = new Date().toLocaleDateString('id-ID', {
-            year: 'numeric', month: 'long', day: 'numeric'
-        });
-    </script>
 
 </body>
 </html>
