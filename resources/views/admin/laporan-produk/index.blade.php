@@ -12,6 +12,21 @@
     .table th, .table td {
         vertical-align: middle !important;
     }
+    /* Styling input search */
+    .dataTables_filter input {
+        border: 1px solid #ccc !important;
+        border-radius: 5px !important;
+        padding: 8px 12px !important;
+        outline: none !important;
+        box-shadow: none !important;
+        transition: all 0.3s ease-in-out;
+    }
+
+    /* Hilangkan border saat input aktif */
+    .dataTables_filter input:focus {
+        border-color: #aaa !important;
+        box-shadow: none !important;
+    }
 </style>
 @endpush
 
@@ -77,25 +92,10 @@
 <script>
 $(document).ready(function() {
     $('#produkTable').DataTable({
-        // "paging": true,
-        // "lengthChange": true,
-        // "searching": true,
-        // "ordering": true,
-        // "info": true,
-        // "autoWidth": false,
+        "lengthChange": false, // Menghilangkan dropdown "Show entries"
         "language": {
-            // "lengthMenu": "Tampilkan _MENU_ entri per halaman",
-            // "zeroRecords": "Data tidak ditemukan",
-            // "info": "Menampilkan _START_ sampai _END_ dari _TOTAL_ entri",
-            // "infoEmpty": "Tidak ada data tersedia",
-            // "infoFiltered": "(disaring dari _MAX_ total entri)",
-            "search": "Cari:",
-            // "paginate": {
-            //     "first": "Pertama",
-            //     "last": "Terakhir",
-            //     "next": "Berikutnya",
-            //     "previous": "Sebelumnya"
-            // }
+            "search": "Cari:", // Mengubah label search menjadi "Cari:"
+            "searchPlaceholder": "Masukkan kata kunci..." // Menambahkan placeholder
         }
     });
 });

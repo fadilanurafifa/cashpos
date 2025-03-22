@@ -2,6 +2,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Kategori;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 
 class KategoriController extends Controller
@@ -51,5 +52,5 @@ class KategoriController extends Controller
                 'message' => 'Gagal menghapus kategori!' // Kirim respons error dalam format JSON
             ], 500);
         }
-    }    
+    }   
 }

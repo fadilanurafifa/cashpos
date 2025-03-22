@@ -183,12 +183,35 @@
 <script src="https://cdn.datatables.net/1.10.25/js/dataTables.bootstrap4.min.js"></script>
 <script>
 $(document).ready(function() {
-    $('#transaksiTable').DataTable({
+    var table = $('#transaksiTable').DataTable({
         "language": {
-            "searchPlaceholder": "Cari Transaksi...",
+            "search": "Cari Nama:", // Teks tetap di samping kiri input
+            "searchPlaceholder": "Cari Nama...", // Placeholder dalam input
             "zeroRecords": "Tidak ada transaksi ditemukan"
         }
     });
+
+    // Pastikan teks "Cari Nama:" tetap sejajar dengan input
+    setTimeout(function() {
+        $('.dataTables_filter').css({
+            "display": "flex",  // Gunakan flexbox agar sejajar
+            "align-items": "center", // Posisikan secara vertikal tengah
+            "justify-content": "flex-end", // Posisi ke kanan container
+            "width": "100%" // Gunakan lebar penuh agar mentok ke kanan
+        });
+
+        $('.dataTables_filter label').css({
+            "margin-right": "8px", // Beri jarak antara teks "Cari Nama:" dan input
+            "white-space": "nowrap", // Hindari teks turun ke bawah
+        });
+
+        $('.dataTables_filter input').css({
+            "width": "200px", // Sesuaikan ukuran input
+            "padding": "5px", // Tambahkan padding agar lebih enak dilihat
+            "border-radius": "5px", // Sedikit rounded pada input
+            "border": "1px solid #ccc" // Tambahkan border agar lebih jelas
+        });
+    }, 100);
 });
 
 function filterTable(type) {

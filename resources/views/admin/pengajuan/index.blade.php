@@ -3,7 +3,6 @@
 @section('title', 'Manajemen Pengajuan Barang')
 
 @section('content')
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css">
     @push('style')
         <style>
             .btn-custom {
@@ -70,7 +69,62 @@
             input:checked+.slider:before {
                 transform: translateX(20px);
             }
+            /* Menghilangkan border pada input pencarian saat diklik */
+            .dataTables_filter input {
+                outline: none !important;
+                box-shadow: none !important;
+                background-color: #f8f9fa;
+                padding: 5px 10px;
+                border-radius: 5px;
+                
+            }
+
+            /* Menghapus garis bawah di kolom terakhir */
+            #PengajuanTable thead th:last-child,
+            #PengajuanTable tbody td:last-child {
+                border-right: none;
+            }
+
+            /* Menghapus garis bawah tabel */
+            #PengajuanTable tbody tr:last-child td {
+                border-bottom: none;
+            }
+            /* Menghilangkan garis bawah tabel */
+            #PengajuanTable {
+                border-bottom: none !important;
+            }
+
+            /* Menghilangkan garis bawah dari elemen wrapper */
+            .dataTables_wrapper {
+                border-bottom: none !important;
+            }
+
+            /* Menghilangkan garis pada baris terakhir */
+            #PengajuanTable tbody tr:last-child td {
+                border-bottom: none !important;
+            }
+            /* Styling input search agar sesuai dengan gambar */
+            .dataTables_filter input {
+                border: 1px solid #ccc !important;
+                border-radius: 5px !important;
+                padding: 8px 12px !important;
+                outline: none !important;
+                box-shadow: none !important;
+                transition: all 0.3s ease-in-out;
+            }
+
+            /* Hilangkan border saat input aktif */
+            .dataTables_filter input:focus {
+                border-color: #aaa !important;
+                box-shadow: none !important;
+            }
+
+            /* Styling label "Cari:" */
+            .dataTables_filter label {
+                font-weight: bold;
+            }
         </style>
+          <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
     @endpush
     <div class="container">
         @if (session('success'))
@@ -124,7 +178,7 @@
         <div class="card table-container">
             <div class="card-body">
                 <div class="table-responsive">
-                    <table id="PengajuanTable" class="table table-bordered">
+                    <table id="PengajuanTable" class="table table-bordered display">
                         <thead class="thead-light">
                             <tr>
                                 <th>No</th>
@@ -261,21 +315,24 @@
         </div>
 
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-        <script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
-        <script src="https://cdn.datatables.net/1.10.25/js/dataTables.bootstrap4.min.js"></script>
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js" defer></script>
+        <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js" defer></script>
+        <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/dataTables.bootstrap5.min.css">
+
         <script>
             $(document).ready(function() {
-                $('#pengajuanTable').DataTable({
-                    "language": {
-                        "url": "//cdn.datatables.net/plug-ins/1.13.4/i18n/Indonesian.json"
-                    },
-                    "order": [
-                        [0, "asc"]
-                    ],
+                let table = $('#PengajuanTable').DataTable({
                     "paging": true,
                     "searching": true,
-                    "lengthChange": true
+                    "ordering": true,
+                    "info": true,
+                    "autoWidth": false,
+                    "responsive": true,
+                    "lengthChange": false, // Menghilangkan dropdown "Show entries"
+                    "language": {
+                        "search": "Cari:", // Mengubah label search menjadi "Cari:"
+                        "searchPlaceholder": "Cari data pengajuan..." // Menambahkan placeholder ke input search
+                    }
                 });
             });
         </script>

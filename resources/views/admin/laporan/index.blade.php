@@ -66,7 +66,7 @@
             <!-- Tabel Laporan dengan DataTables -->
             <div class="table-responsive" id="laporanArea">
                 <table id="laporanTable" class="table table-bordered table-striped">
-                    <thead class="bg-secondary text-white">
+                    <thead class="thead-light">
                         <tr>
                             <th>Nama Produk</th>
                             <th>Stok Awal</th>
@@ -110,29 +110,32 @@
 <script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap5.min.js"></script>
 
 <script>
-   $(document).ready(function() {
-    var table = $('#laporanTable').DataTable({
-        "language": {
-            "search": "Cari:",
-            "lengthMenu": "Tampilkan _MENU_ data per halaman",
-            "zeroRecords": "Tidak ada data yang ditemukan",
-            "info": "Menampilkan _START_ sampai _END_ dari _TOTAL_ data",
-            "infoEmpty": "Tidak ada data tersedia",
-            "paginate": {
-                "first": "Awal",
-                "last": "Akhir",
-                "next": "Selanjutnya",
-                "previous": "Sebelumnya"
-            }
-        }
-    });
+    $(document).ready(function() {
+     var table = $('#laporanTable').DataTable({
+         "lengthChange": false, // Menghilangkan "Show entries"
+         "language": {
+             "search": "Search:",
+             "lengthMenu": "Show _MENU_ entries per page",
+             "zeroRecords": "No data found",
+             "info": "Showing _START_ to _END_ of _TOTAL_ entries",
+             "infoEmpty": "No available data",
+             "paginate": {
+                 "first": "First",
+                 "last": "Last",
+                 "next": "Next",
+                 "previous": "Previous"
+             }
+         }
+     });
+ 
+     // Menambahkan placeholder ke input search
+     setTimeout(function() {
+         $('.dataTables_filter input').attr("placeholder", "Search menu...");
+     }, 100);
+ });
+ </script>
 
-    // Menunggu elemen pencarian selesai dirender, lalu menambahkan placeholder
-    setTimeout(function() {
-        $('.dataTables_filter input').attr("placeholder", "Cari Menu...");
-    }, 100);
-});
-
+<script> 
 
     // Fungsi Cetak Laporan
     function cetakLaporan() {

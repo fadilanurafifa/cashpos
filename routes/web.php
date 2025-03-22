@@ -59,6 +59,7 @@ Route::post('/admin/logout', [AuthController::class, 'logout'])->name('admin.log
 Route::get('admin/kategori', [KategoriController::class, 'index'])->name('kategori.index');
 Route::post('admin/kategori', [KategoriController::class, 'store'])->name('kategori.store');
 Route::delete('/admin/kategori/{id}', [KategoriController::class, 'destroy'])->name('kategori.destroy');
+Route::get('/admin/kategori/export/pdf', [KategoriController::class, 'exportPdf'])->name('kategori.export.pdf');
 
 // Route::group(['middleware' => ['role:admin']], function () {
 // produk
