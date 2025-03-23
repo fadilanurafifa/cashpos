@@ -44,12 +44,6 @@
         padding: 15px;
         background: #f8f9fa;
     }
-    .form-group label {
-        font-weight: bold;
-        font-size: 13px;
-        color: #333;
-        margin-bottom: 4px;
-    }
     .form-control {
         border-radius: 6px;
         border: 1px solid #ced4da;
@@ -70,20 +64,20 @@
                 <a href="#" class="text-custom text-decoration-none">Manajemen Kategori</a>
             </p>                
         </div>
-    </div>    
-    
-    <div class="d-flex justify-content-end align-items-center gap-2" style="margin-bottom: 15px;">
-        <button class="btn btn-custom" data-toggle="modal" data-target="#tambahKategoriModal" style="border-radius: 5px;">
-            <i class="fas fa-plus"></i> Tambah Kategori
-        </button>
-        <a href="{{ route('kategori.exportExcel') }}" class="btn btn-success btn-sm">
-            <i class="fas fa-file-excel"></i> Export Excel
-        </a>
         
-        <a href="{{ route('kategori.exportPDF') }}" class="btn btn-danger btn-sm">
-            <i class="fas fa-file-pdf"></i> Export PDF
-        </a>
-    </div>
+        <div class="d-flex justify-content-end align-items-center gap-2" style="margin-bottom: 15px;">
+            <button class="btn btn-custom" data-toggle="modal" data-target="#tambahKategoriModal" style="border-radius: 5px;">
+                <i class="fas fa-plus"></i> Tambah Kategori
+            </button>
+            <a href="{{ route('kategori.exportExcel') }}" class="btn btn-warning btn-sm">
+                <i class="fas fa-file-excel"></i> Export Excel
+            </a>
+            
+            <a href="{{ route('kategori.exportPDF') }}" class="btn btn-danger btn-sm">
+                <i class="fas fa-file-pdf"></i> Export PDF
+            </a>
+        </div>
+    </div>    
     
     <div class="card table-container">
         <div class="card-body">
@@ -102,6 +96,12 @@
                             <td>{{ $loop->iteration }}</td>
                             <td>{{ $kat->nama_kategori }}</td>
                             <td class="text-center">
+                                <button class="btn btn-sm btn-primary editKategori" 
+                                data-id="{{ $kat->id }}" 
+                                data-nama="{{ $kat->nama_kategori }}" 
+                                data-toggle="modal" data-target="#editKategoriModal">
+                                <i class="fas fa-edit"></i>
+                                </button>
                                 <button class="btn btn-sm btn-danger hapusKategori" data-id="{{ $kat->id }}">
                                     <i class="fas fa-trash"></i> 
                                 </button>
@@ -129,7 +129,7 @@
                 @csrf
                 <div class="modal-body">
                     <div class="form-group">
-                        <label for="nama_kategori">Nama Kategori</label>
+                        <label for="nama_kategori">Nama Kategori :</label>
                         <input type="text" name="nama_kategori" class="form-control" required placeholder="Masukkan Nama Kategori">
                     </div>
                 </div>
@@ -142,6 +142,33 @@
     </div>
 </div>
 
+<!-- Modal Edit Kategori -->
+<div class="modal fade" id="editKategoriModal" tabindex="-1" aria-labelledby="editKategoriModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Edit Kategori</h5>
+                <button type="button" class="close" data-dismiss="modal">
+                    <span>&times;</span>
+                </button>
+            </div>
+            <form id="editKategoriForm" method="POST">
+                @csrf
+                @method('PUT')
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="edit_nama_kategori">Nama Kategori :</label>
+                        <input type="text" name="nama_kategori" id="edit_nama_kategori" class="form-control" required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+                    <button type="submit" class="btn btn-primary">Simpan</button>
+                </div>
+            </form>            
+        </div>
+    </div>
+</div>
 @endsection
 
 @push('script')
@@ -214,4 +241,36 @@ $(document).ready(function() {
     });
 });
 </script>
+<script>
+    $(document).ready(function() {
+        // Ketika tombol edit diklik
+        $(document).on('click', '.editKategori', function() {
+            let kategoriId = $(this).data('id');
+            let kategoriNama = $(this).data('nama');
+    
+            $('#edit_nama_kategori').val(kategoriNama); // Isi input modal dengan data kategori yang dipilih
+            $('#editKategoriForm').attr('action', '/admin/kategori/' + kategoriId); // Set action form
+        });
+    
+        // Submit Form Edit dengan AJAX
+        $('#editKategoriForm').submit(function(e) {
+            e.preventDefault();
+            let form = $(this);
+            let url = form.attr('action');
+    
+            $.ajax({
+                url: url,
+                type: 'POST',
+                data: form.serialize(),
+                success: function(response) {
+                    Swal.fire('Sukses!', 'Kategori berhasil diperbarui.', 'success')
+                        .then(() => location.reload()); // Reload halaman setelah sukses
+                },
+                error: function() {
+                    Swal.fire('Gagal!', 'Terjadi kesalahan.', 'error');
+                }
+            });
+        });
+    });
+</script>    
 @endpush

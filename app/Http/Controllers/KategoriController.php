@@ -36,6 +36,32 @@ class KategoriController extends Controller
         }
     }   
 
+    // Menampilkan form edit kategori
+        public function update(Request $request, $id)
+    {
+        $request->validate([
+            'nama_kategori' => 'required|max:100|unique:kategori,nama_kategori,' . $id,
+        ]);
+
+        try {
+            $kategori = Kategori::findOrFail($id);
+            $kategori->update([
+                'nama_kategori' => $request->nama_kategori,
+            ]);
+
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Kategori berhasil diperbarui!'
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Gagal memperbarui kategori!'
+            ], 500);
+        }
+    }
+
+
     // Menghapus kategori dari database
     public function destroy($id)
     {
@@ -58,13 +84,12 @@ class KategoriController extends Controller
 
         public function exportExcel()
     {
-        return Excel::download(new KategoriExport, 'kategori.xlsx');
+        return Excel::download(new KategoriExport, 'laporan_kategori.xlsx');
     }
     public function exportPDF()
     {
         $kategori = Kategori::all();
-        $pdf = Pdf::loadView('admin.kategori.pdf', compact('kategori'));
-    
-        return $pdf->stream('kategori.pdf'); // Langsung membuka halaman print
+        return view('admin.kategori.pdf', compact('kategori')); // Menampilkan view, bukan PDF
     }
+    
 }

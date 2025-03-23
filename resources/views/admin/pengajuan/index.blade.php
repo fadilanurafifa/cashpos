@@ -126,6 +126,34 @@
             .dataTables_filter label {
                 font-weight: bold;
             }
+            /* Styling untuk dropdown "Show entries" */
+        .dataTables_length label {
+            font-weight: bold;
+            color: #333;
+            font-size: 14px;
+        }
+
+        .dataTables_length select {
+            padding: 6px 12px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            background-color: #f8f9fa;
+            color: #333;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .dataTables_length select:hover {
+            border-color: #89AC46;
+            background-color: #e9f5db;
+        }
+
+        .dataTables_length select:focus {
+            outline: none;
+            border-color: #6f8c38;
+            box-shadow: 0 0 5px rgba(143, 191, 73, 0.5);
+        }
+        
         </style>
         <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
     @endpush
@@ -168,7 +196,7 @@
                     <i class="fas fa-plus"></i> Tambah Pengajuan
                 </button>
                 
-                <a href="{{ route('pengajuan.export.excel') }}" class="btn btn-success btn-sm">
+                <a href="{{ route('pengajuan.export.excel') }}" class="btn btn-warning btn-sm">
                     <i class="fas fa-file-excel"></i> Export Excel
                 </a>
                 
@@ -214,19 +242,21 @@
                                         </form>
                                     </td>
                                     <td>
-                                        <button class="btn btn-warning btn-sm editBtn" data-id="{{ $item->id }}"
+                                        <button class="btn btn-primary btn-sm editBtn" data-id="{{ $item->id }}"
                                             data-pelanggan_id="{{ $item->pelanggan_id }}"
                                             data-nama_barang="{{ $item->nama_barang }}"
                                             data-tanggal_pengajuan="{{ $item->tanggal_pengajuan }}"
                                             data-qty="{{ $item->qty }}" data-status="{{ $item->status }}"
                                             data-bs-toggle="modal" data-bs-target="#editModal">
-                                            Edit
+                                            <i class="fas fa-edit"></i>
                                         </button>
                                         <form class="deleteForm" action="{{ route('admin.pengajuan.destroy', $item->id) }}"
                                             method="POST" style="display:inline;">
                                             @csrf
                                             @method('DELETE')
-                                            <button type="button" class="btn btn-danger btn-sm deleteBtn">Hapus</button>
+                                            <button type="button" class="btn btn-danger btn-sm deleteBtn">
+                                            <i class="fas fa-trash"></i> 
+                                            </button>
                                         </form>
                                     </td>
                                 </tr>
@@ -238,84 +268,112 @@
         </div>
 
         <!-- Modal Tambah -->
-        <div class="modal fade" id="addModal" tabindex="-1">
+        <div class="modal fade" id="addModal" tabindex="-1" aria-labelledby="addModalLabel" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Tambah Pengajuan</h5>
+                        <button type="button" class="close" data-dismiss="modal">
+                            <span>&times;</span>
+                        </button>
+                    </div>
                     <form action="{{ route('admin.pengajuan.store') }}" method="POST">
                         @csrf
-                        <div class="modal-header">
-                            <h5 class="modal-title">Tambah Pengajuan</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                        </div>
                         <div class="modal-body">
-                            <select name="pelanggan_id" class="form-control" required>
-                                <option value="">Pilih Nama Pengaju</option>
-                                @foreach ($pelanggans as $pelanggan)
-                                    <option value="{{ $pelanggan->id }}">{{ $pelanggan->nama }}</option>
-                                @endforeach
-                            </select>
-                            <input type="text" name="nama_barang" class="form-control mt-2" placeholder="Nama Barang"
-                                required>
-                            <input type="date" name="tanggal_pengajuan" class="form-control mt-2"
-                                value="<?= date('Y-m-d') ?>" required readonly>
-                            <input type="number" name="qty" class="form-control mt-2" placeholder="Qty" required>
-                            <select name="status" class="form-control mt-2" disabled>
-                                <option value="tidak terpenuhi" selected>Belum Terpenuhi</option>
-                            </select>
-                            <input type="hidden" name="status" value="tidak terpenuhi">
-
+                            <div class="form-group">
+                                <label for="pelanggan_id">Nama Pengaju:</label>
+                                <select name="pelanggan_id" class="form-control" required>
+                                    <option value="">Pilih Nama Pengaju</option>
+                                    @foreach ($pelanggans as $pelanggan)
+                                        <option value="{{ $pelanggan->id }}">{{ $pelanggan->nama }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+        
+                            <div class="form-group mt-2">
+                                <label for="nama_barang">Nama Menu:</label>
+                                <input type="text" name="nama_barang" class="form-control" required placeholder="Masukkan Nama Menu">
+                            </div>
+        
+                            <div class="form-group mt-2">
+                                <label for="tanggal_pengajuan">Tanggal Pengajuan:</label>
+                                <input type="date" name="tanggal_pengajuan" class="form-control" value="<?= date('Y-m-d') ?>" required readonly>
+                            </div>
+        
+                            <div class="form-group mt-2">
+                                <label for="qty">Quantity:</label>
+                                <input type="number" name="qty" class="form-control" required placeholder="Masukkan Jumlah">
+                            </div>
+        
+                            <div class="form-group mt-2">
+                                <label>Status:</label>
+                                <select name="status" class="form-control" disabled>
+                                    <option value="tidak terpenuhi" selected>Belum Terpenuhi</option>
+                                </select>
+                                <input type="hidden" name="status" value="tidak terpenuhi">
+                            </div>
                         </div>
+                        
                         <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
                             <button type="submit" class="btn btn-primary">Simpan</button>
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
                         </div>
                     </form>
                 </div>
             </div>
         </div>
-
+        
         <!-- Modal Edit -->
-        <div class="modal fade" id="editModal" tabindex="-1">
+        <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Edit Pengajuan</h5>
+                        <button type="button" class="close" data-dismiss="modal">
+                            <span>&times;</span>
+                        </button>
+                    </div>
                     <form id="editForm" method="POST" action="">
                         @csrf
                         @method('PUT')
-        
-                        <div class="modal-header">
-                            <h5 class="modal-title">Edit Pengajuan</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                        </div>
-        
                         <div class="modal-body">
                             <input type="hidden" id="edit_id" name="id">
         
-                            <label for="edit_pelanggan_id">Nama Pengaju:</label>
-                            <select id="edit_pelanggan_id" name="pelanggan_id" class="form-control" required>
-                                <option value="">Pilih Nama Pengaju</option>
-                                @foreach ($pelanggans as $pelanggan)
-                                    <option value="{{ $pelanggan->id }}">{{ $pelanggan->nama }}</option>
-                                @endforeach
-                            </select>
+                            <div class="form-group">
+                                <label for="edit_pelanggan_id">Nama Pengaju:</label>
+                                <select id="edit_pelanggan_id" name="pelanggan_id" class="form-control" required>
+                                    <option value="">Pilih Nama Pengaju</option>
+                                    @foreach ($pelanggans as $pelanggan)
+                                        <option value="{{ $pelanggan->id }}">{{ $pelanggan->nama }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
         
-                            <label for="edit_nama_barang">Nama Barang:</label>
-                            <input type="text" id="edit_nama_barang" name="nama_barang" class="form-control mt-2" required>
+                            <div class="form-group mt-2">
+                                <label for="edit_nama_barang">Nama Menu:</label>
+                                <input type="text" id="edit_nama_barang" name="nama_barang" class="form-control" required placeholder="Masukkan Nama Menu">
+                            </div>
         
-                            <label for="edit_tanggal_pengajuan">Tanggal Pengajuan:</label>
-                            <input type="date" id="edit_tanggal_pengajuan" name="tanggal_pengajuan" class="form-control mt-2" required>
+                            <div class="form-group mt-2">
+                                <label for="edit_tanggal_pengajuan">Tanggal Pengajuan:</label>
+                                <input type="date" id="edit_tanggal_pengajuan" name="tanggal_pengajuan" class="form-control" required readonly>
+                            </div>
         
-                            <label for="edit_qty">Quantity:</label>
-                            <input type="number" id="edit_qty" name="qty" class="form-control mt-2" required>
+                            <div class="form-group mt-2">
+                                <label for="edit_qty">Quantity:</label>
+                                <input type="number" id="edit_qty" name="qty" class="form-control" required placeholder="Masukkan Jumlah">
+                            </div>
                         </div>
         
                         <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
                             <button type="submit" class="btn btn-primary">Simpan Perubahan</button>
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
                         </div>
                     </form>
                 </div>
             </div>
-        </div>        
+        </div>
+        
 
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
         <script src="https://code.jquery.com/jquery-3.6.0.min.js" defer></script>
@@ -323,21 +381,33 @@
         <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/dataTables.bootstrap5.min.css">
 
         <script>
-            $(document).ready(function() {
-                let table = $('#PengajuanTable').DataTable({
-                    "paging": true,
-                    "searching": true,
-                    "ordering": true,
-                    "info": true,
-                    "autoWidth": false,
-                    "responsive": true,
-                    "lengthChange": false, // Menghilangkan dropdown "Show entries"
-                    "language": {
-                        "search": "Cari:", // Mengubah label search menjadi "Cari:"
-                        "searchPlaceholder": "Cari data pengajuan..." // Menambahkan placeholder ke input search
+          $(document).ready(function() {
+            let table = $('#PengajuanTable').DataTable({
+                "paging": true,
+                "searching": true,
+                "ordering": true,
+                "info": true,
+                "autoWidth": false,
+                "responsive": true,
+                "lengthChange": true, // Aktifkan dropdown "Show entries"
+                "pageLength": 10, // Default jumlah baris yang ditampilkan
+                "language": {
+                    "search": "Cari:",
+                    "searchPlaceholder": "Cari data...",
+                    "lengthMenu": "Show _MENU_ entries per page", 
+                    "info": "Showing _START_ to _END_ of _TOTAL_ entries",
+                    "paginate": {
+                        "first": "First",
+                        "last": "Last",
+                        "next": "Next",
+                        "previous": "Previous"
                     }
-                });
+                }
             });
+
+            // Terapkan styling ke dropdown setelah DataTable selesai dimuat
+            $('.dataTables_length select').addClass('custom-select');
+        });
         </script>
         <script>
          document.addEventListener("DOMContentLoaded", function () {
@@ -369,56 +439,6 @@
             });
         });
         </script>
-        {{-- <script>
-            function updateStatus(checkbox, url) {
-                let status = checkbox.checked ? 'terpenuhi' : 'tidak terpenuhi';
-
-                fetch(url, {
-                        method: 'POST',
-                        headers: {
-                            'X-CSRF-TOKEN': '{{ csrf_token() }}',
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify({
-                            status: status,
-                            _method: 'PUT'
-                        })
-                    })
-                    .then(response => response.json())
-                    .then(data => {
-                        console.log('Status updated:', data);
-                    })
-                    .catch(error => {
-                        console.error('Error:', error);
-                    });
-            }
-        </script> --}}
-        {{-- <script>
-            document.addEventListener("DOMContentLoaded", function() {
-                const deleteForms = document.querySelectorAll("form[action*='pengajuan.destroy']");
-
-                deleteForms.forEach(form => {
-                    form.addEventListener("submit", function(event) {
-                        event.preventDefault(); // Mencegah submit default
-
-                        Swal.fire({
-                            title: "Apakah Anda yakin?",
-                            text: "Data yang dihapus tidak bisa dikembalikan!",
-                            icon: "warning",
-                            showCancelButton: true,
-                            confirmButtonColor: "#d33",
-                            cancelButtonColor: "#3085d6",
-                            confirmButtonText: "Ya, hapus!",
-                            cancelButtonText: "Batal"
-                        }).then((result) => {
-                            if (result.isConfirmed) {
-                                form.submit(); // Jika dikonfirmasi, kirim form
-                            }
-                        });
-                    });
-                });
-            });
-        </script> --}}
         <script>
             function updateStatus(element, url) {
                 let status = element.checked ? "terpenuhi" : "tidak terpenuhi";
@@ -469,10 +489,10 @@
                     });
             }
         </script>
-        <script>
+       <script>
             document.addEventListener("DOMContentLoaded", function() {
                 const deleteButtons = document.querySelectorAll(".deleteBtn");
-
+            
                 deleteButtons.forEach(button => {
                     button.addEventListener("click", function() {
                         Swal.fire({
@@ -480,8 +500,8 @@
                             text: "Apakah Anda yakin ingin menghapus data ini?",
                             icon: "warning",
                             showCancelButton: true,
-                            confirmButtonColor: "#d33",
-                            cancelButtonColor: "#6c757d",
+                            confirmButtonColor: "#d33", // Merah untuk hapus
+                            cancelButtonColor: "#007bff", // Biru untuk batal
                             confirmButtonText: "Ya, Hapus!",
                             cancelButtonText: "Batal"
                         }).then((result) => {
@@ -493,4 +513,5 @@
                 });
             });
         </script>
+        
     @endsection

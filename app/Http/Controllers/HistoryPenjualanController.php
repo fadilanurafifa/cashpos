@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\TransaksiExport;
 use Illuminate\Http\Request;
 use App\Models\DetailPenjualan;
 use App\Models\Penjualan;
+use Barryvdh\DomPDF\Facade\Pdf;
+use Maatwebsite\Excel\Facades\Excel;
 
 class HistoryPenjualanController extends Controller
 {

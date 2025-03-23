@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Laporan Kategori</title>
+    <title>Laporan Pelanggan</title>
     <style>
         /* Styling Umum */
         body {
@@ -86,7 +86,7 @@
             background-color: #f9f9f9;
         }
 
-                /* Hover Efek */
+        /* Hover Efek */
         tbody tr:hover {
             background-color: #f1f1f1;
             transition: 0.3s;
@@ -122,28 +122,34 @@
     </div>
     <div class="garis"></div>
 
-    <h2>Laporan Kategori</h2>
+    <h2>Laporan Data Pelanggan</h2>
     <p style="text-align: center; font-weight: bold;">
         Tanggal: {{ now()->format('d-m-Y H:i') }}
     </p>
-
     <table>
         <thead>
             <tr>
                 <th>No</th>
-                <th>Nama Kategori</th>
-                <th>Created At</th> <!-- Tambahan kolom Created At -->
+                <th>Kode Pelanggan</th>
+                <th>Nama</th>
+                <th>Alamat</th>
+                <th>No Telepon</th>
+                <th>Email</th>
             </tr>
         </thead>
         <tbody>
-            @foreach($kategori as $kat)
+            @foreach($pelanggan as $index => $p)
             <tr>
-                <td>{{ $loop->iteration }}</td>
-                <td>{{ $kat->nama_kategori }}</td>
-                <td>{{ $kat->created_at->format('d-m-Y H:i') }}</td> <!-- Format tanggal -->
+                <td>{{ $index + 1 }}</td>
+                <td>{{ $p->kode_pelanggan }}</td>
+                <td>{{ $p->nama }}</td>
+                <td>{{ $p->alamat }}</td>
+                <td>{{ $p->no_telp }}</td>
+                <td>{{ $p->email }}</td>
             </tr>
             @endforeach
         </tbody>
     </table>
+
 </body>
 </html>

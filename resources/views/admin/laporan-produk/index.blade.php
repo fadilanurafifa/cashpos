@@ -44,10 +44,15 @@
                 </p>                
             </div>
     
+            <div class="d-flex justify-content-between align-items-center" style="gap: 15px;">
+            <a href="{{ route('laporan.produk.excel') }}" class="btn btn-warning btn-sm">
+                <i class="fas fa-file-excel"></i> Export Excel
+            </a>
             <!-- Tombol Download PDF -->
             <a href="{{ route('laporan.produk.pdf') }}" target="_blank" onclick="window.open(this.href, '_blank'); return false;" class="btn btn-danger btn-sm">
                 <i class="fas fa-print"></i> Cetak Laporan
-            </a>                 
+            </a> 
+            </div>                
         </div>    
 
     <div class="card table-container">

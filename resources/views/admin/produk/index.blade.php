@@ -241,7 +241,7 @@
                                         <i class="fas fa-trash-alt"></i> 
                                     </button>
                                                 <!-- Tombol Edit Stok -->
-                                    <button class="btn btn-warning btn-sm btn-edit-stok" data-id="{{ $prd->id }}" data-stok="{{ $prd->stok }}"
+                                    <button class="btn btn-sm btn-primary btn-edit-stok" data-id="{{ $prd->id }}" data-stok="{{ $prd->stok }}"
                                             style="font-size: 10px; padding: 2px 5px;">
                                             <i class="fas fa-edit"></i> 
                                     </button>

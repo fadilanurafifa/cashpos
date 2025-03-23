@@ -187,10 +187,10 @@
 @push('script')
     <script>
         let keranjang = [];
-
         function tambahProduk() {
             let produkElements = document.getElementsByName('produk');
-            let produkId;
+            let produkId = null;
+
             produkElements.forEach(element => {
                 if (element.checked) {
                     produkId = element.value;
@@ -202,27 +202,75 @@
                 return;
             }
 
-            let jumlah = document.getElementById('jumlah').value;
+            let jumlah = parseInt(document.getElementById('jumlah').value);
 
             if (jumlah <= 0) {
                 alert("Jumlah produk harus lebih dari 0.");
                 return;
             }
 
-            let harga = document.querySelector(`#produk${produkId}`).getAttribute('data-harga');
+            // Cek apakah produk sudah ada di keranjang
+            let existingProduct = keranjang.find(item => item.id === produkId);
+
+            if (existingProduct) {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Menu sudah ada di keranjang!',
+                    text: `Menu ${existingProduct.nama} sudah dimasukkan.`,
+                });
+                return; // Hentikan proses jika produk sudah ada
+            }
+
+            let harga = parseFloat(document.querySelector(`#produk${produkId}`).getAttribute('data-harga'));
             let nama = document.querySelector(`#produk${produkId}`).nextElementSibling.textContent;
 
             let item = {
                 id: produkId,
                 nama: nama,
-                harga: parseFloat(harga),
-                jumlah: parseInt(jumlah),
-                subtotal: parseFloat(harga) * parseInt(jumlah)
+                harga: harga,
+                jumlah: jumlah,
+                subtotal: harga * jumlah
             };
 
             keranjang.push(item);
             renderKeranjang();
         }
+
+        // function tambahProduk() {
+        //     let produkElements = document.getElementsByName('produk');
+        //     let produkId;
+        //     produkElements.forEach(element => {
+        //         if (element.checked) {
+        //             produkId = element.value;
+        //         }
+        //     });
+
+        //     if (!produkId) {
+        //         alert("Produk harus dipilih.");
+        //         return;
+        //     }
+
+        //     let jumlah = document.getElementById('jumlah').value;
+
+        //     if (jumlah <= 0) {
+        //         alert("Jumlah produk harus lebih dari 0.");
+        //         return;
+        //     }
+
+        //     let harga = document.querySelector(`#produk${produkId}`).getAttribute('data-harga');
+        //     let nama = document.querySelector(`#produk${produkId}`).nextElementSibling.textContent;
+
+        //     let item = {
+        //         id: produkId,
+        //         nama: nama,
+        //         harga: parseFloat(harga),
+        //         jumlah: parseInt(jumlah),
+        //         subtotal: parseFloat(harga) * parseInt(jumlah)
+        //     };
+
+        //     keranjang.push(item);
+        //     renderKeranjang();
+        // }
 
         function renderKeranjang() {
             let tbody = document.getElementById('keranjang');

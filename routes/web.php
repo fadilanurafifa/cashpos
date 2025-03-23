@@ -1,5 +1,6 @@
 <?php
 
+use App\Exports\ProdukExport;
 use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\BarangController;
@@ -54,12 +55,13 @@ Route::get('/dashboard', [DashboardController::class, 'indexPage'])->name('dashb
 Route::get('/admin/login', [AuthController::class, 'showLoginForm'])->name('admin.login');
 Route::post('/admin/login', [AuthController::class, 'login'])->name('admin.login.post');
 Route::post('/admin/logout', [AuthController::class, 'logout'])->name('admin.logout')->middleware('auth');
+// Route::post('/admin/logout', [AuthController::class, 'logout'])->name('admin.logout')->middleware('auth');
 
 // kategori
 Route::get('admin/kategori', [KategoriController::class, 'index'])->name('kategori.index');
 Route::post('admin/kategori', [KategoriController::class, 'store'])->name('kategori.store');
 Route::delete('/admin/kategori/{id}', [KategoriController::class, 'destroy'])->name('kategori.destroy');
-Route::get('/admin/kategori/export/pdf', [KategoriController::class, 'exportPdf'])->name('kategori.export.pdf');
+Route::put('/admin/kategori/{id}', [KategoriController::class, 'update'])->name('kategori.update');
 Route::get('/admin/kategori/export-excel', [KategoriController::class, 'exportExcel'])->name('kategori.exportExcel');
 Route::get('/admin/kategori/export-pdf', [KategoriController::class, 'exportPDF'])->name('kategori.exportPDF');
 
@@ -88,6 +90,9 @@ Route::group(['middleware' => ['role:kasir,admin']], function () {
     Route::get('/pelanggan/{id}/edit', [PelangganController::class, 'edit'])->name('pelanggan.edit');
     Route::put('/pelanggan/{id}', [PelangganController::class, 'update'])->name('pelanggan.update');
     Route::delete('/pelanggan/{id}', [PelangganController::class, 'destroy'])->name('pelanggan.destroy');
+    Route::get('/pelanggan/export-excel', [PelangganController::class, 'exportExcel'])->name('pelanggan.exportExcel');
+    Route::get('/pelanggan/export-pdf', [PelangganController::class, 'exportPdf'])->name('pelanggan.exportPdf');    
+
     
     // penjualan
     Route::get('/penjualan', [PenjualanController::class, 'index'])->name('penjualan.index');
@@ -109,37 +114,30 @@ Route::group(['middleware' => ['role:owner,admin']], function () {
 Route::get('/admin/history-penjualan', [HistoryPenjualanController::class, 'index'])->name('history.penjualan');
 Route::get('/cetak-struk/{id}', [HistoryPenjualanController::class, 'cetakStruk'])->name('cetak.struk');
 
-
 // laporan penjualan
 Route::get('/admin/laporan-penjualan', [LaporanPenjualanController::class, 'index'])->name('admin.laporan.penjualan');
 Route::get('/admin/laporan/cetak-pdf', [LaporanPenjualanController::class, 'cetakPDF'])->name('admin.laporan.cetak');
 Route::get('/laporan-transaksi/export-pdf', [LaporanPenjualanController::class, 'exportPdf'])->name('laporan.transaksi.pdf');
 Route::get('/cetak-laporan', [LaporanPenjualanController::class, 'cetakPDF'])->name('cetak.pdf');
+Route::get('/admin/laporan/penjualan/excel', [LaporanPenjualanController::class, 'exportExcel'])->name('admin.laporan.exportExcel');
+
 
 // laporan produk
 Route::get('/laporan-produk', [LaporanProdukController::class, 'laporanProduk'])->name('laporan.produk');
 Route::get('/laporan-produk/cetak', [LaporanProdukController::class, 'cetakLaporanProduk'])->name('laporan.produk.pdf');
 });
+Route::get('/laporan/produk/excel', [LaporanProdukController::class, 'exportExcel'])->name('laporan.produk.excel');
 
 // halaman chef
 Route::get('/chef/orders', [ChefController::class, 'index'])->name('chef.index');
 Route::put('/chef/update-order/{id}', [ChefController::class, 'updateOrder'])->name('chef.updateOrder');
 
 // pengajuan
-// Route::get('/pengajuan', [PengajuanBarangController::class, 'index'])->name('admin.pengajuan.index');
-// Route::post('/pengajuan', [PengajuanBarangController::class, 'store'])->name('admin.pengajuan.store');
-// Route::put('/pengajuan/{id}', [PengajuanBarangController::class, 'update'])->name('admin.pengajuan.update');
-// Route::delete('/pengajuan/{id}', [PengajuanBarangController::class, 'destroy'])->name('admin.pengajuan.destroy');
-// Route::put('/pengajuan/updateStatus/{id}', [PengajuanBarangController::class, 'updateStatus'])
-//     ->name('admin.pengajuan.updateStatus');
-
 Route::get('/pengajuan', [PengajuanBarangController::class, 'index'])->name('admin.pengajuan.index');
 Route::post('/pengajuan', [PengajuanBarangController::class, 'store'])->name('admin.pengajuan.store');
 Route::put('/pengajuan/{id}', [PengajuanBarangController::class, 'update'])->name('admin.pengajuan.update');
-
 Route::delete('/pengajuan/{id}', [PengajuanBarangController::class, 'destroy'])->name('admin.pengajuan.destroy');
 Route::put('/pengajuan/updateStatus/{id}', [PengajuanBarangController::class, 'updateStatus'])->name('admin.pengajuan.updateStatus');
-
 Route::get('/pengajuan/export/excel', [PengajuanBarangController::class, 'exportExcel'])->name('pengajuan.export.excel');
 Route::get('/pengajuan/export/pdf', [PengajuanBarangController::class, 'exportPDF'])->name('pengajuan.export.pdf');
 

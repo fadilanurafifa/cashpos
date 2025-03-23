@@ -59,6 +59,11 @@
             font-size: 13px;
             height: 32px;
         }
+        .no-hover:hover {
+            transform: none !important; 
+            transition: none !important;
+        }
+
     </style>
     <div class="container">
         <div class="d-flex justify-content-between align-items-center">
@@ -71,14 +76,22 @@
                     <a href="#" class="text-custom text-decoration-none">Manajemen Member</a>
                 </p>                
             </div>
+            <div class="d-flex justify-content-end align-items-center gap-2" style="margin-bottom: 15px;">
+                <button class="btn btn-custom" data-toggle="modal" data-target="#tambahPelangganModal"
+                    style="width: 155px; margin-bottom: 15px; border-radius: 5px; margin-top: 15px; text">
+                    <i class="fas fa-plus"></i> Tambah Member
+                </button>
+                <div class="d-flex justify-content-end">
+                    <a href="{{ route('pelanggan.exportExcel') }}" class="btn btn-warning btn-sm mr-2">
+                        <i class="fas fa-file-excel"></i> Export Excel
+                    </a>
+                    <a href="{{ route('pelanggan.exportPdf') }}" class="btn btn-danger btn-sm mr-2 no-hover">
+                     <i class="fas fa-file-pdf"></i> Export PDF
+                 </a>                 
+                </div>
+            </div>
         </div>    
 
-        <div class="d-flex justify-content-end">
-            <button class="btn btn-custom" data-toggle="modal" data-target="#tambahPelangganModal"
-                style="width: 155px; margin-bottom: 15px; border-radius: 5px; margin-top: -55px; text">
-                <i class="fas fa-plus"></i> Tambah Member
-            </button>
-        </div>
         <div class="card table-container">
             @if (session('success'))
                 <script>
@@ -125,7 +138,7 @@
                                     <td id="no_telp-{{ $p->id }}">{{ $p->no_telp }}</td>
                                     <td id="email-{{ $p->id }}">{{ $p->email }}</td>
                                     <td class="text-center">
-                                        <button class="btn btn-warning editPelanggan" data-id="{{ $p->id }}"
+                                        <button class="btn btn-sm btn-primary editPelanggan" data-id="{{ $p->id }}"
                                             data-nama="{{ $p->nama }}" data-alamat="{{ $p->alamat }}"
                                             data-no_telp="{{ $p->no_telp }}" data-email="{{ $p->email }}"
                                             style="padding: 3px 8px; font-size: 12px; line-height: 1;">

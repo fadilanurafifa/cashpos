@@ -5,7 +5,7 @@
 @push('style')
 <style>
    .btn-custom {
-    background-color: #89AC46; /* Warna hijau sesuai permintaan */
+    background-color: #89AC46;
     border: none;
     color: white;
     padding: 8px 12px;
@@ -13,10 +13,17 @@
     font-weight: 500;
     border-radius: 6px;
     }
-
-    .btn-custom:hover {
-        background-color: #89AC46 !important; /* Tetap hijau saat hover */
+    .btn-custom:hover, 
+    .btn-custom:focus, 
+    .btn-custom:active {
+        background-color: #89AC46 !important; 
         color: white !important;
+        box-shadow: none !important; 
+    }
+    .dropdown-menu .dropdown-item:hover, 
+    .dropdown-menu .dropdown-item:focus {
+        background-color: transparent !important; 
+        color: inherit !important;
     }
     .table-container {
         padding: 20px;
@@ -94,18 +101,19 @@
     
     <div class="d-flex justify-content-between align-items-center mb-4">
        <!-- Button Filter (Kiri) -->
-        <div class="d-flex gap-3" style="margin-top: -30px;">
-            <button class="btn btn-custom d-flex align-items-center" onclick="filterTable('all')">
-                <i class="fas fa-list me-2"></i> Semua Transaksi
-            </button>
-            <button class="btn btn-custom d-flex align-items-center" onclick="filterTable('member')">
-                <i class="fas fa-user-check me-2"></i> Pelanggan Member
-            </button>
-            <button class="btn btn-custom d-flex align-items-center" onclick="filterTable('biasa')">
-                <i class="fas fa-user me-2"></i> Pelanggan Biasa
-            </button>
-        </div>
-        <!-- Box Total Income (Kanan) -->
+       <div class="dropdown">
+        <button class="btn btn-custom dropdown-toggle d-flex align-items-center" type="button" id="filterDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+            <i class="fas fa-filter me-2"></i> Filter Transaksi
+        </button>
+        <ul class="dropdown-menu" aria-labelledby="filterDropdown">
+            <li><a class="dropdown-item" href="#" onclick="filterTable('all')"><i class="fas fa-list me-2"></i> Semua Transaksi</a></li>
+            <div class="dropdown-divider"></div>
+            <li><a class="dropdown-item" href="#" onclick="filterTable('member')"><i class="fas fa-user-check me-2"></i> Pelanggan Member</a></li>
+            <div class="dropdown-divider"></div>
+            <li><a class="dropdown-item" href="#" onclick="filterTable('biasa')"><i class="fas fa-user me-2"></i> Pelanggan Biasa</a></li>
+        </ul>
+    </div>
+    
         <div class="d-flex align-items-center">
             <i class="fas fa-coins me-3 fa-2x"></i>
 
@@ -124,7 +132,7 @@
                         <tr class="text-center">
                             <th>ID Penjualan</th>
                             <th>Nama Pelanggan</th>
-                            <th>Tipe Pelanggan</th> <!-- Tambahkan ini -->
+                            <th>Tipe Pelanggan</th> 
                             <th>Metode Pembayaran</th>
                             <th>Total Harga</th>
                             <th>Tanggal Transaksi</th>
@@ -241,7 +249,7 @@
                     <table style="width: 100%; font-size: 12px;">
                         <tr>
                             <td><strong>Total</strong></td>
-                            <td class="right"><strong>Rp {{ number_format($penjualan->total_harga, 0, ',', '.') }}</strong></td>
+                            <td class="right"><strong>Rp {{ number_format($penjualan->total_bayar ?? 0, 0, ',', '.') }}</strong></td>
                         </tr>
                         <tr>
                             <td>Bayar</td>
@@ -249,7 +257,9 @@
                         </tr>
                         <tr>
                             <td>Kembalian</td>
-                            <td class="right">Rp {{ number_format(max(($penjualan->jumlah_bayar ?? 0) - $penjualan->total_harga, 0), 0, ',', '.') }}</td>
+                            <td class="right">
+                                Rp {{ number_format(($penjualan->jumlah_bayar ?? 0) - ($penjualan->total_bayar ?? 0), 0, ',', '.') }}
+                            </td>
                         </tr>
                     </table>
 
@@ -266,54 +276,12 @@
     </div>
 </div>
 @endforeach
-
-
-{{-- @foreach($detailTransaksi as $penjualan_id => $details)
-@php $penjualan = $transaksi[$penjualan_id] ?? null; @endphp
-@if($penjualan)
-<div class="modal fade" id="modalDetail{{ $penjualan_id }}" tabindex="-1" aria-labelledby="modalDetailLabel" aria-hidden="true">
-    <div class="modal-dialog" style="max-width: 500px;">
-        <div class="modal-content" style="padding: 10px;">
-            <div class="modal-header">
-                <h5 class="modal-title">Detail Transaksi</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <table class="table table-sm">
-                    <thead>
-                        <tr>
-                            <th>Produk</th>
-                            <th>Jumlah</th>
-                            <th>Subtotal</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach($details as $detail)
-                        <tr>
-                            <td>{{ optional($detail->produk)->nama_produk ?? 'Produk Tidak Ditemukan' }}</td>
-                            <td>{{ $detail->jumlah }}</td>
-                            <td>Rp {{ number_format($detail->sub_total, 0, ',', '.') }}</td>
-                        </tr>
-                        @endforeach
-                    </tbody>
-                </table>
-                <p class="mt-2" style="font-size: 14px; background-color: #d1ecf1; padding: 6px 12px; border-radius: 5px; color: #0c5460; font-weight: bold;">
-                    <strong>Status Pembayaran :</strong> {{ ucfirst($penjualan->status_pembayaran) }}
-                </p>                              
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">Tutup</button>
-            </div>
-        </div>
-    </div>
-</div>
-@endif
-@endforeach --}}
 @endsection
 
 @push('script')
 <script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
 <script src="https://cdn.datatables.net/1.10.25/js/dataTables.bootstrap4.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
 $(document).ready(function() {
     var table = $('#transaksiTable').DataTable({
@@ -348,13 +316,27 @@ $(document).ready(function() {
 });
 
 function filterTable(type) {
-    if (type === 'all') {
-        $('.transaksi-row').show();
-    } else {
-        $('.transaksi-row').hide();
-        $('.transaksi-row[data-type="' + type + '"]').show();
-    }
+    Swal.fire({
+        title: 'Memproses...',
+        text: 'Mohon tunggu sebentar',
+        allowOutsideClick: false,
+        didOpen: () => {
+            Swal.showLoading();
+        }
+    });
+
+    setTimeout(() => {
+        if (type === 'all') {
+            $('.transaksi-row').show();
+        } else {
+            $('.transaksi-row').hide();
+            $('.transaksi-row[data-type="' + type + '"]').show();
+        }
+
+        Swal.close(); // Tutup SweetAlert setelah proses selesai
+    }, 1500); // Simulasi loading selama 1 detik
 }
+
 </script>
 <script>
     function printStruk(id) {
@@ -367,33 +349,42 @@ function filterTable(type) {
         location.reload(); // Reload halaman setelah cetak agar tetap normal
     }
 </script>
+
 {{-- cetak struk --}}
 <script>
-    function printStruk(id) {
-        var content = document.getElementById(id).innerHTML;
-        var printWindow = window.open('', '', 'width=350,height=500');
-        printWindow.document.write('<html><head><title>Struk Pembayaran</title>');
-        printWindow.document.write('<style>');
-        printWindow.document.write(`
-            body { font-family: 'Courier New', Courier, monospace; font-size: 11px; align-items: center; }
-            .title { font-size: 13px; font-weight: bold; }
-            .line { border-top: 1px dashed black; margin: 5px 0; }
-            table { width: 100%; text-align: left; font-size: 10px; }
-            .right { text-align: right; }
-            .bold { font-weight: bold; }
-            @media print {
-                @page { size: 58mm auto; margin: 0; }
-                body { width: 58mm; height: auto; }
-            }
-        `);
-        printWindow.document.write('</style></head><body>');
-        printWindow.document.write(content);
-        printWindow.document.write('</body></html>');
-        printWindow.document.close();
-        printWindow.print();
-        printWindow.close();
-    }
-    </script>
+   function printStruk(id) {
+    var content = document.getElementById(id).innerHTML;
     
+    // Cek apakah elemen struk ditemukan
+    if (!content) {
+        console.error("Elemen struk tidak ditemukan: " + id);
+        return;
+    }
+
+    console.log("Isi Struk: ", content); // Debugging
+
+    var printWindow = window.open('', '', 'width=350,height=500');
+    printWindow.document.write('<html><head><title>Struk Pembayaran</title>');
+    printWindow.document.write('<style>');
+    printWindow.document.write(`
+        body { font-family: 'Courier New', Courier, monospace; font-size: 11px; align-items: center; }
+        .title { font-size: 13px; font-weight: bold; }
+        .line { border-top: 1px dashed black; margin: 5px 0; }
+        table { width: 100%; text-align: left; font-size: 10px; }
+        .right { text-align: right; }
+        .bold { font-weight: bold; }
+        @media print {
+            @page { size: 58mm auto; margin: 0; }
+            body { width: 58mm; height: auto; }
+        }
+    `);
+    printWindow.document.write('</style></head><body>');
+    printWindow.document.write(content);
+    printWindow.document.write('</body></html>');
+    printWindow.document.close();
+    printWindow.print();
+    printWindow.close();
+}
+    </script>
 @endpush
 

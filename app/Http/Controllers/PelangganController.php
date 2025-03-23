@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\PelangganExport;
 use Illuminate\Http\Request;
 use App\Models\Pelanggan;
+use Barryvdh\DomPDF\Facade\Pdf;
+use Maatwebsite\Excel\Facades\Excel;
 
 class PelangganController extends Controller
 {
@@ -63,5 +66,15 @@ class PelangganController extends Controller
         Pelanggan::destroy($id); // Hapus pelanggan berdasarkan ID
 
         return response()->json(['success' => true]); // Kembalikan respons sukses dalam format JSON
+    }
+    public function exportExcel()
+    {
+        return Excel::download(new PelangganExport, 'pelanggan.xlsx');
+    }
+    
+    public function exportPdf()
+    {
+        $pelanggan = Pelanggan::all();
+        return view('admin.pelanggan.pdf', compact('pelanggan'));
     }
 }

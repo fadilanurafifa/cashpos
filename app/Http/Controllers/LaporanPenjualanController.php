@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\LaporanPenjualanExport;
 use Illuminate\Http\Request;
 use App\Models\Produk;
 use App\Models\DetailPenjualan;
 use App\Models\Kategori;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Maatwebsite\Excel\Facades\Excel;
 
 class LaporanPenjualanController extends Controller
 {
@@ -52,5 +54,10 @@ class LaporanPenjualanController extends Controller
         }
     
         return view('admin.laporan.cetak', compact('laporan'))->render(); // Kembalikan tampilan HTML dari laporan untuk dicetak
+    }
+    public function exportExcel(Request $request)
+    {
+        $kategori_id = $request->kategori_id;
+        return Excel::download(new LaporanPenjualanExport($kategori_id), 'Laporan_Penjualan.xlsx');
     }
 }

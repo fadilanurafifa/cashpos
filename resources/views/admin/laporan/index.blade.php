@@ -36,10 +36,16 @@
             </p>  
         </div>
 
+        <div class="d-flex justify-content-between align-items-center" style="gap: 15px;">
         <!-- Tombol Download PDF -->
-        <button type="button" class="btn btn-danger btn-sm" onclick="cetakLaporan()">
-            <i class="fas fa-print"></i> Cetak Laporan
+        <button type="button" class="btn btn-warning btn-sm" onclick="exportExcel()">
+            <i class="fas fa-file-excel"></i> Export Excel
         </button>
+        <button type="button" class="btn btn-danger btn-sm" onclick="cetakLaporan()">
+            <i class="fas fa-file-pdf"></i> Cetak Laporan
+        </button>
+        </div>
+        
     </div>   
     <div class="card">
         <div class="card-body">
@@ -214,5 +220,9 @@
         });
     });
 </script>
-
+<script>
+    function exportExcel() {
+    window.location.href = "{{ route('admin.laporan.exportExcel', ['kategori_id' => request()->kategori_id]) }}";
+}
+</script>
 @endpush
