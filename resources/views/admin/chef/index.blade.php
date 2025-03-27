@@ -23,6 +23,23 @@
         background-color: #007bff;
         border-color: #007bff;
     }
+
+    /* Garis merah di sebelah kiri untuk pesanan prioritas */
+    .priority-row {
+        border-left: 6px solid #dc3545 !important;
+        background-color: rgba(220, 53, 69, 0.05) !important;
+    }
+
+    /* Badge untuk menandai pesanan prioritas */
+    .priority-badge {
+        background-color: #dc3545;
+        color: white;
+        font-size: 12px;
+        padding: 5px 10px;
+        border-radius: 5px;
+        font-weight: bold;
+        margin-left: 20px;
+    }
 </style>
 @endpush
 
@@ -33,7 +50,7 @@
                 <i class="fas fa-clipboard-list"></i> Daftar Pesanan
             </h1>
             <p class="text-muted">
-                <a href="#" class="text-custom text-decoration-none">Home</a> / 
+                <a href="{{ route('chef.dashboard') }}" class="text-custom text-decoration-none">Home</a> / 
                 <a href="{{ route('chef.index') }}" class="text-custom text-decoration-none">Daftar Pesanan</a>
             </p>                
         </div>
@@ -42,8 +59,8 @@
     <table class="table table-bordered">
         <thead class="thead-light">
             <tr>
-                <th>No</th>
-                <th>Kode</th>
+                {{-- <th>No</th> --}}
+                <th>No Faktur</th>
                 <th>Produk</th>
                 <th>Status Pembayaran</th>
                 <th>Status Pesanan</th>
@@ -51,37 +68,40 @@
             </tr>
         </thead>
         <tbody>
-            @foreach($orders as $index => $order)
-            <tr>
-                <td>{{ $index + 1 }}</td>
-                <td>{{ $order->no_faktur }}</td>
+            @foreach($orders->sortBy('created_at') as $index => $order)
+            <tr class="{{ $index < 3 ? 'priority-row' : '' }}">
+                {{-- <td>{{ $index + 1 }}</td> --}}
+                <td>
+                    {{ $order->no_faktur }}
+                    @if($index < 3)
+                        <span class="priority-badge"><i class="fas fa-fire priority-icon"></i></span>
+                    @endif
+                </td>
                 <td>
                     @foreach ($order->detail_penjualan as $detail)
                         <p>{{ $detail->produk->nama_produk }}</p>
                     @endforeach
                 </td>
                 <td>
-                    <span style="color: {{ $order->status_pembayaran == 'lunas' ? 'green' : 'red' }}">
+                    <span class="fw-bold text-{{ $order->status_pembayaran == 'lunas' ? 'success' : 'danger' }}">
                         {{ ucfirst($order->status_pembayaran) }}
                     </span>                    
                 </td>
                 <td>
-                    <span style="color: 
-                        {{ $order->status_pesanan == 'pending' ? 'orange' : 
-                        ($order->status_pesanan == 'proses memasak' ? 'red' : 'green') }}">
+                    <span class="fw-bold text-{{ 
+                        $order->status_pesanan == 'pending' ? 'warning' : 
+                        ($order->status_pesanan == 'proses memasak' ? 'danger' : 'success') }}">
                         {{ ucfirst($order->status_pesanan) }}
                     </span>
                 </td>
                 <td>
-                    <!-- Tombol Modal -->
                     <a href="#" data-bs-toggle="modal" data-bs-target="#detailModal{{ $order->id }}" 
                         class="d-flex justify-content-center align-items-center">
-                         <i class="fas fa-eye text-dark fa-lg"></i> <!-- Ikon sedikit lebih besar -->
-                     </a>                                                         
+                         <i class="fas fa-eye text-dark fa-lg"></i> 
+                     </a>                                                          
                 </td>
             </tr>
 
-        
             <!-- Modal Detail Pesanan -->
             <div class="modal fade" id="detailModal{{ $order->id }}" tabindex="-1" 
                     aria-labelledby="modalLabel{{ $order->id }}" aria-hidden="true">
@@ -93,14 +113,11 @@
                         </div>
                         <div class="modal-body">
                             <div class="container">
-                                <!-- Kode Pesanan -->
                                 <div class="row mb-3 d-flex align-items-center">
                                     <div class="col-5 fw-bold text-muted">Kode Pesanan</div>
                                     <div class="col-auto">:</div>
                                     <div class="col-6">{{ $order->no_faktur }}</div>
                                 </div>
-
-                                <!-- Status Pembayaran -->
                                 <div class="row mb-3 d-flex align-items-center">
                                     <div class="col-5 fw-bold text-muted">Status Pembayaran</div>
                                     <div class="col-auto">:</div>
@@ -108,8 +125,6 @@
                                         {{ ucfirst($order->status_pembayaran) }}
                                     </div>
                                 </div>
-
-                                <!-- Status Pesanan -->
                                 <div class="row mb-4 d-flex align-items-center">
                                     <div class="col-5 fw-bold text-muted">Status Pesanan</div>
                                     <div class="col-auto">:</div>
@@ -119,8 +134,6 @@
                                         {{ ucfirst($order->status_pesanan) }}
                                     </div>
                                 </div>
-
-                                <!-- Produk -->
                                 <h6 class="fw-bold border-bottom pb-2 mb-3">Produk</h6>
                                 <ul class="list-group list-group-flush">
                                     @foreach($order->detail_penjualan as $detail)
@@ -147,24 +160,20 @@
                                     @csrf
                                     @method('PUT')
                                     <input type="hidden" name="status_pesanan" value="selesai">
-                                    <button type="submit" class="btn" style="background-color: #89AC46; border-color: #89AC46; color: white;">
+                                    <button type="submit" class="btn btn-success">
                                         <i class="fas fa-check"></i> Tandai Selesai
                                     </button>
-                                                                     
                                 </form>
                             @endif
-                            {{-- <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                                <i class="fas fa-times"></i> Tutup
-                            </button> --}}
                         </div>                        
                     </div>
                 </div>
             </div>
-            <!-- Akhir Modal -->
             @endforeach
         </tbody>
     </table>
 </div>
+@endsection
 @push('script')
 <script>
     document.addEventListener("DOMContentLoaded", function() {
@@ -175,6 +184,4 @@
         toastList.forEach(toast => toast.show());
     });
 </script>
-
 @endpush
-@endsection

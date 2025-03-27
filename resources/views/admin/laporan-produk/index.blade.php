@@ -27,6 +27,26 @@
         border-color: #aaa !important;
         box-shadow: none !important;
     }
+        /* Perlebar dropdown "Show entries" */
+    .dataTables_wrapper .dataTables_length select {
+        width: 150px; /* Ubah ukuran sesuai kebutuhan */
+        min-width: 170px;
+        padding: 5px 12px;
+        border: 1px solid #ccc;
+        border-radius: 6px;
+    }
+    /* Mengatur tampilan Show agar teks 'entries' ada di bawah */
+    .dataTables_wrapper .dataTables_length {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start; /* Pastikan teks rata kiri */
+    }
+
+    .dataTables_wrapper .dataTables_length label {
+        display: flex;
+        flex-direction: column;
+        gap: 5px; /* Jarak antara dropdown dan teks */
+    }
 </style>
 @endpush
 
@@ -55,11 +75,11 @@
             </div>                
         </div>    
 
-    <div class="card table-container">
-        <div class="card-body">
-            <div class="table-responsive">
-                <table id="produkTable" class="table table-bordered">
-                    <thead class="thead-light">
+        <div class="card table-container">
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table id="produkTable" class="table table-bordered">
+                        <thead class="thead-light">
                         <tr>
                             <th>ID</th>
                             <th>Kategori ID</th>
@@ -92,17 +112,32 @@
 
 @push('script')
 <!-- Tambahkan Script DataTables -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
 <script src="https://cdn.datatables.net/1.10.25/js/dataTables.bootstrap4.min.js"></script>
 <script>
 $(document).ready(function() {
-    $('#produkTable').DataTable({
-        "lengthChange": false, // Menghilangkan dropdown "Show entries"
-        "language": {
-            "search": "Cari:", // Mengubah label search menjadi "Cari:"
-            "searchPlaceholder": "Masukkan kata kunci..." // Menambahkan placeholder
-        }
+    let table = $('#produkTable').DataTable({
+        "paging": true,
+        "lengthChange": true,
+        "searching": true,
+        "ordering": true,
+        "info": true,
+        "autoWidth": false
+    });
+
+    // Menambahkan placeholder ke input pencarian bawaan DataTables
+    $('.dataTables_filter input').attr('placeholder', 'Cari data produk...');
+
+    // Menata ulang tampilan Show dan Search agar sejajar
+    $('.dataTables_wrapper .row').css({
+        "display": "flex",
+        "justify-content": "space-between",
+        "align-items": "center",
+        "flex-wrap": "wrap"
     });
 });
+
 </script>
 @endpush

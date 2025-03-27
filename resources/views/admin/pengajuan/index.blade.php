@@ -68,92 +68,59 @@
 
             input:checked+.slider:before {
                 transform: translateX(20px);
+            }   
+            .dataTables_filter {
+                display: flex;
+                align-items: center;
+                justify-content: flex-start;
+                gap: 10px; /* Memberikan jarak antara teks dan input */
             }
 
-            /* Menghilangkan border pada input pencarian saat diklik */
+            .dataTables_filter label {
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                white-space: nowrap; /* Mencegah teks turun ke bawah */
+            }
+            .dataTables_length select,
             .dataTables_filter input {
+                border-radius: 6px !important;
+                border: 1px solid #ccc !important;
+                padding: 5px 10px !important;
                 outline: none !important;
-                box-shadow: none !important;
-                background-color: #f8f9fa;
-                padding: 5px 10px;
-                border-radius: 5px;
-
             }
 
-            /* Menghapus garis bawah di kolom terakhir */
-            #PengajuanTable thead th:last-child,
-            #PengajuanTable tbody td:last-child {
-                border-right: none;
+
+            .dataTables_paginate .paginate_button {
+                background: transparent !important; /* Menghilangkan background hitam */
             }
 
-            /* Menghapus garis bawah tabel */
-            #PengajuanTable tbody tr:last-child td {
-                border-bottom: none;
-            }
+             .dataTables_paginate .paginate_button.current {
+                background: #007bff !important; 
+                color: white !important;
+                border: 1px solid #007bff !important;
+            } 
 
-            /* Menghilangkan garis bawah tabel */
-            #PengajuanTable {
+            .dataTables_paginate .paginate_button:hover {
+                background: #e9ecef !important; 
+                border: 1px solid #007bff !important;
+            } 
+            /* Menghapus border bawah tabel */
+            .dataTables_wrapper table.dataTable {
                 border-bottom: none !important;
             }
 
-            /* Menghilangkan garis bawah dari elemen wrapper */
+            /* Menghapus garis bawah dari wrapper DataTables */
             .dataTables_wrapper {
                 border-bottom: none !important;
-            }
-
-            /* Menghilangkan garis pada baris terakhir */
-            #PengajuanTable tbody tr:last-child td {
-                border-bottom: none !important;
-            }
-
-            /* Styling input search agar sesuai dengan gambar */
-            .dataTables_filter input {
-                border: 1px solid #ccc !important;
-                border-radius: 5px !important;
-                padding: 8px 12px !important;
-                outline: none !important;
-                box-shadow: none !important;
-                transition: all 0.3s ease-in-out;
-            }
-
-            /* Hilangkan border saat input aktif */
-            .dataTables_filter input:focus {
-                border-color: #aaa !important;
                 box-shadow: none !important;
             }
-
-            /* Styling label "Cari:" */
-            .dataTables_filter label {
-                font-weight: bold;
+            .dataTables_wrapper .row {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                flex-wrap: wrap; /* Agar responsif */
             }
-            /* Styling untuk dropdown "Show entries" */
-        .dataTables_length label {
-            font-weight: bold;
-            color: #333;
-            font-size: 14px;
-        }
-
-        .dataTables_length select {
-            padding: 6px 12px;
-            border: 1px solid #ccc;
-            border-radius: 8px;
-            background-color: #f8f9fa;
-            color: #333;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .dataTables_length select:hover {
-            border-color: #89AC46;
-            background-color: #e9f5db;
-        }
-
-        .dataTables_length select:focus {
-            outline: none;
-            border-color: #6f8c38;
-            box-shadow: 0 0 5px rgba(143, 191, 73, 0.5);
-        }
-        
         </style>
         <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
     @endpush
@@ -205,11 +172,11 @@
                 </a>
             </div>            
         </div>
-        <div class="card table-container">
-            <div class="card-body">
-                <div class="table-responsive">
-                    <table id="PengajuanTable" class="table table-bordered display">
-                        <thead class="thead-light">
+                <div class="card table-container">
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table id="pengajuanTable" class="table table-bordered">
+                            <thead class="thead-light">
                             <tr>
                                 <th>No</th>
                                 <th>Nama Pengaju</th>
@@ -301,7 +268,7 @@
                             </div>
         
                             <div class="form-group mt-2">
-                                <label for="qty">Quantity:</label>
+                                <label for="qty">Jumlah:</label>
                                 <input type="number" name="qty" class="form-control" required placeholder="Masukkan Jumlah">
                             </div>
         
@@ -360,7 +327,7 @@
                             </div>
         
                             <div class="form-group mt-2">
-                                <label for="edit_qty">Quantity:</label>
+                                <label for="edit_qty">Jumlah:</label>
                                 <input type="number" id="edit_qty" name="qty" class="form-control" required placeholder="Masukkan Jumlah">
                             </div>
                         </div>
@@ -372,41 +339,36 @@
                     </form>
                 </div>
             </div>
-        </div>
+        </div>       
+    @endsection
         
 
-        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-        <script src="https://code.jquery.com/jquery-3.6.0.min.js" defer></script>
-        <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js" defer></script>
-        <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/dataTables.bootstrap5.min.css">
-
-        <script>
-          $(document).ready(function() {
-            let table = $('#PengajuanTable').DataTable({
+    @push('script')
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.25/js/dataTables.bootstrap4.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        $(document).ready(function() {
+            let table = $('#pengajuanTable').DataTable({
                 "paging": true,
+                "lengthChange": true,
                 "searching": true,
                 "ordering": true,
                 "info": true,
-                "autoWidth": false,
-                "responsive": true,
-                "lengthChange": true, // Aktifkan dropdown "Show entries"
-                "pageLength": 10, // Default jumlah baris yang ditampilkan
-                "language": {
-                    "search": "Cari:",
-                    "searchPlaceholder": "Cari data...",
-                    "lengthMenu": "Show _MENU_ entries per page", 
-                    "info": "Showing _START_ to _END_ of _TOTAL_ entries",
-                    "paginate": {
-                        "first": "First",
-                        "last": "Last",
-                        "next": "Next",
-                        "previous": "Previous"
-                    }
-                }
+                "autoWidth": false
             });
 
-            // Terapkan styling ke dropdown setelah DataTable selesai dimuat
-            $('.dataTables_length select').addClass('custom-select');
+            // Menambahkan placeholder ke input pencarian bawaan DataTables
+            $('.dataTables_filter input').attr('placeholder', 'Cari data pengajuan...');
+
+            // Menata ulang tampilan Show dan Search agar sejajar
+            $('.dataTables_wrapper .row').css({
+                "display": "flex",
+                "justify-content": "space-between",
+                "align-items": "center",
+                "flex-wrap": "wrap"
+            });
         });
         </script>
         <script>
@@ -513,5 +475,4 @@
                 });
             });
         </script>
-        
-    @endsection
+@endpush

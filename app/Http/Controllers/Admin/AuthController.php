@@ -31,7 +31,7 @@ class AuthController extends Controller
             if (Auth::user()->role == 'kasir') {
                 return redirect()->route('penjualan.index'); // Redirect ke halaman penjualan jika user adalah kasir
             } elseif (Auth::user()->role == 'chef') {
-                return redirect()->route('chef.index'); // Redirect ke halaman chef jika user adalah chef
+                return redirect()->route('chef.dashboard'); // Redirect ke halaman chef jika user adalah chef
             }
             return redirect()->route('dashboard'); // Redirect ke dashboard jika bukan kasir atau chef
         }

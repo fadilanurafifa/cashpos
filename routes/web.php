@@ -129,8 +129,11 @@ Route::get('/laporan-produk/cetak', [LaporanProdukController::class, 'cetakLapor
 Route::get('/laporan/produk/excel', [LaporanProdukController::class, 'exportExcel'])->name('laporan.produk.excel');
 
 // halaman chef
+Route::get('/chef/dashboard', [ChefController::class, 'dashboard'])->name('chef.dashboard');
 Route::get('/chef/orders', [ChefController::class, 'index'])->name('chef.index');
 Route::put('/chef/update-order/{id}', [ChefController::class, 'updateOrder'])->name('chef.updateOrder');
+Route::get('/chef/checkNewOrders', [ChefController::class, 'checkNewOrders'])->name('chef.checkNewOrders');
+Route::post('/chef/read-notifications', [ChefController::class, 'readNotifications'])->name('chef.readNotifications');
 
 // pengajuan
 Route::get('/pengajuan', [PengajuanBarangController::class, 'index'])->name('admin.pengajuan.index');

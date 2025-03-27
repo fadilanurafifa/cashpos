@@ -51,6 +51,43 @@
         font-size: 13px; 
         height: 32px; 
     }
+    /* Pastikan parent container flex untuk mengatur posisi */
+.dataTables_wrapper .row:first-child {
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    flex-wrap: wrap !important;
+    width: 100% !important;
+}
+
+/* Form Show tetap di kiri */
+.dataTables_length {
+    flex: none !important;
+}
+
+/* Pastikan form search tetap di kanan */
+.dataTables_filter {
+    display: flex !important;
+    justify-content: flex-end !important;
+    align-items: center !important;
+}
+
+/* Membuat teks "Cari" sejajar di sebelah kiri input */
+.dataTables_filter label {
+    display: flex !important;
+    align-items: center !important;
+    gap: 5px !important; /* Jarak antara teks dan input */
+    white-space: nowrap; /* Mencegah teks turun ke bawah */
+}
+
+/* Menyesuaikan ukuran input */
+.dataTables_filter input {
+    width: 200px !important;
+    padding: 5px !important;
+    border-radius: 5px !important;
+    border: 1px solid #ccc !important;
+}
+
 </style>
 @endpush
 <div class="container">

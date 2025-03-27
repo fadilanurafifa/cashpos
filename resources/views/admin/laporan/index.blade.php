@@ -22,6 +22,43 @@
         display: none !important; /* Menyembunyikan tombol saat cetak */
     }
     }
+        /* Pastikan parent container flex untuk mengatur posisi */
+.dataTables_wrapper .row:first-child {
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    flex-wrap: wrap !important;
+    width: 100% !important;
+}
+
+/* Form Show tetap di kiri */
+.dataTables_length {
+    flex: none !important;
+}
+
+/* Pastikan form search tetap di kanan */
+.dataTables_filter {
+    display: flex !important;
+    justify-content: flex-end !important;
+    align-items: center !important;
+}
+
+/* Membuat teks "Cari" sejajar di sebelah kiri input */
+.dataTables_filter label {
+    display: flex !important;
+    align-items: center !important;
+    gap: 5px !important; /* Jarak antara teks dan input */
+    white-space: nowrap; /* Mencegah teks turun ke bawah */
+}
+
+/* Menyesuaikan ukuran input */
+.dataTables_filter input {
+    width: 200px !important;
+    padding: 5px !important;
+    border-radius: 5px !important;
+    border: 1px solid #ccc !important;
+}
+
     </style>
 @endpush
 <div class="container-fluid">
@@ -70,9 +107,11 @@
             </form>
             
             <!-- Tabel Laporan dengan DataTables -->
-            <div class="table-responsive" id="laporanArea">
-                <table id="laporanTable" class="table table-bordered table-striped">
-                    <thead class="thead-light">
+            <div class="card table-container">
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table id="laporanTable" class="table table-bordered">
+                        <thead class="thead-light">
                         <tr>
                             <th>Nama Produk</th>
                             <th>Stok Awal</th>
@@ -110,36 +149,29 @@
 @push('script')
 
 <!-- DataTables -->
-<link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/dataTables.bootstrap5.min.css">
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
-<script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap5.min.js"></script>
-
+<script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.10.25/js/dataTables.bootstrap4.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
-    $(document).ready(function() {
-     var table = $('#laporanTable').DataTable({
-         "lengthChange": false, // Menghilangkan "Show entries"
-         "language": {
-             "search": "Search:",
-             "lengthMenu": "Show _MENU_ entries per page",
-             "zeroRecords": "No data found",
-             "info": "Showing _START_ to _END_ of _TOTAL_ entries",
-             "infoEmpty": "No available data",
-             "paginate": {
-                 "first": "First",
-                 "last": "Last",
-                 "next": "Next",
-                 "previous": "Previous"
-             }
-         }
-     });
- 
-     // Menambahkan placeholder ke input search
-     setTimeout(function() {
-         $('.dataTables_filter input').attr("placeholder", "Search menu...");
-     }, 100);
- });
- </script>
+$(document).ready(function() {
+let table = $('#laporanTable').DataTable({
+    "paging": true,
+    "lengthChange": true,
+    "searching": true,
+    "ordering": true,
+    "info": true,
+    "autoWidth": false
+});
+
+$(document).ready(function() {
+var table = $('#yourTableID').DataTable();
+
+// Menambahkan placeholder ke input pencarian bawaan DataTables
+$('.dataTables_filter input').attr('placeholder', 'Cari data laporan...');
+});
+});
+    </script>
 
 <script> 
 

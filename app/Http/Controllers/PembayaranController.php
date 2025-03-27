@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\PesananBaruEvent;
 use Illuminate\Http\Request;
 use App\Models\Penjualan;
 use App\Models\DetailPenjualan;
 use App\Models\Order;
 use App\Models\User;
+use App\Notifications\PesananBaruNotification;
 use App\Notifications\PesananKeChefNotification;
 use Barryvdh\DomPDF\Facade\Pdf;
 

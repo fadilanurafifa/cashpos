@@ -4,6 +4,7 @@ namespace App\Observers;
 
 use App\Models\Penjualan;
 use App\Models\User;
+use App\Notifications\PesananBaruNotification;
 use App\Notifications\StatusPesananNotification;
 
 class PenjualanObserver
@@ -11,11 +12,14 @@ class PenjualanObserver
     /**
      * Handle the Penjualan "created" event.
      */
-    public function created(Penjualan $penjualan): void
-    {
-        //
+   public function created(Penjualan $penjualan)
+{
+    // Kirim notifikasi ke Chef saat pesanan baru dibuat
+    $chefs = User::where('role', 'chef')->get();
+    foreach ($chefs as $chef) {
+        $chef->notify(new PesananBaruNotification($penjualan));
     }
-
+}
     /**
      * Handle the Penjualan "updated" event.
      */

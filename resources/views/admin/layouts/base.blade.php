@@ -226,6 +226,15 @@
                 </a>
             </li>            
             @endif
+
+            @if (Auth::user()->role === 'chef')
+            <li class="nav-item">
+                <a class="nav-link" href="{{ route('chef.dashboard') }}">
+                    <i class="fas fa-fw fa-tachometer-alt"></i>
+                    <span>Dashboard Chef</span>
+                </a>
+            </li>   
+            @endif
             <!-- Divider -->
             @if (Auth::user()->role === 'admin' || (Auth::user()->role === 'kasir'))
             <hr class="sidebar-divider">
@@ -517,6 +526,7 @@
                             </div>
                         </li>
 
+                        
                         @if (Auth::user()->role === 'kasir' || Auth::user()->role === 'admin')
                         <!-- Nav Item - Alerts -->
                         <li class="nav-item dropdown">
@@ -563,7 +573,55 @@
                                 </li>
                             </ul>
                         </li>                                                
-                        @endif
+                        @endif      
+                        
+                        @if (Auth::user()->role === 'chef')
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle d-flex align-items-center position-relative" href="#" id="notifikasiDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <span class="position-relative">
+                                    <i class="fas fa-bell fa-fw notification-icon me-2"></i>
+                                    @if(Auth::user()->unreadNotifications->count() > 0)
+                                        <span class="badge rounded-pill bg-danger position-absolute notification-badge">
+                                            {{ Auth::user()->unreadNotifications->count() }}
+                                        </span>
+                                    @endif
+                                </span>
+                            </a>
+                    
+                            <ul class="dropdown-menu dropdown-menu-end shadow-lg p-3 notification-dropdown" aria-labelledby="notifikasiDropdown">
+                                <li class="dropdown-header fw-bold text-white bg-primary p-2 rounded d-flex align-items-center">
+                                    <i class="bi bi-app-indicator me-2"></i> PESANAN MASUK
+                                </li>
+                    
+                                @forelse(Auth::user()->unreadNotifications as $notification)
+                                    <li class="notification-item d-flex align-items-center p-2">
+                                        <a href="#" class="dropdown-item d-flex align-items-center text-wrap fw-bold text-dark w-100">
+                                            <i class="bi bi-bell me-3 text-primary"></i>
+                                            <div class="d-flex justify-content-between w-100">
+                                                <span class="flex-grow-1">{{ $notification->data['message'] }}</span>
+                                                <small class="text-muted">{{ $notification->created_at->diffForHumans() }}</small>
+                                            </div>
+                                        </a>
+                                    </li>
+                                    <li><hr class="dropdown-divider"></li>
+                                @empty
+                                    <li class="dropdown-item text-muted text-center">
+                                        <i class="bi bi-info-circle me-2"></i> Tidak ada notifikasi
+                                    </li>
+                                @endforelse
+                    
+                                <li class="text-center">
+                                    <form action="{{ route('chef.readNotifications') }}" method="POST">
+                                        @csrf
+                                        <button type="submit" class="dropdown-item d-flex align-items-center text-primary">
+                                            <i class="bi bi-check2-circle me-2"></i> Tandai Semua Dibaca
+                                        </button>
+                                    </form>                                    
+                                </li>
+                            </ul>
+                        </li>
+                    @endif
+                    
                         <!-- Nav Item - Messages -->
                         {{-- <li class="nav-item dropdown no-arrow mx-1">
                             <a class="nav-link dropdown-toggle" href="#" id="messagesDropdown" role="button"
