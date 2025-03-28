@@ -15,7 +15,7 @@ class ChefController extends Controller
     {
         // Menghitung jumlah pesanan yang telah selesai
         $completedOrdersCount = Penjualan::where('status_pesanan', 'selesai')->count();
-
+    
         // Mengambil menu terlaris berdasarkan jumlah pemesanan
         $topMenus = DetailPenjualan::select('produk_id', DB::raw('COUNT(*) as total'))
             ->groupBy('produk_id')
@@ -23,16 +23,23 @@ class ChefController extends Controller
             ->take(5)
             ->with('produk')
             ->get();
-
-        // Menghitung rata-rata waktu penyelesaian pesanan tanpa completed_at
+    
+        // Pisahkan nama menu dan total pesanan agar bisa digunakan di Chart.js
+        $menuNames = $topMenus->pluck('produk.nama_produk'); // Nama produk
+        $menuOrders = $topMenus->pluck('total'); // Jumlah pesanan
+    
+        // Menghitung rata-rata waktu penyelesaian pesanan
         $averageCompletionTime = Penjualan::whereNotNull('created_at')
             ->where('status_pesanan', 'selesai')
             ->whereColumn('updated_at', '>', 'created_at') // Pastikan updated_at lebih besar dari created_at
             ->select(DB::raw('AVG(TIMESTAMPDIFF(MINUTE, created_at, updated_at)) as avg_time'))
             ->value('avg_time');
-
-        return view('admin.chef.dashboard', compact('completedOrdersCount', 'topMenus', 'averageCompletionTime'));
+    
+        return view('admin.chef.dashboard', compact(
+            'completedOrdersCount', 'topMenus', 'menuNames', 'menuOrders', 'averageCompletionTime'
+        ));
     }
+    
 
     // Menampilkan daftar pesanan untuk chef
     public function index()

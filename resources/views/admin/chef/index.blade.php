@@ -104,71 +104,84 @@
 
             <!-- Modal Detail Pesanan -->
             <div class="modal fade" id="detailModal{{ $order->id }}" tabindex="-1" 
-                    aria-labelledby="modalLabel{{ $order->id }}" aria-hidden="true">
-                <div class="modal-dialog modal-lg"> 
-                    <div class="modal-content">
-                        <div class="modal-header bg-light">
-                            <h5 class="modal-title fw-bold">Detail Pesanan -> {{ $order->no_faktur }}</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body">
-                            <div class="container">
-                                <div class="row mb-3 d-flex align-items-center">
-                                    <div class="col-5 fw-bold text-muted">Kode Pesanan</div>
-                                    <div class="col-auto">:</div>
-                                    <div class="col-6">{{ $order->no_faktur }}</div>
-                                </div>
-                                <div class="row mb-3 d-flex align-items-center">
-                                    <div class="col-5 fw-bold text-muted">Status Pembayaran</div>
-                                    <div class="col-auto">:</div>
-                                    <div class="col-6 text-{{ $order->status_pembayaran == 'lunas' ? 'success' : 'danger' }}">
-                                        {{ ucfirst($order->status_pembayaran) }}
-                                    </div>
-                                </div>
-                                <div class="row mb-4 d-flex align-items-center">
-                                    <div class="col-5 fw-bold text-muted">Status Pesanan</div>
-                                    <div class="col-auto">:</div>
-                                    <div class="col-6 text-{{ 
-                                        $order->status_pesanan == 'pending' ? 'warning' : 
-                                        ($order->status_pesanan == 'proses memasak' ? 'primary' : 'success') }}">
-                                        {{ ucfirst($order->status_pesanan) }}
-                                    </div>
-                                </div>
-                                <h6 class="fw-bold border-bottom pb-2 mb-3">Produk</h6>
-                                <ul class="list-group list-group-flush">
-                                    @foreach($order->detail_penjualan as $detail)
-                                        <li class="list-group-item border-bottom d-flex justify-content-between">
-                                            <span>{{ $detail->produk->nama_produk }}</span>
-                                            <span class="fw-bold text-danger">x{{ $detail->jumlah }}</span>
-                                        </li>
-                                    @endforeach
-                                </ul>                                
-                            </div>
-                        </div>
-                        <div class="modal-footer d-flex justify-content-end gap-2">
-                            @if($order->status_pesanan == 'pending')
-                                <form action="{{ route('chef.updateOrder', $order->id) }}" method="POST" class="d-inline">
-                                    @csrf
-                                    @method('PUT')
-                                    <input type="hidden" name="status_pesanan" value="proses memasak">
-                                    <button type="submit" class="btn btn-primary">
-                                        <i class="fas fa-fire"></i>  Mulai Memasak
-                                    </button>                                    
-                                </form>
-                            @elseif($order->status_pesanan == 'proses memasak')
-                                <form action="{{ route('chef.updateOrder', $order->id) }}" method="POST" class="d-inline">
-                                    @csrf
-                                    @method('PUT')
-                                    <input type="hidden" name="status_pesanan" value="selesai">
-                                    <button type="submit" class="btn btn-success">
-                                        <i class="fas fa-check"></i> Tandai Selesai
-                                    </button>
-                                </form>
-                            @endif
-                        </div>                        
-                    </div>
-                </div>
-            </div>
+                aria-labelledby="modalLabel{{ $order->id }}" aria-hidden="true">
+               <div class="modal-dialog modal-md"> 
+                   <div class="modal-content shadow rounded-3">
+                       <!-- Modal Header -->
+                       <div class="modal-header bg-light border-bottom">
+                           <h6 class="modal-title fw-bold">Detail Pesanan → {{ $order->no_faktur }}</h6>
+                           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                       </div>
+           
+                       <!-- Modal Body -->
+                       <div class="modal-body p-3" style="max-height: 60vh; overflow-y: auto;">
+                           <div class="container">
+                               <!-- Kode Pesanan -->
+                               <div class="row mb-2">
+                                   <div class="col-5 text-muted small">Kode Pesanan</div>
+                                   <div class="col-auto small">:</div>
+                                   <div class="col-6 small fw-bold">{{ $order->no_faktur }}</div>
+                               </div>
+           
+                               <!-- Status Pembayaran -->
+                               <div class="row mb-2">
+                                   <div class="col-5 text-muted small">Status Pembayaran</div>
+                                   <div class="col-auto small">:</div>
+                                   <div class="col-6 small fw-bold text-{{ $order->status_pembayaran == 'lunas' ? 'success' : 'danger' }}">
+                                       {{ ucfirst($order->status_pembayaran) }}
+                                   </div>
+                               </div>
+           
+                               <!-- Status Pesanan -->
+                               <div class="row mb-3">
+                                   <div class="col-5 text-muted small">Status Pesanan</div>
+                                   <div class="col-auto small">:</div>
+                                   <div class="col-6 small fw-bold text-{{ 
+                                       $order->status_pesanan == 'pending' ? 'warning' : 
+                                       ($order->status_pesanan == 'proses memasak' ? 'primary' : 'success') }}">
+                                       {{ ucfirst($order->status_pesanan) }}
+                                   </div>
+                               </div>
+           
+                               <!-- Produk -->
+                               <h6 class="border-bottom pb-1 mb-2 small">Produk :</h6>
+                               <ul class="list-group list-group-flush small">
+                                   @foreach($order->detail_penjualan as $detail)
+                                       <li class="list-group-item d-flex justify-content-between align-items-center p-2">
+                                           <span>{{ $detail->produk->nama_produk }}</span>
+                                           <span class="fw-bold text-danger">x{{ $detail->jumlah }}</span>
+                                       </li>
+                                   @endforeach
+                               </ul>                                
+                           </div>
+                       </div>
+           
+                       <!-- Modal Footer -->
+                       <div class="modal-footer bg-light border-top p-2 d-flex justify-content-end gap-2">
+                           @if($order->status_pesanan == 'pending')
+                               <form action="{{ route('chef.updateOrder', $order->id) }}" method="POST" class="d-inline">
+                                   @csrf
+                                   @method('PUT')
+                                   <input type="hidden" name="status_pesanan" value="proses memasak">
+                                   <button type="submit" class="btn btn-sm btn-primary">
+                                       <i class="fas fa-fire"></i>  Masak
+                                   </button>                                    
+                               </form>
+                           @elseif($order->status_pesanan == 'proses memasak')
+                               <form action="{{ route('chef.updateOrder', $order->id) }}" method="POST" class="d-inline">
+                                   @csrf
+                                   @method('PUT')
+                                   <input type="hidden" name="status_pesanan" value="selesai">
+                                   <button type="submit" class="btn btn-sm btn-success">
+                                       <i class="fas fa-check"></i> Selesai
+                                   </button>
+                               </form>
+                           @endif
+                       </div>                        
+                   </div>
+               </div>
+           </div>
+           
             @endforeach
         </tbody>
     </table>

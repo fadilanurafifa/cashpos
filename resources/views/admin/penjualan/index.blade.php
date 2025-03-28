@@ -71,6 +71,37 @@
         margin: 20px 0;
         margin-top: 5px;
     }
+    .form-check-input {
+    appearance: none; /* Hilangkan gaya bawaan */
+    width: 16px;
+    height: 16px;
+    border: 2px solid #34495e; /* Warna border agar lebih terlihat */
+    border-radius: 50%; /* Agar tetap berbentuk lingkaran */
+    outline: none; /* Hindari efek klik yang aneh */
+    background-color: #fff; /* Warna dasar */
+    position: relative;
+    cursor: pointer;
+}
+
+/* Saat radio button dipilih */
+.form-check-input:checked {
+    background-color: #89AC46; /* Warna merah saat dipilih */
+    border: 2px solid #89AC46;
+}
+
+/* Tambahkan lingkaran dalam agar terlihat jelas */
+.form-check-input:checked::before {
+    content: "";
+    width: 8px;
+    height: 8px;
+    background-color: white;
+    border-radius: 50%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
     </style>
     @endpush
     <div class="container">
