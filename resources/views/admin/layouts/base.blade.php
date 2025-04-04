@@ -24,6 +24,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <!-- Custom styles for this template-->
     <link href="{{ asset('assets/css/sb-admin-2.min.css') }}" rel="stylesheet">
@@ -200,6 +201,30 @@
 </head>
 <body id="page-top">
 
+    @if(session('success'))
+        <script>
+            Swal.fire({
+                title: "Berhasil!",
+                text: "{{ session('success') }}",
+                icon: "success",
+                timer: 3000,
+                showConfirmButton: false
+            });
+        </script>
+    @endif
+    
+    @if(session('logout'))
+        <script>
+            Swal.fire({
+                title: "Logout Berhasil!",
+                text: "{{ session('logout') }}",
+                icon: "info",
+                timer: 3000,
+                showConfirmButton: false
+            });
+        </script>
+    @endif
+    
     <!-- Page Wrapper -->
     <div id="wrapper">
 
@@ -527,7 +552,7 @@
                         </li>
 
                         
-                        @if (Auth::user()->role === 'kasir' || Auth::user()->role === 'admin')
+                        @if(Auth::user()->role === 'kasir' || Auth::user()->role === 'admin')
                         <!-- Nav Item - Alerts -->
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle d-flex align-items-center position-relative" href="#" id="notifikasiDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">

@@ -4,6 +4,7 @@
 @section('content')
 <!-- Bootstrap Icons -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
 
 @push('style')
     <style>
@@ -368,7 +369,20 @@
                         Swal.fire({
                             icon: 'success',
                             title: 'Transaksi Berhasil!',
-                            html: `No Faktur: <b>${data.no_faktur}</b><br>Total Bayar: <b>Rp ${data.total_bayar.toLocaleString()}</b>`
+                            html: `
+                                <div style="text-align: left;">
+                                    <p>No Faktur: <strong>${data.no_faktur}</strong></p>
+                                    <p>Total Bayar: <strong>Rp ${data.total_bayar.toLocaleString()}</strong></p>
+                                </div>
+                            `,
+                            background: '#2c3e50', // Warna latar belakang
+                            color: '#ecf0f1', // Warna teks
+                            iconColor: '#2ecc71', // Warna ikon
+                            confirmButtonText: '<i class="fa-solid fa-check"></i> OK',
+                            buttonsStyling: false, // Menonaktifkan styling default tombol
+                            customClass: {
+                                confirmButton: 'btn btn-primary' // Kelas kustom untuk tombol konfirmasi
+                            }
                         }).then(() => {
                             window.location.href =
                                 `{{ route('admin.pembayaran.show', ['no_faktur' => '__NO_FAKTUR__']) }}`

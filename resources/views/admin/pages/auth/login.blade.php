@@ -6,7 +6,10 @@
     <title>Login Admin</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
 </head>
+
 <body class="bg-gray-900 flex items-center justify-center min-h-screen">
 
     <div class="bg-[#2c3e50] p-6 rounded-lg shadow-lg w-96">
@@ -16,7 +19,27 @@
             </div>
             <h2 class="text-lg font-semibold text-white">Selamat Datang!</h2>
             <p class="text-gray-300 text-xs">Masuk sekarang untuk melanjutkan</p>
-        </div>        
+        </div>      
+        
+        @if(session('logout'))
+        <script>
+            Toastify({
+                text: "<i class='fa-solid fa-check-circle' style='color: lightgreen;'></i> {{ session('logout') }}",
+                duration: 3000,
+                gravity: "top",
+                position: "right",
+                stopOnFocus: true,
+                escapeMarkup: false, // Agar ikon HTML bisa dirender
+                style: {
+                    background: "none",
+                    color: "white",
+                    fontSize: "14px",
+                    boxShadow: "none",
+                    padding: "5px"
+                }
+            }).showToast();
+            </script>
+        @endif
 
         @if ($errors->any())
             <div class="mb-3 p-2 bg-red-500 text-white rounded text-xs">
