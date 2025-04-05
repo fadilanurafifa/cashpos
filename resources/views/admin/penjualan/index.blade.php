@@ -406,18 +406,43 @@ label.form-label {
                             icon: 'success',
                             title: 'Transaksi Berhasil!',
                             html: `
-                                <div style="text-align: left;">
-                                    <p>No Faktur: <strong>${data.no_faktur}</strong></p>
-                                    <p>Total Bayar: <strong>Rp ${data.total_bayar.toLocaleString()}</strong></p>
+                               <div style="font-size: 14px; line-height: 1.6; max-width: 420px; margin: auto;">
+                                <!-- No Faktur di tengah -->
+                                <p style="text-align: center;"><strong>No Faktur:</strong> ${data.no_faktur}</p>
+
+                                <!-- Data 2 kolom di tengah -->
+                                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 10px auto; max-width: 360px;">
+                                    <div style="text-align: center;">
+                                        <p style="margin: 0;"><strong>Tanggal Transaksi</strong></p>
+                                        <p style="margin: 0;">${new Date().toLocaleDateString()}</p>
+                                    </div>
+                                    <div style="text-align: center;">
+                                        <p style="margin: 0;"><strong>Pembayaran</strong></p>
+                                        <p style="margin: 0;">${data.metode_pembayaran || 'Tunai'}</p>
+                                    </div>
+                                    <div style="text-align: center;">
+                                        <p style="margin: 0;"><strong>Total Bayar</strong></p>
+                                        <p style="margin: 0;">Rp ${data.total_bayar.toLocaleString()}</p>
+                                    </div>
+                                    <div style="text-align: center;">
+                                        <p style="margin: 0;"><strong>Kasir</strong></p>
+                                        <p style="margin: 0;">${data.kasir || '-'}</p>
+                                    </div>
                                 </div>
+
+                                <hr style="margin: 12px 0;">
+                                <p style="font-style: italic; text-align: center;">Terima kasih atas kunjungan Anda!</p>
+                            </div>
+
                             `,
-                            background: '#2c3e50', // Warna latar belakang
-                            color: '#ecf0f1', // Warna teks
-                            iconColor: '#2ecc71', // Warna ikon
+                            width: '420px',
+                            iconColor: '#28a745',
+                            background: '#fff',
+                            color: '#333',
                             confirmButtonText: '<i class="fa-solid fa-check"></i> OK',
-                            buttonsStyling: false, // Menonaktifkan styling default tombol
+                            buttonsStyling: false,
                             customClass: {
-                                confirmButton: 'btn btn-primary' // Kelas kustom untuk tombol konfirmasi
+                                confirmButton: 'btn btn-success'
                             }
                         }).then(() => {
                             window.location.href =

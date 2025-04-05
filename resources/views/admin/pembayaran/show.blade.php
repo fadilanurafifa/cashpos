@@ -273,7 +273,9 @@
                 box-shadow: 0 0 0 0 rgba(40, 167, 69, 0);
             }
         }
-        
+        .btn[style*="#89AC46"]:hover {
+            background-color: #769636 !important;
+        }
     </style>
 @endpush
 
@@ -366,17 +368,17 @@
                     </div>
                     
                     
-                    <button type="submit" class="btn w-100 mt-4 btn-lg" style="background-color: #89AC46; border-color: #89AC46; color: white;">
-                        <i class="fas fa-money-bill-wave"></i> Proses Pembayaran
-                    </button>
+                    <button type="submit" class="btn w-100 mt-4 btn-lg shadow-sm border-0" 
+                    style="background-color: #89AC46; color: white; font-weight: 600; letter-spacing: 0.5px;">
+                    <i class="fas fa-credit-card me-2"></i>Lakukan Pembayaran!
+                </button>
+                
                 </form>
             @else
-            <button class="btn btn-success-custom w-100 mt-3 d-flex align-items-center justify-content-center gap-2" disabled>
-                <i class="fas fa-check-circle fa-lg"></i>
-                <span>Sukses melakukan pembayaran!</span>
-            </button>
-                
-            
+                <button class="btn btn-success-custom w-100 mt-3 d-flex align-items-center justify-content-center gap-2" disabled>
+                  <i class="fas fa-check-double fa-lg"></i>
+                    <span>Transaksi Sukses!</span>
+                </button>
                 <a href="{{ route('admin.pembayaran.print', $transaksi->no_faktur) }}" class="btn btn-cetak-struk" target="_blank">
                     <i class="fas fa-print"></i> Cetak Struk
                 </a>
@@ -450,17 +452,15 @@
                 title: 'Konfirmasi Pembayaran',
                 text: 'Apakah Anda yakin ingin melakukan pembayaran?',
                 icon: 'warning',
-                background: '#2c3e50', // Warna latar belakang
-                color: '#ecf0f1', // Warna teks
-                iconColor: '#f39c12', // Warna ikon
+                iconColor: '#f39c12', // Warna ikon tetap eye-catching
                 showCancelButton: true,
-                buttonsStyling: false, // Menonaktifkan gaya default tombol
+                buttonsStyling: false, // Matikan gaya default SweetAlert
                 confirmButtonText: '<i class="fa-solid fa-check"></i> Ya, bayar sekarang!',
                 cancelButtonText: '<i class="fa-solid fa-times"></i> Batal',
                 customClass: {
-                confirmButton: 'btn btn-success me-2', // Kelas Bootstrap untuk tombol konfirmasi dengan margin-end
-                cancelButton: 'btn btn-danger' // Kelas Bootstrap untuk tombol pembatalan
-            }
+                    confirmButton: 'btn btn-success me-2', // Tombol hijau Bootstrap
+                    cancelButton: 'btn btn-danger' // Tombol merah Bootstrap
+                }
             }).then((result) => {
                 if (result.isConfirmed) {
                     this.submit();
