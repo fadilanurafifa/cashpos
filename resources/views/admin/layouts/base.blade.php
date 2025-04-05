@@ -302,21 +302,6 @@
                 </div>
             </li>
             @endif
-            <!-- Nav Item - Utilities Collapse Menu -->
-             {{-- <li class="nav-item">
-                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseBarang"
-                aria-expanded="true" aria-controls="collapseUtilities">
-                <i class="fas fa-box"></i> <!-- Ganti ikon di sini -->
-                <span>Manajemen Barang</span>
-            </a>            
-                <div id="collapseBarang" class="collapse" aria-labelledby="headingUtilities"
-                    data-parent="#accordionSidebar">
-                    <div class="bg-white py-2 collapse-inner rounded">
-                        <h6 class="collapse-header">Pembelajaan Barang</h6>
-                        <a class="collapse-item" href="{{ route('barang.index') }}">Daftar Barang</a>
-                    </div>
-                </div>
-            </li>  --}}
             @if (Auth::user()->role === 'admin' || Auth::user()->role === 'kasir')
             <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseProduk"
@@ -333,20 +318,6 @@
                 </div>
             </li>
             @endif
-            {{-- <li class="nav-item">
-                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseSupplier"
-                aria-expanded="true" aria-controls="collapseUtilities">
-                 <i class="fas fa-fw fa-truck"></i>
-                 <span>Supplier</span>
-             </a>             
-                <div id="collapseSupplier" class="collapse" aria-labelledby="headingUtilities"
-                    data-parent="#accordionSidebar">
-                    <div class="bg-white py-2 collapse-inner rounded">
-                        <h6 class="collapse-header">Manajemen Supplier</h6>
-                        <a class="collapse-item" href="{{ route('pemasok.index') }}">Data Supplier</a>
-                    </div>
-                </div>
-            </li> --}}
             @if (Auth::user()->role === 'kasir' || Auth::user()->role === 'admin')
             <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePelanggan"
@@ -376,7 +347,7 @@
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePenjualan"
                 aria-expanded="true" aria-controls="collapsePenjualan">
                  <i class="fas fa-fw fa-shopping-cart"></i>
-                 <span>Manajemen Menu</span>
+                 <span>Transaksi Menu</span>
              </a>             
                 <div id="collapsePenjualan" class="collapse" aria-labelledby="headingUtilities"
                     data-parent="#accordionSidebar">
@@ -552,7 +523,7 @@
                         </li>
 
                         
-                        @if(Auth::user()->role === 'kasir' || Auth::user()->role === 'admin')
+                        @if(Auth::user()->role === 'kasir')
                         <!-- Nav Item - Alerts -->
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle d-flex align-items-center position-relative" href="#" id="notifikasiDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">

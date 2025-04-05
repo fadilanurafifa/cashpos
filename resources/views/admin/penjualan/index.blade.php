@@ -102,6 +102,23 @@
     left: 50%;
     transform: translate(-50%, -50%);
 }
+#form_member,
+#tipe_pelanggan {
+    transition: all 0.3s ease;
+}
+
+.form-select,
+.form-control {
+    border-radius: 0.5rem;
+    padding: 0.75rem;
+    font-size: 0.95rem;
+}
+
+label.form-label {
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+    color: #333;
+}
 
     </style>
     @endpush
@@ -133,7 +150,7 @@
             </div>    
             <div class="divider"></div>
         <!-- Pilih Tipe Pelanggan -->
-        <div class="d-flex gap-4 w-100">
+        {{-- <div class="d-flex gap-4 w-100">
             <div class="flex-grow-1">
                 <label for="tipe_pelanggan">Pilih Tipe Pelanggan :</label>
                 <select id="tipe_pelanggan" class="form-control" onchange="togglePelangganForm()">
@@ -151,8 +168,27 @@
                     @endforeach
                 </select>
             </div>
+        </div> --}}
+        <div class="d-flex flex-column flex-md-row gap-4 w-100">
+            <div class="flex-grow-1">
+                <label for="tipe_pelanggan" class="form-label fw-semibold">Pilih Tipe Pelanggan</label>
+                <select id="tipe_pelanggan" class="form-select shadow-sm" onchange="togglePelangganForm()">
+                    <option value="member">Pelanggan Member</option>
+                    <option value="lain">Pelanggan Lain</option>
+                </select>
+            </div>
+        
+            <div class="flex-grow-1" id="form_member">
+                <label for="pelanggan" class="form-label fw-semibold">Pelanggan Member</label>
+                <select id="pelanggan" class="form-select shadow-sm">
+                    <option value="">-- Pilih Pelanggan --</option>
+                    @foreach ($pelanggan as $p)
+                        <option value="{{ $p->id }}">{{ $p->nama }}</option>
+                    @endforeach
+                </select>
+            </div>
         </div>
-
+        
         <!-- Tambah Produk -->
         <div class="form-group">
             <label class="form-label" style="font-weight: bold; margin-top: 10px;">Produk :</label>
@@ -470,5 +506,19 @@
             }, index * 500); // Animasi bertahap setiap 500ms
         });
     });
+</script>
+<script>
+    function togglePelangganForm() {
+    const tipe = document.getElementById('tipe_pelanggan').value;
+    const formMember = document.getElementById('form_member');
+    if (tipe === 'member') {
+        formMember.style.display = 'block';
+    } else {
+        formMember.style.display = 'none';
+    }
+}
+window.addEventListener('DOMContentLoaded', () => {
+    togglePelangganForm(); // Initial state
+});
 </script>
 @endpush

@@ -186,26 +186,29 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 @push('style')
     <style>
-        .btn-cetak-struk {
-            background-color: #007bff;
-            color: white;
-            border: none;
+      .btn-cetak-struk {
+            background-color: #007bff !important;
+            color: white !important;
+            border: none !important;
             padding: 10px 16px;
             border-radius: 6px;
             font-size: 14px;
             cursor: pointer;
             margin-top: 15px;
+            transition: none;
         }
 
-        .btn-custom-success {
-            background-color: #89AC46 !important;
+        .btn-cetak-struk:hover,
+        .btn-cetak-struk:focus,
+        .btn-cetak-struk:active {
+            background-color: #007bff !important;
             color: white !important;
-            border: none;
-            padding: 12px;
-            font-size: 16px;
-            border-radius: 6px;
+            box-shadow: none !important;
+            outline: none !important;
         }
-
+        .btn-cetak-struk:active {
+            transform: scale(0.98);
+        }
         .uang-cepat {
             margin-right: 5px;
             margin-top: 5px;
@@ -229,6 +232,48 @@
             font-weight: bold;
             font-size: 1.5rem;
         }
+        .btn-success-custom {
+            background: linear-gradient(135deg, #28d17c, #1ea85c); /* fresh modern green */
+            color: #ffffff;
+            border: none;
+            padding: 0.9rem 1.5rem;
+            border-radius: 0.75rem;
+            font-size: 1rem;
+            font-weight: 600;
+            box-shadow: 0 6px 14px rgba(30, 168, 92, 0.3);
+            transition: transform 0.2s ease, box-shadow 0.3s ease;
+        }
+
+        .btn-success-custom:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 8px 18px rgba(30, 168, 92, 0.35);
+        }
+
+        .btn-success-custom i {
+            color: linear-gradient(135deg, #28d17c, #1ea85c);
+        }
+
+        .btn-success-custom:disabled {
+            background: #c3e6cb !important;
+            color: #2f4f2f !important;
+            box-shadow: none !important;
+            cursor: not-allowed;
+            opacity: 1;
+            animation: pulse 1.6s infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(40, 167, 69, 0.4);
+            }
+            70% {
+                box-shadow: 0 0 0 10px rgba(40, 167, 69, 0);
+            }
+            100% {
+                box-shadow: 0 0 0 0 rgba(40, 167, 69, 0);
+            }
+        }
+        
     </style>
 @endpush
 
@@ -326,9 +371,12 @@
                     </button>
                 </form>
             @else
-                <button class="btn btn-custom-success w-100 mt-3" disabled>
-                    <i class="fas fa-check"></i> Sukses melakukan pembayaran!
-                </button>
+            <button class="btn btn-success-custom w-100 mt-3 d-flex align-items-center justify-content-center gap-2" disabled>
+                <i class="fas fa-check-circle fa-lg"></i>
+                <span>Sukses melakukan pembayaran!</span>
+            </button>
+                
+            
                 <a href="{{ route('admin.pembayaran.print', $transaksi->no_faktur) }}" class="btn btn-cetak-struk" target="_blank">
                     <i class="fas fa-print"></i> Cetak Struk
                 </a>
