@@ -29,7 +29,7 @@ class AuthController extends Controller
             
             // Cek role user setelah login untuk menentukan halaman tujuan
             if (Auth::user()->role == 'kasir') {
-                return redirect()->route('penjualan.index')->with('success', 'Login berhasil sebagai Kasir!'); // Redirect ke halaman penjualan jika user adalah kasir
+                return redirect()->route('kasir.shift')->with('success', 'Login berhasil sebagai Kasir!'); // Redirect ke halaman penjualan jika user adalah kasir
             } elseif (Auth::user()->role == 'chef') {
                 return redirect()->route('chef.dashboard')->with('success', 'Login berhasil sebagai Chef!'); // Redirect ke halaman chef jika user adalah chef
             } elseif (Auth::user()->role == 'owner') {

@@ -17,6 +17,8 @@ class Penjualan extends Model
         'total_bayar',
         'pelanggan_id',
         'user_id',
+        'kasir_slot',
+        'kasir_nama',
         'metode_pembayar',
         'status_pembayaran',
         'status_pesanan',

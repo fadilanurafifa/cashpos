@@ -170,9 +170,11 @@
                             <th>ID Penjualan</th>
                             <th>Nama Pelanggan</th>
                             <th>Tipe Pelanggan</th> 
-                            <th>Metode Pembayaran</th>
+                            {{-- <th>Metode Pembayaran</th> --}}
                             <th>Total Harga</th>
                             <th>Tanggal Transaksi</th>
+                            <th>Kasir Slot</th>
+                            <th>Nama Kasir</th>
                             <th>Aksi</th>
                         </tr>
                     </thead>                                 
@@ -190,9 +192,11 @@
                                     {{ $penjualan->pelanggan ? 'Member' : 'Non-Member' }}
                                 </span>
                             </td>                            
-                            <td class="align-middle">Cash</td>
+                            {{-- <td class="align-middle">Cash</td> --}}
                             <td class="align-middle">Rp.{{ number_format($penjualan->total_bayar, 0, ',', '.') }}</td>
                             <td class="align-middle">{{ $penjualan->created_at->format('d-m-Y H:i') }}</td>
+                            <td class="align-middle">{{ $penjualan->kasir_slot ?? '-' }}</td>
+                            <td class="align-middle">{{ $penjualan->kasir_nama ?? '-' }}</td>
                             <td class="align-middle">
                                 <button class="btn btn-sm btn-info" data-bs-toggle="modal" data-bs-target="#modalDetail{{ $penjualan_id }}">
                                     <i class="fas fa-eye"></i> 

@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Struk Pembayaran</title>
     <style>
-        /* Pastikan elemen struk berada di tengah */
         body {
             font-family: 'Courier New', Courier, monospace;
             font-size: 11px;
@@ -15,14 +14,14 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh; /* Pusatkan vertikal */
+            height: 100vh; 
         }
 
         .container {
-            width: 58mm; /* Lebar kertas thermal */
+            width: 58mm; 
             padding: 5px;
             text-align: center;
-            border: 1px solid transparent; /* Untuk memastikan tidak ada clipping */
+            border: 1px solid transparent; 
         }
 
         .title {
@@ -52,12 +51,10 @@
         .bold {
             font-weight: bold;
         }
-
-        /* 🔥 Pengaturan cetak thermal */
         @media print {
             @page {
-                size: 58mm auto; /* Ukuran kertas thermal */
-                margin: 0; /* Hapus margin kosong */
+                size: 58mm auto; 
+                margin: 0; 
             }
 
             body {

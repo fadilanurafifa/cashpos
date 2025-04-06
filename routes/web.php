@@ -16,6 +16,7 @@ use App\Http\Controllers\PembayaranController;
 use App\Http\Controllers\PengajuanBarangController;
 use App\Http\Controllers\PenjualanController;
 use App\Http\Controllers\ProdukController;
+use App\Http\Controllers\ShiftController;
 use App\Http\Controllers\TransaksiController;
 use App\Http\Middleware\RoleMiddleware;
 use App\Models\PengajuanBarang;
@@ -80,8 +81,10 @@ Route::prefix('admin')->group(function () {
     Route::put('produk/{produk}/update-stok', [ProdukController::class, 'updateStok'])
         ->name('admin.produk.update-stok');
 });
-// });
     
+    // // penjualan
+    // Route::get('/penjualan', [PenjualanController::class, 'index'])->name('penjualan.index');
+    // Route::post('/penjualan/store', [PenjualanController::class, 'store'])->name('penjualan.store');
 
 Route::group(['middleware' => ['role:kasir,admin']], function () {
     // pelanggan 
@@ -94,9 +97,7 @@ Route::group(['middleware' => ['role:kasir,admin']], function () {
     Route::get('/pelanggan/export-pdf', [PelangganController::class, 'exportPdf'])->name('pelanggan.exportPdf');    
 
     
-    // penjualan
-    Route::get('/penjualan', [PenjualanController::class, 'index'])->name('penjualan.index');
-    Route::post('/penjualan/store', [PenjualanController::class, 'store'])->name('penjualan.store');
+
     
     
     // pembayaran 
@@ -145,4 +146,13 @@ Route::get('/pengajuan/export/excel', [PengajuanBarangController::class, 'export
 Route::get('/pengajuan/export/pdf', [PengajuanBarangController::class, 'exportPDF'])->name('pengajuan.export.pdf');
 
 
+Route::middleware(['web', 'auth', 'role:kasir,admin'])->group(function () {
+    Route::get('/shift', [ShiftController::class, 'index'])->name('kasir.shift');
+    Route::post('/shift', [ShiftController::class, 'store'])->name('shift.store');
+
+    // penjualan
+    Route::get('/penjualan', [PenjualanController::class, 'index'])->name('penjualan.index');
+    Route::post('/penjualan/store', [PenjualanController::class, 'store'])->name('penjualan.store');
+
+});
 

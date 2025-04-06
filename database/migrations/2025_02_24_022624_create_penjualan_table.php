@@ -18,6 +18,8 @@ return new class extends Migration
             $table->integer('total_bayar');
             $table->bigInteger('pelanggan_id');
             $table->bigInteger('user_id');
+            $table->string('kasir_slot')->nullable();
+            $table->string('kasir_nama')->nullable();            
             $table->string('metode_pembayar');
             $table->timestamps();
         });

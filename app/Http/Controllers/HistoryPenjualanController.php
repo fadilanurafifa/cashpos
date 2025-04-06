@@ -20,11 +20,20 @@ class HistoryPenjualanController extends Controller
             ->groupBy('penjualan_id'); // Mengelompokkan detail transaksi berdasarkan ID penjualan
     
         // Mengambil data transaksi utama dengan informasi pelanggan terkait
-        $transaksi = Penjualan::select(['id', 'pelanggan_id', 'total_bayar', 'status_pembayaran', 'created_at']) // Memilih kolom yang diperlukan
-            ->with('pelanggan') // Memuat relasi pelanggan
-            ->get() // Mengambil semua data transaksi dari tabel Penjualan
-            ->keyBy('id'); // Menjadikan ID sebagai key untuk akses lebih mudah
-        
+        $transaksi = Penjualan::select([
+            'id',
+            'pelanggan_id',
+            'total_bayar',
+            'status_pembayaran',
+            'created_at',
+            'kasir_slot', // ✅ Tambahkan ini
+            'kasir_nama'  // ✅ Tambahkan ini
+        ])
+        ->with('pelanggan')
+        ->get()
+        ->keyBy('id');
+    
+    
             $penjualan = Penjualan::with('detailTransaksi.produk')->get();
             
         // Menampilkan view 'admin.history-penjualan.index' dengan data transaksi dan detail transaksi

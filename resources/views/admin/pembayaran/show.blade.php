@@ -219,21 +219,21 @@
             font-weight: bold;
         }
         .alert-kembalian {
-            height: 60px !important; /* Paksa ukuran agar sama */
+            height: 60px !important; 
             display: flex;
             align-items: center;
             justify-content: center;
         }
 
         #jumlah_bayar {
-            height: 100% !important; /* Pastikan input mengisi penuh div */
+            height: 100% !important; 
             width: 100%;
             text-align: center;
             font-weight: bold;
             font-size: 1.5rem;
         }
         .btn-success-custom {
-            background: linear-gradient(135deg, #28d17c, #1ea85c); /* fresh modern green */
+            background: linear-gradient(135deg, #28d17c, #1ea85c); 
             color: #ffffff;
             border: none;
             padding: 0.9rem 1.5rem;
@@ -322,7 +322,7 @@
                             @php
                                 $harga_satuan = $detail->sub_total / $detail->jumlah;
                             @endphp
-                            <tr>
+                            <tr> 
                                 <td>{{ $detail->produk->nama_produk ?? 'Produk tidak ditemukan' }}</td>
                                 <td>{{ $detail->jumlah }}</td>
                                 <td>Rp {{ number_format($harga_satuan, 0, ',', '.') }}</td>

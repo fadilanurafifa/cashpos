@@ -425,8 +425,8 @@ label.form-label {
                                         <p style="margin: 0;">Rp ${data.total_bayar.toLocaleString()}</p>
                                     </div>
                                     <div style="text-align: center;">
-                                        <p style="margin: 0;"><strong>Kasir</strong></p>
-                                        <p style="margin: 0;">${data.kasir || '-'}</p>
+                                       <p style="margin: 0;"><strong>Kasir</strong></p>
+                                      <p style="margin: 0;">${data.kasir || '-'}</p>
                                     </div>
                                 </div>
 
