@@ -21,9 +21,9 @@ class PenjualanController extends Controller
     public function index()
     {
           // ✅ Cek apakah kasir sudah mengisi shift
-        if (!session()->has('kasir_slot') || !session()->has('kasir_nama')) {
-            return redirect()->route('kasir.shift')->with('error', 'Isi shift terlebih dahulu.');
-        }
+        // if (!session()->has('kasir_slot') || !session()->has('kasir_nama')) {
+        //     return redirect()->route('kasir.shift')->with('error', 'Isi shift terlebih dahulu.');
+        // }
         $pelanggan = Pelanggan::all(); // Ambil semua data pelanggan
         $penjualan = Penjualan::with('pelanggan')->paginate(10); // Ambil daftar penjualan dengan relasi pelanggan
         $produk = Produk::select('id', 'nama_produk', 'harga', 'foto')->get(); // Ambil daftar produk yang tersedia
@@ -91,8 +91,7 @@ class PenjualanController extends Controller
                 'total_bayar' => 0,
                 'pelanggan_id' => $validated['pelanggan_id'],
                 'user_id' => Auth::id(), // Simpan user login
-                'kasir_slot' => session('kasir_slot'), // Ambil dari sesi yang dipilih sebelumnya
-                'kasir_nama' => session('kasir_nama'), // Ambil nama kasir dari sesi juga
+                'kasir_id' => session('kasir_id'), // ⬅️ Tambahkan ini!
                 'metode_pembayar' => $request->metode_pembayaran ?? 'cash',
             ]);
             
@@ -121,7 +120,7 @@ class PenjualanController extends Controller
                 'success' => true,
                 'no_faktur' => $penjualan->no_faktur, // Kirim nomor faktur sebagai respon
                 'total_bayar' => $penjualan->total_bayar, // Kirim total bayar sebagai respon
-                'kasir' => $penjualan->kasir_nama, // ← ini penting
+                'kasir' => $penjualan->kasir->nama_kasir ?? '-',
             ]);
         } catch (\Exception $e) {
             DB::rollback(); // Batalkan transaksi jika terjadi kesalahan

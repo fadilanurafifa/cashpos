@@ -82,9 +82,9 @@ Route::prefix('admin')->group(function () {
         ->name('admin.produk.update-stok');
 });
     
-    // // penjualan
-    // Route::get('/penjualan', [PenjualanController::class, 'index'])->name('penjualan.index');
-    // Route::post('/penjualan/store', [PenjualanController::class, 'store'])->name('penjualan.store');
+    // penjualan
+    Route::get('/penjualan', [PenjualanController::class, 'index'])->name('penjualan.index');
+    Route::post('/penjualan/store', [PenjualanController::class, 'store'])->name('penjualan.store');
 
 Route::group(['middleware' => ['role:kasir,admin']], function () {
     // pelanggan 
@@ -96,9 +96,6 @@ Route::group(['middleware' => ['role:kasir,admin']], function () {
     Route::get('/pelanggan/export-excel', [PelangganController::class, 'exportExcel'])->name('pelanggan.exportExcel');
     Route::get('/pelanggan/export-pdf', [PelangganController::class, 'exportPdf'])->name('pelanggan.exportPdf');    
 
-    
-
-    
     
     // pembayaran 
     Route::prefix('admin')->name('admin.')->group(function () {
@@ -114,6 +111,9 @@ Route::group(['middleware' => ['role:owner,admin']], function () {
 // history Transaksi
 Route::get('/admin/history-penjualan', [HistoryPenjualanController::class, 'index'])->name('history.penjualan');
 Route::get('/cetak-struk/{id}', [HistoryPenjualanController::class, 'cetakStruk'])->name('cetak.struk');
+Route::get('/export/transaksi/excel', [HistoryPenjualanController::class, 'exportExcel'])->name('export.transaksi.excel');
+Route::get('/export/transaksi/pdf', [HistoryPenjualanController::class, 'exportPDF'])->name('export.transaksi.pdf');
+
 
 // laporan penjualan
 Route::get('/admin/laporan-penjualan', [LaporanPenjualanController::class, 'index'])->name('admin.laporan.penjualan');
@@ -146,13 +146,14 @@ Route::get('/pengajuan/export/excel', [PengajuanBarangController::class, 'export
 Route::get('/pengajuan/export/pdf', [PengajuanBarangController::class, 'exportPDF'])->name('pengajuan.export.pdf');
 
 
+// Buat route shift di luar group middleware auth
+Route::get('/shift', [ShiftController::class, 'index'])->name('kasir.shift');
+Route::post('/shift', [ShiftController::class, 'store'])->name('shift.store');
+
+// Setelah login, baru yang ini pake middleware:
 Route::middleware(['web', 'auth', 'role:kasir,admin'])->group(function () {
-    Route::get('/shift', [ShiftController::class, 'index'])->name('kasir.shift');
-    Route::post('/shift', [ShiftController::class, 'store'])->name('shift.store');
-
-    // penjualan
     Route::get('/penjualan', [PenjualanController::class, 'index'])->name('penjualan.index');
-    Route::post('/penjualan/store', [PenjualanController::class, 'store'])->name('penjualan.store');
-
+    // ...
 });
+
 

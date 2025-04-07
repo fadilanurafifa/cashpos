@@ -138,18 +138,33 @@
     
     <div class="d-flex justify-content-between align-items-center mb-4">
        <!-- Button Filter (Kiri) -->
-       <div class="dropdown">
-        <button class="btn btn-custom dropdown-toggle d-flex align-items-center" type="button" id="filterDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-            <i class="fas fa-filter me-2"></i> Filter Transaksi
-        </button>
-        <ul class="dropdown-menu" aria-labelledby="filterDropdown">
-            <li><a class="dropdown-item" href="#" onclick="filterTable('all')"><i class="fas fa-list me-2"></i> Semua Transaksi</a></li>
-            <div class="dropdown-divider"></div>
-            <li><a class="dropdown-item" href="#" onclick="filterTable('member')"><i class="fas fa-user-check me-2"></i> Pelanggan Member</a></li>
-            <div class="dropdown-divider"></div>
-            <li><a class="dropdown-item" href="#" onclick="filterTable('biasa')"><i class="fas fa-user me-2"></i> Pelanggan Biasa</a></li>
-        </ul>
-    </div>
+       <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+
+        <!-- FILTER -->
+        <div class="dropdown">
+            <button class="btn btn-custom dropdown-toggle d-flex align-items-center" type="button" id="filterDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                <i class="fas fa-filter me-2"></i> Filter Transaksi
+            </button>
+            <ul class="dropdown-menu" aria-labelledby="filterDropdown">
+                <li><a class="dropdown-item" href="#" onclick="filterTable('all')"><i class="fas fa-list me-2"></i> Semua Transaksi</a></li>
+                <div class="dropdown-divider"></div>
+                <li><a class="dropdown-item" href="#" onclick="filterTable('member')"><i class="fas fa-user-check me-2"></i> Pelanggan Member</a></li>
+                <div class="dropdown-divider"></div>
+                <li><a class="dropdown-item" href="#" onclick="filterTable('biasa')"><i class="fas fa-user me-2"></i> Pelanggan Biasa</a></li>
+            </ul>
+        </div>
+    
+        <!-- EXPORT BUTTONS -->
+        <div class="d-flex gap-2">
+            <a href="{{ route('export.transaksi.excel') }}" class="btn btn-success btn-sm">
+                <i class="fas fa-file-excel me-1"></i> Export Excel
+            </a>
+            <a href="{{ route('export.transaksi.pdf') }}" target="_blank" class="btn btn-danger btn-sm">
+                <i class="fas fa-file-pdf me-1"></i> Cetak Laporan
+            </a>            
+        </div>
+    
+    </div>    
     
         <div class="d-flex align-items-center">
             <i class="fas fa-coins me-3 fa-2x"></i>
@@ -168,13 +183,13 @@
                     <thead class="thead-light">
                         <tr class="text-center">
                             <th>ID Penjualan</th>
+                            <th>Slot Kasir</th>
                             <th>Nama Pelanggan</th>
                             <th>Tipe Pelanggan</th> 
                             {{-- <th>Metode Pembayaran</th> --}}
                             <th>Total Harga</th>
                             <th>Tanggal Transaksi</th>
-                            <th>Kasir Slot</th>
-                            <th>Nama Kasir</th>
+                            {{-- <th>Nama Kasir</th> --}}
                             <th>Aksi</th>
                         </tr>
                     </thead>                                 
@@ -184,6 +199,7 @@
                         @if($penjualan)
                         <tr class="transaksi-row" data-type="{{ $penjualan->pelanggan ? 'member' : 'biasa' }}">
                             <td class="text-center align-middle">{{ $penjualan_id }}</td>
+                            <td class="align-middle">{{ $penjualan->kasir->slot_kasir ?? '-' }}</td>
                             <td class="align-middle">
                                 {{ $penjualan->pelanggan ? $penjualan->pelanggan->nama : 'Pelanggan Biasa' }}
                             </td>
@@ -195,8 +211,7 @@
                             {{-- <td class="align-middle">Cash</td> --}}
                             <td class="align-middle">Rp.{{ number_format($penjualan->total_bayar, 0, ',', '.') }}</td>
                             <td class="align-middle">{{ $penjualan->created_at->format('d-m-Y H:i') }}</td>
-                            <td class="align-middle">{{ $penjualan->kasir_slot ?? '-' }}</td>
-                            <td class="align-middle">{{ $penjualan->kasir_nama ?? '-' }}</td>
+                            {{-- <td class="align-middle">{{ $penjualan->kasir_nama ?? '-' }}</td> --}}
                             <td class="align-middle">
                                 <button class="btn btn-sm btn-info" data-bs-toggle="modal" data-bs-target="#modalDetail{{ $penjualan_id }}">
                                     <i class="fas fa-eye"></i> 
@@ -242,10 +257,21 @@
                         @endforeach
                     </tbody>
                 </table>
+            
+                <!-- Tambahan informasi nama kasir -->
+                <p class="mt-2" style="font-size: 14px;">
+                    <strong>Nama Kasir:</strong> {{ $penjualan->kasir->nama_kasir ?? '-' }}
+                </p>
+                <p class="mt-2" style="font-size: 14px;">
+                    <strong>Slot Kasir:</strong> {{ $penjualan->kasir->slot_kasir ?? '-' }}
+                </p>                
+                
+            
                 <p class="mt-2" style="font-size: 14px; background-color: #d1ecf1; padding: 6px 12px; border-radius: 5px; color: #0c5460; font-weight: bold;">
                     <strong>Status Pembayaran :</strong> {{ ucfirst($penjualan->status_pembayaran) }}
-                </p>                              
+                </p>
             </div>
+            
             <div class="modal-footer">
                 <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">Tutup</button>
                 <!-- Tombol untuk menampilkan struk -->

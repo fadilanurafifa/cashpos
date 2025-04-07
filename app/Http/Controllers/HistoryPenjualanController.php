@@ -14,30 +14,37 @@ class HistoryPenjualanController extends Controller
     // Menampilkan riwayat transaksi penjualan
     public function index()
     {
-        // Mengambil semua detail transaksi, termasuk informasi produk dan pelanggan terkait
-        $detailTransaksi = DetailPenjualan::with(['produk', 'penjualan.pelanggan']) // Memuat relasi produk dan pelanggan
-            ->get() // Mengambil semua data dari tabel DetailPenjualan
-            ->groupBy('penjualan_id'); // Mengelompokkan detail transaksi berdasarkan ID penjualan
+        $detailTransaksi = DetailPenjualan::with(['produk', 'penjualan.pelanggan'])
+            ->get()
+            ->groupBy('penjualan_id');
     
-        // Mengambil data transaksi utama dengan informasi pelanggan terkait
-        $transaksi = Penjualan::select([
-            'id',
-            'pelanggan_id',
-            'total_bayar',
-            'status_pembayaran',
-            'created_at',
-            'kasir_slot', // ✅ Tambahkan ini
-            'kasir_nama'  // ✅ Tambahkan ini
-        ])
-        ->with('pelanggan')
-        ->get()
-        ->keyBy('id');
+        $transaksi = Penjualan::with(['pelanggan', 'kasir']) // include kasir relation
+            ->select([
+                'id',
+                'pelanggan_id',
+                'kasir_id',
+                'total_bayar',
+                'status_pembayaran',
+                'created_at'
+            ])
+            ->get()
+            ->keyBy('id');
     
-    
-            $penjualan = Penjualan::with('detailTransaksi.produk')->get();
-            
-        // Menampilkan view 'admin.history-penjualan.index' dengan data transaksi dan detail transaksi
         return view('admin.history-penjualan.index', compact('detailTransaksi', 'transaksi'));
-
     }
+        // Export ke Excel
+    public function exportExcel()
+    {
+        return Excel::download(new TransaksiExport, 'laporan-transaksi.xlsx');
+    }
+
+    // Export ke PDF
+    public function exportPDF()
+    {
+        $penjualan = Penjualan::with(['pelanggan', 'kasir', 'detailTransaksi.produk'])->get();
+    
+        return view('admin.history-penjualan.export-pdf', compact('penjualan'));
+    }
+    
+    
 }

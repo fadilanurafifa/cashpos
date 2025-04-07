@@ -17,8 +17,7 @@ class Penjualan extends Model
         'total_bayar',
         'pelanggan_id',
         'user_id',
-        'kasir_slot',
-        'kasir_nama',
+        'kasir_id',
         'metode_pembayar',
         'status_pembayaran',
         'status_pesanan',
@@ -65,6 +64,12 @@ class Penjualan extends Model
     {
         return $this->hasMany(detailPenjualan::class, 'penjualan_id');
     }
+    public function kasir()
+    {
+        return $this->belongsTo(\App\Models\Kasir::class, 'kasir_id');
+    }
+
+    
 
 }
 

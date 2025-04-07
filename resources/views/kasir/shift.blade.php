@@ -79,31 +79,40 @@
 
             <!-- Form Shift -->
             <form action="{{ route('shift.store') }}" method="POST">
-                @csrf            
-
+                @csrf
                 <div class="mb-3">
                     <label for="slot" class="form-label">Pilih Slot Kasir</label>
-                    <select name="slot" id="slot" class="form-select" required>
+                    <select name="slot" class="form-select" required>
                         <option value="">-- Pilih Slot --</option>
                         <option value="Kasir 1">Kasir 1</option>
                         <option value="Kasir 2">Kasir 2</option>
                         <option value="Kasir 3">Kasir 3</option>
                     </select>
                 </div>
-
+            
                 <div class="mb-3">
-                    <label for="nama" class="form-label">Nama Kasir</label>
-                    <input type="text" name="nama" id="nama" class="form-control" placeholder="Nama Lengkap" required>
+                    <label for="kasir_id" class="form-label">Nama Kasir</label>
+                    <select name="kasir_id" id="kasir_id" class="form-select" required>
+                        <option value="">-- Pilih Kasir --</option>
+                        @foreach($daftarKasir as $kasir)
+                            <option value="{{ $kasir->id }}">{{ $kasir->nama_kasir }}</option>
+                        @endforeach
+                        <option value="lainnya">+ Tambah Nama Baru</option>
+                    </select>
+            
+                    <input type="text" name="nama_baru" id="nama_baru" class="form-control mt-2" placeholder="Masukkan Nama Baru" style="display: none;">
                 </div>
-
-                <button type="submit" class="btn btn-primary w-100 mb-3">Mulai Shift</button>
+            
+                <button type="submit" class="btn btn-primary w-100">Mulai Shift</button>
             </form>
+            
+            
 
             <!-- Tombol Logout -->
             <div class="text-center">
                 <a href="#" class="btn btn-outline-danger w-100"
                    onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                    Logout
+                    Cancel
                 </a>
                 <form id="logout-form" action="{{ route('admin.logout') }}" method="POST" style="display: none;">
                     @csrf
@@ -115,4 +124,13 @@
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
+<script>
+    document.getElementById('kasir_id').addEventListener('change', function () {
+        const namaBaruInput = document.getElementById('nama_baru');
+        namaBaruInput.style.display = this.value === 'lainnya' ? 'block' : 'none';
+    });
+</script>
+
+    
 </html>
+
