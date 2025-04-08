@@ -76,12 +76,22 @@
         }
 
         th {
-            background-color: #aec3c7;
-            color: #333;
-            font-size: 14px;
-            font-weight: bold;
-            text-transform: uppercase;
+        border: 1px solid #ddd;
+        padding: 10px;
+        text-align: center; /* Header tetap di tengah */
+        background-color: #aec3c7;
+        color: #333;
+        font-size: 14px;
+        font-weight: bold;
+        text-transform: uppercase;
         }
+
+        td {
+        border: 1px solid #ddd;
+        padding: 10px;
+        text-align: left; /* Isi data tabel di kiri */
+        }
+
 
         tbody tr:nth-child(even) {
             background-color: #f9f9f9;
@@ -111,6 +121,9 @@
                 -webkit-print-color-adjust: exact;
                 print-color-adjust: exact;
             }
+        }
+        .table-header-row td {
+            text-align: center !important;
         }
     </style>
     <script>
@@ -143,7 +156,7 @@
     
         <tbody>
             <!-- HEADER: ditaruh di baris pertama tbody agar hanya muncul sekali -->
-            <tr style="background-color: #aec3c7; color: #333; font-size: 14px; font-weight: bold; text-transform: uppercase;">
+            <tr class="table-header-row" style="background-color: #aec3c7; color: #333; font-size: 14px; font-weight: bold; text-transform: uppercase;">
                 <td class="header-cell">ID</td>
                 <td class="header-cell">Pelanggan</td>
                 <td class="header-cell">Kasir</td>

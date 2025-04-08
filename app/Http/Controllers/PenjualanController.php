@@ -20,10 +20,6 @@ class PenjualanController extends Controller
     // Menampilkan daftar penjualan dengan informasi pelanggan dan produk
     public function index()
     {
-          // ✅ Cek apakah kasir sudah mengisi shift
-        // if (!session()->has('kasir_slot') || !session()->has('kasir_nama')) {
-        //     return redirect()->route('kasir.shift')->with('error', 'Isi shift terlebih dahulu.');
-        // }
         $pelanggan = Pelanggan::all(); // Ambil semua data pelanggan
         $penjualan = Penjualan::with('pelanggan')->paginate(10); // Ambil daftar penjualan dengan relasi pelanggan
         $produk = Produk::select('id', 'nama_produk', 'harga', 'foto')->get(); // Ambil daftar produk yang tersedia

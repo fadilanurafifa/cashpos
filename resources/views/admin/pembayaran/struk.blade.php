@@ -79,10 +79,11 @@
         <div class="line"></div>
 
         @if(isset($transaksi) && isset($detail_penjualan))
-            <p class="bold">No Faktur: {{ $transaksi->no_faktur ?? '-' }}</p>
-            <p class="bold">Tanggal: {{ isset($transaksi->created_at) ? date('d-m-Y H:i', strtotime($transaksi->created_at)) : '-' }}</p>
-            <div class="line"></div>
-
+        <p class="bold">No Faktur: {{ $transaksi->no_faktur ?? '-' }}</p>
+        <p class="bold">Tanggal: {{ isset($transaksi->created_at) ? date('d-m-Y H:i', strtotime($transaksi->created_at)) : '-' }}</p>
+        <p class="bold">Kasir: {{ $transaksi->kasir->nama_kasir ?? '-' }}</p>
+        <div class="line"></div>
+        
             <table>
                 @foreach ($detail_penjualan as $detail)
                     <tr>

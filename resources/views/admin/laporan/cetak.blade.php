@@ -80,11 +80,20 @@
 
         /* Header Tabel */
         th {
-            background-color: #aec3c7;
-            color: #333;
-            font-size: 14px;
-            font-weight: bold;
-            text-transform: uppercase;
+        border: 1px solid #ddd;
+        padding: 10px;
+        text-align: center; /* Header tetap di tengah */
+        background-color: #aec3c7;
+        color: #333;
+        font-size: 14px;
+        font-weight: bold;
+        text-transform: uppercase;
+        }
+
+        td {
+        border: 1px solid #ddd;
+        padding: 10px;
+        text-align: left; /* Isi data tabel di kiri */
         }
 
         /* Baris Bergantian */
