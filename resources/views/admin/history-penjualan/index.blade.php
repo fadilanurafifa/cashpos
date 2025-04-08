@@ -131,32 +131,8 @@
                 <a href="#" class="text-custom text-decoration-none">Laporan Transaksi</a>
             </p>                
         </div>
-    </div>       
-    @php
-    $totalIncome = $transaksi->where('status_pembayaran', 'lunas')->sum('total_bayar');
-    @endphp
-    
-    <div class="d-flex justify-content-between align-items-center mb-4">
-       <!-- Button Filter (Kiri) -->
-       <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
-
-        <!-- FILTER -->
-        <div class="dropdown">
-            <button class="btn btn-custom dropdown-toggle d-flex align-items-center" type="button" id="filterDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                <i class="fas fa-filter me-2"></i> Filter Transaksi
-            </button>
-            <ul class="dropdown-menu" aria-labelledby="filterDropdown">
-                <li><a class="dropdown-item" href="#" onclick="filterTable('all')"><i class="fas fa-list me-2"></i> Semua Transaksi</a></li>
-                <div class="dropdown-divider"></div>
-                <li><a class="dropdown-item" href="#" onclick="filterTable('member')"><i class="fas fa-user-check me-2"></i> Pelanggan Member</a></li>
-                <div class="dropdown-divider"></div>
-                <li><a class="dropdown-item" href="#" onclick="filterTable('biasa')"><i class="fas fa-user me-2"></i> Pelanggan Biasa</a></li>
-            </ul>
-        </div>
-    
-        <!-- EXPORT BUTTONS -->
         <div class="d-flex gap-2">
-            <a href="{{ route('export.transaksi.excel') }}" class="btn btn-success btn-sm">
+            <a href="{{ route('export.transaksi.excel') }}" class="btn btn-warning btn-sm">
                 <i class="fas fa-file-excel me-1"></i> Export Excel
             </a>
             <a href="{{ route('export.transaksi.pdf') }}" target="_blank" class="btn btn-danger btn-sm">
@@ -164,7 +140,53 @@
             </a>            
         </div>
     
-    </div>    
+    </div>       
+    @php
+    $totalIncome = $transaksi->where('status_pembayaran', 'lunas')->sum('total_bayar');
+    @endphp
+    
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <!-- FILTER -->
+        <div class="row align-items-end mb-3">
+            <!-- Filter Dropdown -->
+            <div class="col-md-3">
+                <div class="dropdown">
+                    <button class="btn btn-custom dropdown-toggle d-flex align-items-center" type="button" id="filterDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="fas fa-filter me-2"></i> Filter Transaksi
+                    </button>
+                    <ul class="dropdown-menu" aria-labelledby="filterDropdown">
+                        <li><a class="dropdown-item" href="#" onclick="filterTable('all')"><i class="fas fa-list me-2"></i> Semua Transaksi</a></li>
+                        <div class="dropdown-divider"></div>
+                        <li><a class="dropdown-item" href="#" onclick="filterTable('member')"><i class="fas fa-user-check me-2"></i> Pelanggan Member</a></li>
+                        <div class="dropdown-divider"></div>
+                        <li><a class="dropdown-item" href="#" onclick="filterTable('biasa')"><i class="fas fa-user me-2"></i> Pelanggan Biasa</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+        
+           <!-- Tanggal Filter -->
+           <div class="col-md-4" style="margin-left: 30px;">
+            <label for="startDate" class="form-label" style="font-size: 13px;">Dari Tanggal :</label>
+            <input type="date" id="startDate" class="form-control form-control-sm" placeholder="dd-mm-yyyy"
+                style="height: 34px; font-size: 0.85rem; width: 135px;" onchange="filterByDate()">
+            </div>
+        
+
+            <div class="col-md-4 d-flex flex-column" style="margin-left: -30px;">
+                <label for="endDate" class="form-label" style="font-size: 13px;">Sampai Tanggal :</label>
+                <div class="d-flex align-items-center">
+                    <input type="date" id="endDate" class="form-control form-control-sm me-2" placeholder="dd-mm-yyyy"
+                        style="height: 34px; font-size: 0.85rem;" onchange="filterByDate()">
+                    <span onclick="resetTanggal()" style="cursor: pointer; font-size: 12px; color: red; text-decoration: underline;">
+                            Reset
+                    </span>                        
+                </div>
+            </div>
+
+        </div>
+        
     
         <div class="d-flex align-items-center">
             <i class="fas fa-coins me-3 fa-2x"></i>
@@ -359,6 +381,8 @@ $(document).ready(function() {
         }
     });
 
+    // filter berdasarkan tanggal transaksi
+
     // Pastikan teks "Cari Nama:" tetap sejajar dengan input
     setTimeout(function() {
         $('.dataTables_filter').css({
@@ -452,6 +476,41 @@ function filterTable(type) {
     printWindow.print();
     printWindow.close();
 }
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+
+    <script>
+        $.fn.dataTable.ext.search.push(function(settings, data, dataIndex) {
+            var startDate = $('#startDate').val();
+            var endDate = $('#endDate').val();
+    
+            // Kolom ke-5 adalah "Tanggal Transaksi" (index mulai dari 0)
+            var dateStr = data[5]; // Format: dd-mm-yyyy HH:mm
+            var transactionDate = moment(dateStr, 'DD-MM-YYYY HH:mm').toDate();
+    
+            if (!startDate && !endDate) return true;
+    
+            if (startDate && !endDate) {
+                return transactionDate >= new Date(startDate);
+            }
+    
+            if (!startDate && endDate) {
+                return transactionDate <= new Date(endDate);
+            }
+    
+            return transactionDate >= new Date(startDate) && transactionDate <= new Date(endDate);
+        });
+    
+        $('#startDate, #endDate').change(function() {
+            $('#transaksiTable').DataTable().draw();
+        });
+
+        // reset tanggal
+        function resetTanggal() {
+        document.getElementById('startDate').value = '';
+        document.getElementById('endDate').value = '';
+        filterByDate(); // Panggil filter ulang jika perlu
+    }
     </script>
 @endpush
 

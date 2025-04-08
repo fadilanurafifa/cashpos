@@ -9,7 +9,12 @@
     <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
 </head>
-
+<style>
+    p {
+    font-style: italic;
+    font-size: 13px;
+}
+</style>
 <body class="bg-gray-900 flex items-center justify-center min-h-screen">
 
     <div class="bg-[#2c3e50] p-6 rounded-lg shadow-lg w-96">
@@ -18,7 +23,7 @@
                 <img src="{{ asset('assets/img/logo.png') }}" alt="Logo" style="width: 100px; height: 100px;">
             </div>
             <h2 class="text-lg font-semibold text-white">Selamat Datang!</h2>
-            <p class="text-gray-300 text-xs">Masuk sekarang untuk melanjutkan</p>
+            <p class="text-gray-300 text-xs">Masuk sekarang untuk melanjutkan!</p>
         </div>      
         
         @if(session('logout'))

@@ -98,12 +98,16 @@
                 padding: 0;
                 margin: 0;
             }
+
             .kop-surat {
                 margin-bottom: 10px;
             }
-            th {
+
+            /* Tambahkan untuk memastikan warna header table tetap muncul */
+            td.header-cell {
                 background: #aec3c7 !important;
                 color: #333 !important;
+                font-weight: bold;
                 -webkit-print-color-adjust: exact;
                 print-color-adjust: exact;
             }
@@ -134,17 +138,21 @@
     </p>
 
     <table>
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Pelanggan</th>
-                <th>Kasir</th>
-                <th>Total</th>
-                <th>Status</th>
-                <th>Tanggal</th>
-            </tr>
-        </thead>
+        <!-- Kosongkan <thead> untuk mencegah pengulangan otomatis saat print -->
+        <thead></thead>
+    
         <tbody>
+            <!-- HEADER: ditaruh di baris pertama tbody agar hanya muncul sekali -->
+            <tr style="background-color: #aec3c7; color: #333; font-size: 14px; font-weight: bold; text-transform: uppercase;">
+                <td class="header-cell">ID</td>
+                <td class="header-cell">Pelanggan</td>
+                <td class="header-cell">Kasir</td>
+                <td class="header-cell">Total</td>
+                <td class="header-cell">Status</td>
+                <td class="header-cell">Tanggal</td>
+            </tr>
+    
+            <!-- DATA -->
             @foreach($penjualan as $trx)
             <tr>
                 <td>{{ $trx->id }}</td>
@@ -157,6 +165,7 @@
             @endforeach
         </tbody>
     </table>
-
+    
+    
 </body>
 </html>
