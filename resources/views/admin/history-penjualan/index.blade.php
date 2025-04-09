@@ -312,30 +312,118 @@
 <div class="modal fade" id="modalStruk{{ $penjualan->id }}" tabindex="-1" aria-labelledby="modalStrukLabel" aria-hidden="true">
     <div class="modal-dialog" style="max-width: 350px;">
         <div class="modal-content">
-            <div class="modal-body">
+            <div class="modal-body text-center">
                 <div id="struk{{ $penjualan->id }}" class="struk-container">
-                    <div class="text-center">
-                        <p class="title">Kasir Caffe</p>
-                        <p>Jl. Merdeka Belajar No.12<br>Bandung - Jawa Barat</p>
-                        <div class="line"></div>
-                        <p class="bold">No Faktur: {{ $penjualan->id }}</p>
-                        <p class="bold">Tanggal: {{ $penjualan->created_at->format('d-m-Y H:i') }}</p>
-                        <div class="line"></div>
-                    </div>
+                    <style>
+                        .struk-container {
+                            max-width: 300px;
+                            margin: 0 auto;
+                            font-family: 'Courier New', Courier, monospace;
+                            font-size: 11px;
+                            text-align: center;
+                            padding: 10px;
+                        }
 
-                    <table style="width: 100%; font-size: 12px;">
-                        <tbody>
-                            @foreach($penjualan->detailTransaksi ?? [] as $detail)
-                            <tr>
-                                <td>{{ $detail->produk->nama_produk ?? 'Produk Tidak Ditemukan' }}</td>
-                                <td class="right">{{ $detail->jumlah }} x Rp {{ number_format($detail->sub_total / max($detail->jumlah, 1), 0, ',', '.') }}</td>
-                            </tr>
-                            @endforeach
-                        </tbody>
+                        .title {
+                            font-size: 13px;
+                            font-weight: bold;
+                            margin-bottom: 2px;
+                        }
+
+                        .subtitle {
+                            font-size: 10px;
+                            margin-bottom: 8px;
+                            line-height: 1.2;
+                        }
+
+                        .line {
+                            border-top: 1px dashed #000;
+                            margin: 5px 0;
+                        }
+
+                        table {
+                            width: 100%;
+                            font-size: 10px;
+                            border-collapse: collapse;
+                            text-align: left;
+                        }
+
+                        td {
+                            vertical-align: top;
+                            padding: 2px 0;
+                        }
+
+                        .right {
+                            text-align: right;
+                        }
+
+                        .bold {
+                            font-weight: bold;
+                        }
+
+                        .footer {
+                            font-size: 10px;
+                            margin-top: 6px;
+                            line-height: 1.3;
+                        }
+
+                        @media print {
+                            body * {
+                                visibility: hidden;
+                            }
+
+                            .struk-container,
+                            .struk-container * {
+                                visibility: visible;
+                            }
+
+                            .struk-container {
+                                position: absolute;
+                                top: 0;
+                                left: 0;
+                                width: 100%;
+                                margin: 0 auto;
+                            }
+                        }
+                    </style>
+
+                    <!-- STRUK CONTENT -->
+                    <p class="title">Kasir Caffe</p>
+                    <p class="subtitle">Jl. Merdeka Belajar No.12<br>Bandung - Jawa Barat</p>
+                    <div class="line"></div>
+
+                    <table>
+                        <tr>
+                            <td>No Faktur</td>
+                            <td class="right bold">{{ $penjualan->id }}</td>
+                        </tr>
+                        <tr>
+                            <td>Tanggal</td>
+                            <td class="right">{{ $penjualan->created_at->format('d-m-Y H:i') }}</td>
+                        </tr>
+                        <tr>
+                            <td>Kasir</td>
+                            <td class="right">{{ $penjualan->kasir->nama_kasir ?? '-' }}</td>
+                        </tr>
                     </table>
 
                     <div class="line"></div>
-                    <table style="width: 100%; font-size: 12px;">
+
+                    <table>
+                        @foreach($penjualan->detailTransaksi ?? [] as $detail)
+                        <tr>
+                            <td colspan="2">{{ $detail->produk->nama_produk ?? 'Produk Tidak Ditemukan' }}</td>
+                        </tr>
+                        <tr>
+                            <td>{{ $detail->jumlah }} x Rp {{ number_format($detail->sub_total / max($detail->jumlah, 1), 0, ',', '.') }}</td>
+                            <td class="right">Rp {{ number_format($detail->sub_total, 0, ',', '.') }}</td>
+                        </tr>
+                        @endforeach
+                    </table>
+
+                    <div class="line"></div>
+
+                    <table>
                         <tr>
                             <td><strong>Total</strong></td>
                             <td class="right"><strong>Rp {{ number_format($penjualan->total_bayar ?? 0, 0, ',', '.') }}</strong></td>
@@ -346,14 +434,13 @@
                         </tr>
                         <tr>
                             <td>Kembalian</td>
-                            <td class="right">
-                                Rp {{ number_format(($penjualan->jumlah_bayar ?? 0) - ($penjualan->total_bayar ?? 0), 0, ',', '.') }}
-                            </td>
+                            <td class="right">Rp {{ number_format(($penjualan->jumlah_bayar ?? 0) - ($penjualan->total_bayar ?? 0), 0, ',', '.') }}</td>
                         </tr>
                     </table>
 
                     <div class="line"></div>
-                    <p>Terima Kasih atas kunjungan Anda!<br>~ Kasir Caffe ~</p>
+
+                    <p class="footer">Terima Kasih atas kunjungan Anda!<br>~ Kasir Caffe ~</p>
                 </div>
 
                 <!-- Tombol Cetak -->
@@ -431,86 +518,41 @@ function filterTable(type) {
 </script>
 <script>
     function printStruk(id) {
-        var content = document.getElementById(id).innerHTML;
-        var originalContent = document.body.innerHTML;
-        
-        document.body.innerHTML = content;
-        window.print();
-        document.body.innerHTML = originalContent;
-        location.reload(); // Reload halaman setelah cetak agar tetap normal
+        const struk = document.getElementById(id).innerHTML;
+        const printWindow = window.open('', '_blank');
+        printWindow.document.write(`
+            <html>
+            <head>
+                <title>Struk Pembelian</title>
+                <style>
+                    body {
+                        font-family: monospace;
+                        font-size: 12px;
+                        text-align: center;
+                        padding: 20px;
+                    }
+                    .title {
+                        font-size: 18px;
+                        font-weight: bold;
+                    }
+                    .line {
+                        border-top: 1px dashed #000;
+                        margin: 8px 0;
+                    }
+                    .right {
+                        text-align: right;
+                    }
+                </style>
+            </head>
+            <body onload="window.print(); window.close();">
+                <div class="struk-container">
+                    ${struk}
+                </div>
+            </body>
+            </html>
+        `);
+        printWindow.document.close();
     }
 </script>
-
-{{-- cetak struk --}}
-<script>
-   function printStruk(id) {
-    var content = document.getElementById(id).innerHTML;
-    
-    // Cek apakah elemen struk ditemukan
-    if (!content) {
-        console.error("Elemen struk tidak ditemukan: " + id);
-        return;
-    }
-
-    console.log("Isi Struk: ", content); // Debugging
-
-    var printWindow = window.open('', '', 'width=350,height=500');
-    printWindow.document.write('<html><head><title>Struk Pembayaran</title>');
-    printWindow.document.write('<style>');
-    printWindow.document.write(`
-        body { font-family: 'Courier New', Courier, monospace; font-size: 11px; align-items: center; }
-        .title { font-size: 13px; font-weight: bold; }
-        .line { border-top: 1px dashed black; margin: 5px 0; }
-        table { width: 100%; text-align: left; font-size: 10px; }
-        .right { text-align: right; }
-        .bold { font-weight: bold; }
-        @media print {
-            @page { size: 58mm auto; margin: 0; }
-            body { width: 58mm; height: auto; }
-        }
-    `);
-    printWindow.document.write('</style></head><body>');
-    printWindow.document.write(content);
-    printWindow.document.write('</body></html>');
-    printWindow.document.close();
-    printWindow.print();
-    printWindow.close();
-}
-    </script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
-
-    <script>
-        $.fn.dataTable.ext.search.push(function(settings, data, dataIndex) {
-            var startDate = $('#startDate').val();
-            var endDate = $('#endDate').val();
-    
-            // Kolom ke-5 adalah "Tanggal Transaksi" (index mulai dari 0)
-            var dateStr = data[5]; // Format: dd-mm-yyyy HH:mm
-            var transactionDate = moment(dateStr, 'DD-MM-YYYY HH:mm').toDate();
-    
-            if (!startDate && !endDate) return true;
-    
-            if (startDate && !endDate) {
-                return transactionDate >= new Date(startDate);
-            }
-    
-            if (!startDate && endDate) {
-                return transactionDate <= new Date(endDate);
-            }
-    
-            return transactionDate >= new Date(startDate) && transactionDate <= new Date(endDate);
-        });
-    
-        $('#startDate, #endDate').change(function() {
-            $('#transaksiTable').DataTable().draw();
-        });
-
-        // reset tanggal
-        function resetTanggal() {
-        document.getElementById('startDate').value = '';
-        document.getElementById('endDate').value = '';
-        filterByDate(); // Panggil filter ulang jika perlu
-    }
-    </script>
 @endpush
 

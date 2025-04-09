@@ -121,6 +121,31 @@
                 align-items: center;
                 flex-wrap: wrap; /* Agar responsif */
             }
+           
+            .modal-dialog.custom-size {
+                width: 400px;
+                max-width: 90%;
+            }
+
+            .modal-body {
+                max-height: 420px; /* Dinaikkan dari 350px */
+                overflow-y: auto;  /* Biar muncul scroll kalau terlalu panjang */
+                padding-bottom: 10px; /* Tambahan padding bawah */
+            }
+
+            .form-group {
+                margin-bottom: 10px;
+            }
+
+            .modal .form-control {
+                font-size: 14px;
+                padding: 4px 8px;
+            }
+
+            .modal .btn {
+                padding: 6px 12px;
+                font-size: 14px;
+            }
         </style>
         <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
     @endpush
@@ -236,7 +261,7 @@
 
         <!-- Modal Tambah -->
         <div class="modal fade" id="addModal" tabindex="-1" aria-labelledby="addModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
+            <div class="modal-dialog custom-size">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title">Tambah Pengajuan</h5>
@@ -257,22 +282,22 @@
                                 </select>
                             </div>
         
-                            <div class="form-group mt-2">
+                            <div class="form-group">
                                 <label for="nama_barang">Nama Menu:</label>
                                 <input type="text" name="nama_barang" class="form-control" required placeholder="Masukkan Nama Menu">
                             </div>
         
-                            <div class="form-group mt-2">
+                            <div class="form-group">
                                 <label for="tanggal_pengajuan">Tanggal Pengajuan:</label>
                                 <input type="date" name="tanggal_pengajuan" class="form-control" value="<?= date('Y-m-d') ?>" required readonly>
                             </div>
         
-                            <div class="form-group mt-2">
+                            <div class="form-group">
                                 <label for="qty">Jumlah:</label>
                                 <input type="number" name="qty" class="form-control" required placeholder="Masukkan Jumlah">
                             </div>
         
-                            <div class="form-group mt-2">
+                            <div class="form-group">
                                 <label>Status:</label>
                                 <select name="status" class="form-control" disabled>
                                     <option value="tidak terpenuhi" selected>Belum Terpenuhi</option>
@@ -290,9 +315,10 @@
             </div>
         </div>
         
+        
         <!-- Modal Edit -->
         <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
+            <div class="modal-dialog custom-size"> <!-- Ubah ukuran di sini -->
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title">Edit Pengajuan</h5>
@@ -316,17 +342,17 @@
                                 </select>
                             </div>
         
-                            <div class="form-group mt-2">
+                            <div class="form-group">
                                 <label for="edit_nama_barang">Nama Menu:</label>
                                 <input type="text" id="edit_nama_barang" name="nama_barang" class="form-control" required placeholder="Masukkan Nama Menu">
                             </div>
         
-                            <div class="form-group mt-2">
+                            <div class="form-group">
                                 <label for="edit_tanggal_pengajuan">Tanggal Pengajuan:</label>
                                 <input type="date" id="edit_tanggal_pengajuan" name="tanggal_pengajuan" class="form-control" required readonly>
                             </div>
         
-                            <div class="form-group mt-2">
+                            <div class="form-group">
                                 <label for="edit_qty">Jumlah:</label>
                                 <input type="number" id="edit_qty" name="qty" class="form-control" required placeholder="Masukkan Jumlah">
                             </div>
@@ -339,7 +365,7 @@
                     </form>
                 </div>
             </div>
-        </div>       
+        </div>        
     @endsection
         
 

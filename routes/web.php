@@ -96,7 +96,6 @@ Route::group(['middleware' => ['role:kasir,admin']], function () {
     Route::get('/pelanggan/export-excel', [PelangganController::class, 'exportExcel'])->name('pelanggan.exportExcel');
     Route::get('/pelanggan/export-pdf', [PelangganController::class, 'exportPdf'])->name('pelanggan.exportPdf');    
 
-    
     // pembayaran 
     Route::prefix('admin')->name('admin.')->group(function () {
         Route::prefix('pembayaran')->name('pembayaran.')->group(function () {

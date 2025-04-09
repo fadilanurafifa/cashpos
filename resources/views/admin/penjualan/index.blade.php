@@ -119,7 +119,77 @@ label.form-label {
     font-weight: 600;
     color: #333;
 }
+.produk-img {
+        height: 120px;
+        object-fit: cover;
+        border-radius: 10px 10px 0 0;
+        transition: transform 0.3s ease;
+    }
 
+    .card:hover .produk-img {
+        transform: scale(1.05);
+    }
+
+    .card {
+        border: 1px solid #dee2e6;
+        border-radius: 12px;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+        transition: 0.3s ease;
+    }
+
+    .card:hover {
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+    }
+
+    .card-title {
+        font-size: 14px;
+        font-weight: bold;
+        margin-bottom: 4px;
+    }
+
+    .card-text {
+        font-size: 13px;
+        color: #6c757d;
+    }
+
+    .produk-extra {
+        font-size: 12px;
+        color: #999;
+    }
+
+    .form-check-input:checked + .form-check-label::before {
+        content: "✓ ";
+        color: green;
+        font-weight: bold;
+    }
+    .table thead th {
+        background-color: #34495e;
+        color: #fff;
+        font-weight: 600;
+        border-bottom: 2px solid #222221;
+        padding: 12px;
+    }
+        .table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    .table thead {
+        background-color: #34495e;
+        color: white;
+    }
+
+    .table th,
+    .table td {
+        border: 1px solid #dee2e6;
+        padding: 12px 15px;
+        text-align: left;
+        vertical-align: middle;
+    }
+
+    .table tbody tr:hover {
+        background-color: #f2f2f2;
+    }
     </style>
     @endpush
     <div class="container">
@@ -149,26 +219,7 @@ label.form-label {
                 </div>
             </div>    
             <div class="divider"></div>
-        <!-- Pilih Tipe Pelanggan -->
-        {{-- <div class="d-flex gap-4 w-100">
-            <div class="flex-grow-1">
-                <label for="tipe_pelanggan">Pilih Tipe Pelanggan :</label>
-                <select id="tipe_pelanggan" class="form-control" onchange="togglePelangganForm()">
-                    <option value="member">Pelanggan Member</option>
-                    <option value="lain">Pelanggan Lain</option>
-                </select>
-            </div>
 
-            <div class="flex-grow-1" id="form_member">
-                <label for="pelanggan">Pelanggan Member</label>
-                <select id="pelanggan" class="form-control">
-                    <option value="">-- Pilih Pelanggan --</option>
-                    @foreach ($pelanggan as $p)
-                        <option value="{{ $p->id }}">{{ $p->nama }}</option>
-                    @endforeach
-                </select>
-            </div>
-        </div> --}}
         <div class="d-flex flex-column flex-md-row gap-4 w-100">
             <div class="flex-grow-1">
                 <label for="tipe_pelanggan" class="form-label fw-semibold">Pilih Tipe Pelanggan</label>
@@ -191,17 +242,19 @@ label.form-label {
         
         <!-- Tambah Produk -->
         <div class="form-group">
-            <label class="form-label" style="font-weight: bold; margin-top: 10px;">Produk :</label>
-            <div class="row row-cols-1 row-cols-md-5 g-3">
+            <label class="form-label" style="margin-top: 10px;">Pilih Produk:</label>
+            <div class="row row-cols-2 row-cols-sm-3 row-cols-md-5 g-3"> <!-- 5 kolom di layar md+ -->
                 @foreach($produk as $p)
                     <div class="col">
-                        <div class="card">
+                        <div class="card h-100">
                             <img src="{{ asset('assets/produk_fotos/' . $p->foto) }}" class="card-img-top produk-img" alt="{{ $p->nama_produk }}">
                             <div class="card-body">
                                 <h6 class="card-title">{{ $p->nama_produk }}</h6>
                                 <p class="card-text">Rp{{ number_format($p->harga, 0, ',', '.') }}</p>
-                                <div class="form-check">
-                                    <input class="form-check-input" type="radio" name="produk" id="produk{{ $p->id }}" value="{{ $p->id }}" data-harga="{{ $p->harga }}" data-foto="{{ asset('storage/produk_fotos/' . $p->foto) }}" onchange="updateFotoProduk()">
+                                <div class="form-check d-flex justify-content-center mt-2">
+                                    <input class="form-check-input me-2" type="radio" name="produk" id="produk{{ $p->id }}"
+                                        value="{{ $p->id }}" data-harga="{{ $p->harga }}"
+                                        data-foto="{{ asset('storage/produk_fotos/' . $p->foto) }}" onchange="updateFotoProduk()">
                                     <label class="form-check-label" for="produk{{ $p->id }}">
                                         {{ $p->nama_produk }}
                                     </label>
@@ -211,14 +264,16 @@ label.form-label {
                     </div>
                 @endforeach
             </div>
-            <div class="input-group mt-2">
+        
+            <div class="input-group mt-3">
                 <span class="input-group-text"><i class="bi bi-cart-plus"></i></span>
                 <input type="number" id="jumlah" class="form-control" placeholder="Jumlah" min="1" value="1">
-                <button onclick="tambahProduk()" class="btn" style="background-color: #34495e; color: white; border: none;">
+                <button onclick="tambahProduk()" class="btn" style="background-color: #34495e; color: white;">
                     <i class="bi bi-plus-lg"></i> Tambah Produk
-                </button>                
+                </button>
             </div>
         </div>
+        
         <!-- Keranjang -->
         <div class="card-container" style="margin-bottom: 30px;">
             <h1 class="h3 mb-4 text-gray-800 ms-3">
@@ -228,11 +283,11 @@ label.form-label {
             <table class="table">
                 <thead>
                     <tr>
-                        <th>Produk</th>
-                        <th>Harga</th>
-                        <th>Jumlah</th>
-                        <th>Subtotal</th>
-                        <th>Aksi</th>
+                        <th class="text-center">Produk</th>
+                        <th class="text-center">Harga</th>
+                        <th class="text-center">Jumlah</th>
+                        <th class="text-center">Subtotal</th>
+                        <th class="text-center">Aksi</th>
                     </tr>
                 </thead>
                 <tbody id="keranjang"></tbody>
@@ -247,11 +302,8 @@ label.form-label {
                 </button>                
             </div>            
         </div>
-        
+
 @endsection
-
-
-
 @push('script')
     <script>
         let keranjang = [];
