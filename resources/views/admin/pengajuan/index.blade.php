@@ -146,6 +146,12 @@
                 padding: 6px 12px;
                 font-size: 14px;
             }
+            .form-group label {
+                font-weight: bold;
+                font-size: 13px;
+                color: #333;
+                margin-bottom: 4px;
+            }
         </style>
         <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
     @endpush
@@ -273,7 +279,7 @@
                         @csrf
                         <div class="modal-body">
                             <div class="form-group">
-                                <label for="pelanggan_id">Nama Pengaju:</label>
+                                <label for="pelanggan_id">Nama Pengaju :</label>
                                 <select name="pelanggan_id" class="form-control" required>
                                     <option value="">Pilih Nama Pengaju</option>
                                     @foreach ($pelanggans as $pelanggan)
@@ -283,22 +289,22 @@
                             </div>
         
                             <div class="form-group">
-                                <label for="nama_barang">Nama Menu:</label>
+                                <label for="nama_barang">Nama Menu :</label>
                                 <input type="text" name="nama_barang" class="form-control" required placeholder="Masukkan Nama Menu">
                             </div>
         
                             <div class="form-group">
-                                <label for="tanggal_pengajuan">Tanggal Pengajuan:</label>
+                                <label for="tanggal_pengajuan">Tanggal Pengajuan :</label>
                                 <input type="date" name="tanggal_pengajuan" class="form-control" value="<?= date('Y-m-d') ?>" required readonly>
                             </div>
         
                             <div class="form-group">
-                                <label for="qty">Jumlah:</label>
+                                <label for="qty">Jumlah :</label>
                                 <input type="number" name="qty" class="form-control" required placeholder="Masukkan Jumlah">
                             </div>
         
                             <div class="form-group">
-                                <label>Status:</label>
+                                <label>Status :</label>
                                 <select name="status" class="form-control" disabled>
                                     <option value="tidak terpenuhi" selected>Belum Terpenuhi</option>
                                 </select>
@@ -333,7 +339,7 @@
                             <input type="hidden" id="edit_id" name="id">
         
                             <div class="form-group">
-                                <label for="edit_pelanggan_id">Nama Pengaju:</label>
+                                <label for="edit_pelanggan_id">Nama Pengaju :</label>
                                 <select id="edit_pelanggan_id" name="pelanggan_id" class="form-control" required>
                                     <option value="">Pilih Nama Pengaju</option>
                                     @foreach ($pelanggans as $pelanggan)
@@ -343,17 +349,17 @@
                             </div>
         
                             <div class="form-group">
-                                <label for="edit_nama_barang">Nama Menu:</label>
+                                <label for="edit_nama_barang">Nama Menu :</label>
                                 <input type="text" id="edit_nama_barang" name="nama_barang" class="form-control" required placeholder="Masukkan Nama Menu">
                             </div>
         
                             <div class="form-group">
-                                <label for="edit_tanggal_pengajuan">Tanggal Pengajuan:</label>
+                                <label for="edit_tanggal_pengajuan">Tanggal Pengajuan :</label>
                                 <input type="date" id="edit_tanggal_pengajuan" name="tanggal_pengajuan" class="form-control" required readonly>
                             </div>
         
                             <div class="form-group">
-                                <label for="edit_qty">Jumlah:</label>
+                                <label for="edit_qty">Jumlah :</label>
                                 <input type="number" id="edit_qty" name="qty" class="form-control" required placeholder="Masukkan Jumlah">
                             </div>
                         </div>

@@ -5,6 +5,7 @@
 @section('content')
 <!-- Bootstrap Icons CDN -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
+
 @include('style')
     <style>
         .produk-container {
@@ -294,16 +295,16 @@
                     @csrf
                     <div class="modal-body">
                         <div class="form-group">
-                            <label>Menu</label>
+                            <label>Menu :</label>
                             <input type="text" name="nama_produk" placeholder="Masukkan Nama Produk" class="form-control"
                                 required>
                         </div>
                         <div class="form-group">
-                            <label>Stok</label>
+                            <label>Stok :</label>
                             <input type="number" name="stok" placeholder="Masukkan Stok" class="form-control" required>
                         </div>
                         <div class="form-group">
-                            <label for="kategori">Kategori</label>
+                            <label for="kategori">Kategori :</label>
                             <select name="kategori_id" id="kategori" class="form-control">
                                 <option value="">Pilih Kategori</option>
                                 @foreach ($kategori as $kat)
@@ -312,12 +313,12 @@
                             </select>
                         </div>
                         <div class="form-group">
-                            <label for="harga">Harga Menu</label>
+                            <label for="harga">Harga Menu :</label>
                             <input type="number" name="harga" placeholder="Masukkan Harga" class="form-control"
                                 required>
                         </div>
                         <div class="form-group">
-                            <label>Foto Menu</label>
+                            <label>Foto Menu :</label>
                             <input type="file" name="foto" class="form-control" accept="image/*">
                         </div>
                     </div>

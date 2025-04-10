@@ -84,11 +84,10 @@
         </div>
         
     </div>   
-    <div class="card">
         <div class="card-body">
             <form method="GET" action="{{ route('admin.laporan.penjualan') }}" style="margin-bottom: 20px;">
                 <div class="d-flex align-items-center gap-2 flex-wrap">
-                    <label class="fw-bold mb-0" style="font-size: 14px;">Filter Kategori:</label>
+                    <label class="fw-bold mb-0" style="font-size: 14px; color: #333;">Filter Kategori:</label>
                     <div class="input-group input-group-sm" style="width: 280px;">
                         <select name="kategori_id" class="form-control custom-select">
                             <option value="">Semua Kategori</option>

@@ -116,6 +116,25 @@
     border-radius: 5px !important;
     border: 1px solid #ccc !important;
 }
+.input-xs {
+        padding: 0.25rem 0.4rem;
+        font-size: 0.75rem;
+        line-height: 1.2;
+        border-radius: 0.2rem;
+    }
+
+    .btn-xs {
+        padding: 0.25rem 0.4rem;
+        font-size: 0.75rem;
+        line-height: 1.2;
+        border-radius: 0.2rem;
+    }
+
+    .form-label-sm {
+        font-size: 0.75rem;
+        margin-bottom: 0.25rem;
+    }
+
 
 </style>
 @endpush
@@ -152,7 +171,7 @@
             <!-- Filter Dropdown -->
             <div class="col-md-3">
                 <div class="dropdown">
-                    <button class="btn btn-custom dropdown-toggle d-flex align-items-center" type="button" id="filterDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                    <button class="btn btn-custom btn-sm dropdown-toggle d-flex align-items-center" type="button" id="filterDropdown" data-bs-toggle="dropdown" aria-expanded="false">
                         <i class="fas fa-filter me-2"></i> Filter Transaksi
                     </button>
                     <ul class="dropdown-menu" aria-labelledby="filterDropdown">
@@ -164,28 +183,8 @@
                     </ul>
                 </div>
             </div>
-            
-        
-           <!-- Tanggal Filter -->
-           <div class="col-md-4" style="margin-left: 30px;">
-            <label for="startDate" class="form-label" style="font-size: 13px;">Dari Tanggal :</label>
-            <input type="date" id="startDate" class="form-control form-control-sm" placeholder="dd-mm-yyyy"
-                style="height: 34px; font-size: 0.85rem; width: 135px;" onchange="filterByDate()">
-            </div>
-        
-
-            <div class="col-md-4 d-flex flex-column" style="margin-left: -30px;">
-                <label for="endDate" class="form-label" style="font-size: 13px;">Sampai Tanggal :</label>
-                <div class="d-flex align-items-center">
-                    <input type="date" id="endDate" class="form-control form-control-sm me-2" placeholder="dd-mm-yyyy"
-                        style="height: 34px; font-size: 0.85rem;" onchange="filterByDate()">
-                    <span onclick="resetTanggal()" style="cursor: pointer; font-size: 12px; color: red; text-decoration: underline;">
-                            Reset
-                    </span>                        
-                </div>
-            </div>
-
         </div>
+        
         
     
         <div class="d-flex align-items-center">
@@ -553,6 +552,6 @@ function filterTable(type) {
         `);
         printWindow.document.close();
     }
-</script>
+</script>    
 @endpush
 

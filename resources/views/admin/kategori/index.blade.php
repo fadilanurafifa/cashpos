@@ -87,7 +87,12 @@
     border-radius: 5px !important;
     border: 1px solid #ccc !important;
 }
-
+.form-group label {
+        font-weight: bold;
+        font-size: 13px;
+        color: #333;
+        margin-bottom: 4px;
+    }
 </style>
 @endpush
 <div class="container">
