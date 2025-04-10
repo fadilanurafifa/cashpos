@@ -70,11 +70,11 @@ class TransaksiExport implements FromCollection, WithHeadings, WithMapping, Shou
                 $sheet = $event->sheet;
 
                 // Buat header bold dan rata tengah
-                $sheet->getStyle('A1:G1')->getFont()->setBold(true);
-                $sheet->getStyle('A1:G1')->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+                $sheet->getStyle('A1:H1')->getFont()->setBold(true);
+                $sheet->getStyle('A1:H1')->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
 
                 // Warna latar header (light blue)
-                $sheet->getStyle('A1:G1')->getFill()
+                $sheet->getStyle('A1:H1')->getFill()
                     ->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
                     ->getStartColor()->setARGB('ADD8E6');
             },

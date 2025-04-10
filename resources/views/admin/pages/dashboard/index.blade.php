@@ -106,77 +106,98 @@
 @push('script')
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
-    var ctx = document.getElementById('salesChart').getContext('2d');
+   var ctx = document.getElementById('salesChart').getContext('2d');
 
-    var salesChart = new Chart(ctx, {
-        type: 'line',
-        data: {
-            labels: {!! json_encode($dates) !!},
-            datasets: [
-                {
-                    label: 'Jumlah Transaksi',
-                    data: {!! json_encode($transactionsByDay) !!},
-                    borderColor: 'rgba(0, 31, 63, 1)',
-                    backgroundColor: 'rgba(0, 31, 63, 0.5)',
-                    borderWidth: 3,
-                    pointBackgroundColor: 'rgba(0, 31, 63, 1)',
-                    pointBorderColor: '#fff',
-                    pointRadius: 6,
-                    pointHoverRadius: 8,
-                    fill: false,
-                    tension: 0.3
-                },
-                {
-                    label: 'Total Pendapatan',
-                    data: {!! json_encode($incomeByDay) !!},
-                    borderColor: 'rgba(0, 150, 0, 1)',
-                    backgroundColor: 'rgba(0, 150, 0, 0.5)',
-                    borderWidth: 3,
-                    pointBackgroundColor: 'rgba(0, 150, 0, 1)',
-                    pointBorderColor: '#fff',
-                    pointRadius: 6,
-                    pointHoverRadius: 8,
-                    fill: false,
-                    tension: 0.3
-                }
-            ]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: {
-                legend: {
-                    labels: {
-                        color: "#001f3f",
-                        font: { size: 14, weight: "bold" }
-                    }
-                },
-                tooltip: {
-                    backgroundColor: "rgba(0, 0, 0, 0.8)"
-                }
+var salesChart = new Chart(ctx, {
+    type: 'line',
+    data: {
+        labels: {!! json_encode($dates) !!},
+        datasets: [
+            {
+                label: 'Jumlah Transaksi',
+                data: {!! json_encode($transactionsByDay) !!},
+                yAxisID: 'y',
+                borderColor: 'rgba(0, 31, 63, 1)',
+                backgroundColor: 'rgba(0, 31, 63, 0.5)',
+                borderWidth: 3,
+                pointBackgroundColor: 'rgba(0, 31, 63, 1)',
+                pointBorderColor: '#fff',
+                pointRadius: 6,
+                pointHoverRadius: 8,
+                fill: false,
+                tension: 0.3
             },
-            scales: {
-                x: {
-                    ticks: {
-                        color: "#001f3f",
-                        font: { size: 12, weight: "bold" }
-                    }
-                },
-                y: {
-                    grid: {
-                        color: 'rgba(0, 31, 63, 0.2)'
-                    },
-                    ticks: {
-                        color: "#001f3f",
-                        font: { size: 12, weight: "bold" }
-                    }
-                }
-            },
-            animation: {
-                duration: 1500,
-                easing: 'easeInOutQuart'
+            {
+                label: 'Total Pendapatan',
+                data: {!! json_encode($incomeByDay) !!},
+                yAxisID: 'y1',
+                borderColor: 'rgba(0, 150, 0, 1)',
+                backgroundColor: 'rgba(0, 150, 0, 0.5)',
+                borderWidth: 3,
+                pointBackgroundColor: 'rgba(0, 150, 0, 1)',
+                pointBorderColor: '#fff',
+                pointRadius: 6,
+                pointHoverRadius: 8,
+                fill: false,
+                tension: 0.3,
+                borderDash: [5, 5] // Garis putus-putus biar beda
             }
+        ]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        interaction: {
+            mode: 'index',
+            intersect: false
+        },
+        plugins: {
+            legend: {
+                labels: {
+                    color: "#001f3f",
+                    font: { size: 14, weight: "bold" }
+                }
+            },
+            tooltip: {
+                backgroundColor: "rgba(0, 0, 0, 0.8)"
+            }
+        },
+        scales: {
+            x: {
+                ticks: {
+                    color: "#001f3f",
+                    font: { size: 12, weight: "bold" }
+                }
+            },
+            y: {
+                beginAtZero: true,
+                position: 'left',
+                grid: {
+                    color: 'rgba(0, 31, 63, 0.2)'
+                },
+                ticks: {
+                    color: "#001f3f",
+                    font: { size: 12, weight: "bold" }
+                }
+            },
+            y1: {
+                beginAtZero: true,
+                position: 'right',
+                grid: {
+                    drawOnChartArea: false // Hindari tumpang tindih grid
+                },
+                ticks: {
+                    color: "#006600",
+                    font: { size: 12, weight: "bold" }
+                }
+            }
+        },
+        animation: {
+            duration: 1500,
+            easing: 'easeInOutQuart'
         }
-    });
+    }
+});
+
 </script>
 @endpush
