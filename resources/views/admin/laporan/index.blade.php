@@ -110,38 +110,43 @@
                 <div class="card-body">
                     <div class="table-responsive">
                         <table id="laporanTable" class="table table-bordered">
-                        <thead class="thead-light">
-                        <tr>
-                            <th>Nama Produk</th>
-                            <th>Stok Awal</th>
-                            <th>Terjual</th>
-                            <th>Keuntungan</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach ($laporan as $produk)
-                            @php
-                                $stok_awal = 100; // Stok awal per bulan
-                                $terjual = $produk->detailPenjualan
-                                    ->whereBetween('created_at', [now()->startOfMonth(), now()->endOfMonth()])
-                                    ->sum('jumlah');
-
-                                // Perhitungan keuntungan (total terjual * harga produk)
-                                $keuntungan = $terjual * $produk->harga;
-                            @endphp
-                            <tr>
-                                <td>{{ $produk->nama_produk }}</td>
-                                <td>{{ $stok_awal }}</td>
-                                <td>{{ $terjual }}</td>
-                                <td>Rp{{ number_format($keuntungan, 0, ',', '.') }}</td>
-                            </tr>
-                        @endforeach
-                    </tbody>
-                </table>
-            </div>
-
-        </div>
-    </div>
+                            <thead class="thead-light">
+                                <tr>
+                                    <th>Nama Produk</th>
+                                    <th>Stok Awal</th>
+                                    <th>Terjual</th>
+                                    <th>Harga Pokok</th>
+                                    <th>Harga Jual</th>
+                                    <th>Keuntungan</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($laporan as $produk)
+                                    @php
+                                        $stok_awal = 100;
+                                        $terjual = $produk->detailPenjualan
+                                            ->whereBetween('created_at', [now()->startOfMonth(), now()->endOfMonth()])
+                                            ->sum('jumlah');
+            
+                                        $harga_jual = $produk->harga;
+                                        $harga_pokok = $produk->harga_pokok ?? 0;
+            
+                                        $keuntungan = $terjual * ($harga_jual - $harga_pokok);
+                                    @endphp
+                                    <tr>
+                                        <td>{{ $produk->nama_produk }}</td>
+                                        <td>{{ $stok_awal }}</td>
+                                        <td>{{ $terjual }}</td>
+                                        <td>Rp{{ number_format($harga_pokok, 0, ',', '.') }}</td>
+                                        <td>Rp{{ number_format($harga_jual, 0, ',', '.') }}</td>
+                                        <td>Rp{{ number_format($keuntungan, 0, ',', '.') }}</td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>            
 </div>
 @endsection
 

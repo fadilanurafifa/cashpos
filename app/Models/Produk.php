@@ -15,6 +15,7 @@ class Produk extends Model
         'kategori_id', 
         'nama_produk',
         'harga', 
+        'harga_pokok',
         'foto',
         'stok', 
         'created_at',
@@ -39,7 +40,6 @@ class Produk extends Model
     {
         return $this->hasMany(Penjualan::class, 'produk_id');
     }
-    
 
 }
 

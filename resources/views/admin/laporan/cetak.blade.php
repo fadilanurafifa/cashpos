@@ -134,40 +134,56 @@
 <body>
 
     <!-- KOP SURAT -->
-    <div class="kop-surat">
-        <img src="{{ asset('assets/img/logoitem.png') }}" alt="Logo">
-        <div class="kop-text">
-            <h1>Cash Caffe POS</h1>
-            <p>Jl. Merdeka Belajar No. 10, Kota Bandung, Jawa Barat - Indonesia</p>
-            <p>Email: info@CashPOS.com | Telp: (021) 123456</p>
-        </div>
+   <!-- KOP SURAT -->
+<div class="kop-surat">
+    <img src="{{ asset('assets/img/logoitem.png') }}" alt="Logo">
+    <div class="kop-text">
+        <h1>Cash Caffe POS</h1>
+        <p>Jl. Merdeka Belajar No. 10, Kota Bandung, Jawa Barat - Indonesia</p>
+        <p>Email: info@CashPOS.com | Telp: (021) 123456</p>
     </div>
-    <div class="garis"></div>
+</div>
+<div class="garis"></div>
 
-    <h2>Laporan Penjualan Bulanan</h2>
-    <p style="text-align: center; font-weight: bold;">
-        Periode: {{ \Carbon\Carbon::now()->isoFormat('MMMM Y') }}
-    </p>    
-    <table>
-        <thead>
-            <tr>
-                <th>Nama Produk</th>
-                <th>Stok Awal</th>
-                <th>Terjual</th>
-                <th>Keuntungan</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach ($laporan as $produk)
+<h2>Laporan Penjualan Bulanan</h2>
+<p style="text-align: center; font-weight: bold;">
+    Periode: {{ \Carbon\Carbon::now()->isoFormat('MMMM Y') }}
+</p>
+
+<table border="1" cellspacing="0" cellpadding="5" width="100%">
+    <thead>
+        <tr style="background-color: #f2f2f2;">
+            <th>Nama Produk</th>
+            <th>Stok Awal</th>
+            <th>Terjual</th>
+            <th>Harga Pokok</th>
+            <th>Harga Jual</th>
+            <th>Keuntungan</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach ($laporan as $produk)
+            @php
+                $stok_awal = 100; // Misalnya stok awal default
+                $terjual = $produk->detailPenjualan
+                    ->whereBetween('created_at', [now()->startOfMonth(), now()->endOfMonth()])
+                    ->sum('jumlah');
+
+                $harga_jual = $produk->harga;
+                $harga_pokok = $produk->harga_pokok ?? 0;
+                $keuntungan = $terjual * ($harga_jual - $harga_pokok);
+            @endphp
             <tr>
                 <td>{{ $produk->nama_produk }}</td>
-                <td>{{ $produk->stok_awal }}</td>
-                <td>{{ $produk->terjual }}</td>
-                <td>Rp{{ number_format($produk->keuntungan, 0, ',', '.') }}</td>
+                <td>{{ $stok_awal }}</td>
+                <td>{{ $terjual }}</td>
+                <td>Rp{{ number_format($harga_pokok, 0, ',', '.') }}</td>
+                <td>Rp{{ number_format($harga_jual, 0, ',', '.') }}</td>
+                <td>Rp{{ number_format($keuntungan, 0, ',', '.') }}</td>
             </tr>
-            @endforeach
-        </tbody>
-    </table>
+        @endforeach
+    </tbody>
+</table>
 
 </body>
 </html>

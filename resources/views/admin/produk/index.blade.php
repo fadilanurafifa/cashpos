@@ -259,29 +259,33 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="editStokLabel">Edit Stok Produk</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
+    
                 <form id="editStokForm" method="POST">
                     @csrf
                     @method('PUT')
+    
                     <div class="modal-body">
                         <input type="hidden" id="produkId" name="produk_id">
                         <div class="form-group">
-                            <label for="stokBaru">Stok Baru</label>
+                            <label for="stokBaru">Stok Baru :</label>
                             <input type="number" id="stokBaru" name="stok" class="form-control" required>
                         </div>
                     </div>
+    
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
-                        <button type="submit" class="btn btn-primary">Simpan</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                            <i class="bi bi-x-circle me-1"></i> Batal
+                        </button>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save me-1"></i>Simpan
+                        </button>
                     </div>
                 </form>
             </div>
         </div>
-    </div>
-    
+    </div>    
     <div class="modal fade" id="tambahProdukModal" tabindex="-1" aria-labelledby="tambahProdukLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
@@ -291,45 +295,58 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
+    
                 <form action="{{ route('admin.produk.store') }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     <div class="modal-body">
                         <div class="form-group">
-                            <label>Menu :</label>
-                            <input type="text" name="nama_produk" placeholder="Masukkan Nama Produk" class="form-control"
-                                required>
+                            <label>Nama Menu:</label>
+                            <input type="text" name="nama_produk" placeholder="Masukkan Nama Produk" class="form-control" required>
                         </div>
+    
                         <div class="form-group">
-                            <label>Stok :</label>
+                            <label>Stok:</label>
                             <input type="number" name="stok" placeholder="Masukkan Stok" class="form-control" required>
                         </div>
+    
                         <div class="form-group">
-                            <label for="kategori">Kategori :</label>
-                            <select name="kategori_id" id="kategori" class="form-control">
+                            <label>Kategori:</label>
+                            <select name="kategori_id" class="form-control">
                                 <option value="">Pilih Kategori</option>
                                 @foreach ($kategori as $kat)
                                     <option value="{{ $kat->id }}">{{ $kat->nama_kategori }}</option>
                                 @endforeach
                             </select>
                         </div>
+    
                         <div class="form-group">
-                            <label for="harga">Harga Menu :</label>
-                            <input type="number" name="harga" placeholder="Masukkan Harga" class="form-control"
-                                required>
+                            <label>Harga Jual:</label>
+                            <input type="number" name="harga" placeholder="Masukkan Harga Jual" class="form-control" required>
                         </div>
+    
                         <div class="form-group">
-                            <label>Foto Menu :</label>
-                            <input type="file" name="foto" class="form-control" accept="image/*">
+                            <label>Harga Pokok:</label>
+                            <input type="number" name="harga_pokok" placeholder="Masukkan Harga Pokok" class="form-control" required>
+                        </div>
+    
+                        <div class="form-group">
+                            <label>Foto Menu:</label>
+                            <input type="file" name="foto" class="form-control" accept="image/*" required>
                         </div>
                     </div>
+    
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
-                        <button type="submit" class="btn btn-primary">Simpan</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                            <i class="bi bi-x-circle me-1"></i> Batal
+                        </button>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="bi bi-save me-1"></i> Simpan
+                        </button>
                     </div>
                 </form>
             </div>
         </div>
-    </div>
+    </div>    
 
 @push('script')
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>

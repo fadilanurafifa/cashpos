@@ -12,7 +12,7 @@ use Maatwebsite\Excel\Events\AfterSheet;
 
 class LaporanPenjualanExport implements FromCollection, WithHeadings, WithMapping, ShouldAutoSize, WithEvents
 {
-    private $index = 0; // Nomor urut otomatis
+    private $index = 0;
 
     protected $kategori_id;
 
@@ -21,69 +21,63 @@ class LaporanPenjualanExport implements FromCollection, WithHeadings, WithMappin
         $this->kategori_id = $kategori_id;
     }
 
-    /**
-     * Mengambil data dari database
-     */
     public function collection()
     {
-        return Produk::when($this->kategori_id, function ($query) {
+        return Produk::with('detailPenjualan')->when($this->kategori_id, function ($query) {
             $query->where('kategori_id', $this->kategori_id);
         })->orderBy('id', 'asc')->get();
     }
 
-    /**
-     * Menentukan judul kolom untuk file Excel
-     */
     public function headings(): array
     {
         return [
-            'No', // Nomor urut
+            'No',
             'Nama Produk',
             'Stok Awal',
             'Terjual',
-            'Keuntungan'
+            'Harga Pokok',
+            'Harga Jual',
+            'Keuntungan',
         ];
     }
 
-    /**
-     * Memformat data sebelum diekspor ke Excel
-     */
     public function map($produk): array
     {
-        $this->index++; // Tambah nomor urut
+        $this->index++;
 
-        $stok_awal = 100; // Bisa disesuaikan
+        $stok_awal = 100;
         $terjual = $produk->detailPenjualan
             ->whereBetween('created_at', [now()->startOfMonth(), now()->endOfMonth()])
             ->sum('jumlah');
 
-        $keuntungan = $terjual * $produk->harga;
+        $harga_pokok = $produk->harga_pokok ?? 0;
+        $harga_jual = $produk->harga ?? 0;
+        $keuntungan = $terjual * ($harga_jual - $harga_pokok);
 
         return [
-            $this->index, // Nomor urut otomatis
+            $this->index,
             $produk->nama_produk ?? '-',
             $stok_awal,
             $terjual,
-            number_format($keuntungan, 0, ',', '.'),
+            'Rp' . number_format($harga_pokok, 0, ',', '.'),
+            'Rp' . number_format($harga_jual, 0, ',', '.'),
+            'Rp' . number_format($keuntungan, 0, ',', '.'),
         ];
     }
 
-    /**
-     * Mengatur gaya tampilan setelah sheet dibuat
-     */
     public function registerEvents(): array
     {
         return [
             AfterSheet::class => function (AfterSheet $event) {
                 $sheet = $event->sheet;
 
-                // Membuat teks header (A1:E1) bold dan rata tengah
-                $sheet->getStyle('A1:E1')->getFont()->setBold(true);
-                $sheet->getStyle('A1:E1')->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+                // Bold dan center header
+                $sheet->getStyle('A1:G1')->getFont()->setBold(true);
+                $sheet->getStyle('A1:G1')->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
 
-                // Memberi warna latar belakang header (A1:E1) dengan biru muda
-                $sheet->getStyle('A1:E1')->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
-                    ->getStartColor()->setARGB('ADD8E6'); // Warna biru muda (light blue)
+                // Background header
+                $sheet->getStyle('A1:G1')->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
+                    ->getStartColor()->setARGB('ADD8E6');
             },
         ];
     }

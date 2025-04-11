@@ -32,6 +32,8 @@ class ProdukController extends Controller
         $request->validate([
             'nama_produk' => 'required|string|max:255', // Nama produk harus berupa string dengan maksimal 255 karakter
             'harga' => 'required|numeric', // Harga harus berupa angka
+            'harga_pokok' => 'required|numeric', // tambahkan ini
+            'stok' => 'required|numeric', // Jumlah stok harus berupa angka
             'foto' => 'required|image|mimes:jpg,jpeg,png,gif|max:2048', // Foto harus berupa gambar dengan format tertentu dan ukuran maksimal 2MB
             'kategori_id' => 'nullable|exists:kategori,id', // kategori_id opsional, tetapi jika ada harus sesuai dengan data di tabel kategori
         ]);
@@ -47,6 +49,7 @@ class ProdukController extends Controller
                 'nama_produk' => $request->nama_produk, // Menyimpan nama produk
                 'stok' => $request->stok, // Menyimpan jumlah stok produk
                 'harga' => $request->harga, // Menyimpan harga produk
+                'harga_pokok' => $request->harga_pokok, // tambahkan ini
                 'foto' => $fileName, // Menyimpan nama file gambar
                 'kategori_id' => $request->kategori_id // Menyimpan ID kategori jika ada
             ]);

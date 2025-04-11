@@ -2,6 +2,7 @@
 
 @section('title', 'Laporan Transaksi')
 
+@section('content')
 @push('style')
 <style>
    .btn-custom {
@@ -134,11 +135,31 @@
         font-size: 0.75rem;
         margin-bottom: 0.25rem;
     }
+    .filter-wrapper {
+        row-gap: 1rem;
+    }
+
+    .filter-transaksi {
+        margin-right: 30px; /* Atur jarak antara dropdown dan tanggal */
+    }
+
+    .reset-link {
+        cursor: pointer;
+        margin-top: 6px;
+        font-size: 0.85rem;
+        color: #dc3545; /* merah */
+        transition: color 0.2s;
+    }
+
+    .reset-link:hover {
+        color: #a71d2a;
+        text-decoration: underline;
+    }
 
 
 </style>
 @endpush
-@section('content')
+
 <div class="container mt-4">
     <div class="d-flex justify-content-between align-items-center">
         <div>
@@ -166,10 +187,10 @@
     
     <div class="d-flex justify-content-between align-items-center mb-4">
 
-        <!-- FILTER -->
-        <div class="row align-items-end mb-3">
-            <!-- Filter Dropdown -->
-            <div class="col-md-3">
+        <div class="row align-items-end mb-3 filter-wrapper">
+            <!-- Filter Transaksi Dropdown -->
+            <div class="col-md-3 filter-transaksi">
+                <label class="form-label-sm invisible">.</label> <!-- untuk sejajarkan -->
                 <div class="dropdown">
                     <button class="btn btn-custom btn-sm dropdown-toggle d-flex align-items-center" type="button" id="filterDropdown" data-bs-toggle="dropdown" aria-expanded="false">
                         <i class="fas fa-filter me-2"></i> Filter Transaksi
@@ -183,18 +204,35 @@
                     </ul>
                 </div>
             </div>
+        
+            <!-- Filter Tanggal -->
+            <div class="col-md-3">
+                <label for="startDate" class="form-label-sm">Dari Tanggal :</label>
+                <input type="date" id="startDate" class="form-control form-control-sm">
+            </div>
+        
+            <div class="col-md-3">
+                <label for="endDate" class="form-label-sm">Sampai Tanggal :</label>
+                <input type="date" id="endDate" class="form-control form-control-sm">
+            </div>
+        
+            <!-- Reset -->
+            <div class="col-md-2 d-flex flex-column justify-content-end align-items-start">
+                <span class="small text-danger reset-link" onclick="resetDateFilter()">
+                    <i class="fas fa-times-circle me-1"></i> Reset
+                </span>
+            </div>
         </div>
         
-        
-    
-        <div class="d-flex align-items-center">
+        {{-- <div class="d-flex align-items-center">
             <i class="fas fa-coins me-3 fa-2x"></i>
 
             <div>
-                <h6 class="mb-1 text-muted" style="font-size: 14px;">Total Pemasukan :</h6>
+                <h6 class="mb-1 text-muted" style="font-size: 14px;">Total Keuntungan :</h6>
                 <h4 class="fw-bold m-0 text-dark">Rp.{{ number_format($totalIncome, 0, ',', '.') }}</h4>
             </div>
-        </div>
+            
+        </div> --}}
         
     </div>    
     <div class="card table-container">
@@ -464,6 +502,7 @@ $(document).ready(function() {
             "search": "Cari Nama:", // Teks tetap di samping kiri input
             "searchPlaceholder": "Cari data transaksi...", // Placeholder dalam input
             "zeroRecords": "Tidak ada transaksi ditemukan"
+            
         }
     });
 
@@ -552,6 +591,43 @@ function filterTable(type) {
         `);
         printWindow.document.close();
     }
-</script>    
+</script>
+<script>
+    $(document).ready(function () {
+        $('#startDate, #endDate').on('change', function () {
+            filterByDate();
+        });
+    });
+    
+    function filterByDate() {
+        const start = $('#startDate').val();
+        const end = $('#endDate').val();
+    
+        if (!start || !end) {
+            $('#transaksiTable tbody tr').show();
+            return;
+        }
+    
+        const startDate = new Date(start);
+        const endDate = new Date(end);
+    
+        $('#transaksiTable tbody tr').each(function () {
+            const dateText = $(this).find('td:nth-child(6)').text(); 
+            const rowDate = new Date(dateText.split(' ')[0].split('-').reverse().join('-')); 
+    
+            if (rowDate >= startDate && rowDate <= endDate) {
+                $(this).show();
+            } else {
+                $(this).hide();
+            }
+        });
+    }
+    
+    function resetDateFilter() {
+        $('#startDate').val('');
+        $('#endDate').val('');
+        $('#transaksiTable tbody tr').show();
+    }
+    </script>    
 @endpush
 
