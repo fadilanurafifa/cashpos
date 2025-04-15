@@ -152,4 +152,22 @@ class ProdukController extends Controller
     
         return redirect()->back()->with('success', 'Data produk berhasil diimport!');
     }
+    public function uploadGambar(Request $request)
+    {
+        $request->validate([
+            'produk_id' => 'required|exists:produk,id',
+            'gambar' => 'required|image|mimes:jpg,jpeg,png|max:2048'
+        ]);
+    
+        $produk = Produk::find($request->produk_id);
+        $fileName = time().'.'.$request->gambar->extension();
+        $request->gambar->move(public_path('assets/produk_fotos'), $fileName);
+    
+        $produk->foto = $fileName;
+        $produk->save();
+    
+        return back()->with('success', 'Gambar berhasil diupload!');
+    }
+    
+    
 }

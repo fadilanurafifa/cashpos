@@ -206,17 +206,15 @@
         </button>
 
         </div>
-        <form action="{{ route('produk.import') }}" method="POST" enctype="multipart/form-data">
-            @csrf
-            <div class="row justify-content-end">
-                <div class="col-md-4">
-                    <input type="file" name="file" class="form-control form-control-sm" required>
-                </div>
-                <div class="col-md-2">
-                    <button class="btn btn-success btn-sm">Import Produk</button>
-                </div>
-            </div>
-        </form>
+        <div class="d-flex justify-content-end mb-3">
+            <form action="{{ route('produk.import') }}" method="POST" enctype="multipart/form-data" class="d-flex gap-2">
+                @csrf
+                <input type="file" name="file" class="form-control" required style="width: 300px;">
+                <button class="btn" style="background-color: #4CAF50; color: white; font-size: 14px; padding: 5px 10px; border-radius: 6px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);">
+                    <i class="fas fa-file-excel"></i>
+                </button>
+            </form>
+        </div>        
         
         <div class="divider"></div>
         @if(session('success'))
@@ -251,14 +249,68 @@
             <div class="col-lg-12">
                 <div class="row row-cols-3 row-cols-sm-4 row-cols-md-5 row-cols-lg-6 g-2" style="margin-bottom: 50px;">
                     @foreach ($produk as $prd)
+                    <div class="col" data-id="{{ $prd->id }}"
+                        data-nama="{{ strtolower($prd->nama_produk) }}" data-harga="{{ $prd->harga }}"
+                        data-foto="{{ asset('assets/produk_fotos/' . $prd->foto) }}"
+                        data-kategori="{{ strtolower($prd->kategori ? $prd->kategori->nama_kategori : 'tanpa kategori') }}">
+                        <div class="card border-0 shadow-sm h-100" style="max-width: 120px;">
+                        @if ($prd->foto)
+                            <img src="{{ asset('assets/produk_fotos/' . $prd->foto) }}"
+                                class="card-img-top img-fluid rounded-top"
+                                style="height: 100px; object-fit: cover;">
+                        @else
+                            <div class="d-flex align-items-center justify-content-center bg-light"
+                                style="height: 100px;">
+                                <button type="button"
+                                class="btn btn-sm bg-transparent border-0"
+                                style="font-size: 0.85rem; color: #555;"
+                                data-bs-toggle="modal"
+                                data-bs-target="#exampleModal"
+                                data-id="{{ $prd->id }}">
+                                <i class="bi bi-camera"></i> Gambar
+                                </button>
+                            </div>
+                        @endif
+                            <div class="card-body text-center p-1">
+                                <h6 class="card-title text-truncate" style="font-size: 12px;">{{ $prd->nama_produk }}</h6>
+                                <h6 class="card-title text-truncate" style="font-size: 12px;">Stok: {{ $prd->stok }}</h6>
+                                <h5 class="text-muted mt-1" style="font-size: 10px;">
+                                    {{ $prd->kategori ? $prd->kategori->nama_kategori : 'Tanpa Kategori' }}
+                                </h5>
+                                <p class="card-text text-danger fw-bold" style="font-size: 12px;">
+                                    Rp{{ number_format($prd->harga, 0, ',', '.') }}</p>
+
+                                <!-- Tombol Hapus -->
+                                <button class="btn btn-danger btn-sm btn-hapus" data-id="{{ $prd->id }}"
+                                        style="font-size: 10px; padding: 2px 5px;">
+                                    <i class="fas fa-trash-alt"></i> 
+                                </button>
+
+                                <!-- Tombol Edit Stok -->
+                                <button class="btn btn-sm btn-primary btn-edit-stok" data-id="{{ $prd->id }}" data-stok="{{ $prd->stok }}"
+                                        style="font-size: 10px; padding: 2px 5px;">
+                                    <i class="fas fa-edit"></i> 
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                @endforeach
+                    {{-- @foreach ($produk as $prd)
                         <div class="col" data-id="{{ $prd->id }}"
                             data-nama="{{ strtolower($prd->nama_produk) }}" data-harga="{{ $prd->harga }}"
                             data-foto="{{ asset('assets/produk_fotos/' . $prd->foto) }}"
                             data-kategori="{{ strtolower($prd->kategori ? $prd->kategori->nama_kategori : 'tanpa kategori') }}">
                             <div class="card border-0 shadow-sm h-100" style="max-width: 120px;">
+
+                                @if ($prd->foto == null)
+                                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                                @endif
                                 <img src="{{ asset('assets/produk_fotos/' . $prd->foto) }}"
                                     class="card-img-top img-fluid rounded-top"
                                     style="height: 100px; object-fit: cover;">
+                                    @if ($prd->foto == null)
+                                </button>
+                                @endif
                                 <div class="card-body text-center p-1">
                                     <h6 class="card-title text-truncate" style="font-size: 12px;">{{ $prd->nama_produk }}</h6>
                                     <h6 class="card-title text-truncate" style="font-size: 12px;">Stok: {{ $prd->stok }}</h6>
@@ -280,7 +332,7 @@
                                 </div>
                             </div>
                         </div>
-                    @endforeach
+                    @endforeach --}}
                 </div>                    
             </div>
         </div>              
@@ -371,7 +423,7 @@
                             <i class="bi bi-x-circle me-1"></i> Batal
                         </button>
                         <button type="submit" class="btn btn-primary">
-                            <i class="bi bi-save me-1"></i> Simpan
+                            <i class="fas fa-save me-1"></i> Simpan
                         </button>
                     </div>
                 </form>
@@ -379,8 +431,44 @@
         </div>
     </div>    
 
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <form action="{{ route('produk.uploadGambar') }}" method="POST" enctype="multipart/form-data">
+                @csrf
+                <input type="hidden" name="produk_id" id="produk_id_modal">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="exampleModalLabel">Kirim Gambar Produk</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <input type="file" name="gambar" class="form-control" required>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                            <i class="bi bi-x-circle me-1"></i> Batal
+                        </button>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save me-1"></i> Simpan
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
 @push('script')
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+    var exampleModal = document.getElementById('exampleModal')
+    exampleModal.addEventListener('show.bs.modal', function (event) {
+        var button = event.relatedTarget
+        var produkId = button.getAttribute('data-id') // Ambil ID dari tombol yang diklik
+        var inputProdukId = document.getElementById('produk_id_modal')
+        inputProdukId.value = produkId // Masukkan ID ke dalam input hidden di modal
+    })
+</script>
+
 <script>
     document.addEventListener("DOMContentLoaded", function () {
         const dropdown = document.getElementById("kategoriDropdown");

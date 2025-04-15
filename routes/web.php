@@ -16,7 +16,9 @@ use App\Http\Controllers\PembayaranController;
 use App\Http\Controllers\PengajuanBarangController;
 use App\Http\Controllers\PenjualanController;
 use App\Http\Controllers\ProdukController;
+use App\Http\Controllers\RoleController;
 use App\Http\Controllers\ShiftController;
+use App\Http\Controllers\SlotKasirController;
 use App\Http\Controllers\TransaksiController;
 use App\Http\Middleware\RoleMiddleware;
 use App\Models\PengajuanBarang;
@@ -79,6 +81,7 @@ Route::prefix('admin')->group(function () {
         'destroy' => 'admin.produk.destroy',
     ]);
     Route::post('/produk/import', [ProdukController::class, 'import'])->name('produk.import');
+    Route::post('/produk/upload-gambar', [ProdukController::class, 'uploadGambar'])->name('produk.uploadGambar');
 
     // Rute khusus untuk memperbarui stok saja
     Route::put('produk/{produk}/update-stok', [ProdukController::class, 'updateStok'])
@@ -158,5 +161,11 @@ Route::middleware(['web', 'auth', 'role:kasir,admin'])->group(function () {
     Route::get('/penjualan', [PenjualanController::class, 'index'])->name('penjualan.index');
     // ...
 });
+
+// kasir
+Route::get('/slot_kasir', [SlotKasirController::class, 'index'])->name('slot_kasir.index');
+Route::post('/slot_kasir/update/{id}', [SlotKasirController::class, 'update'])->name('slot_kasir.update');
+Route::delete('/slot_kasir/delete/{id}', [SlotKasirController::class, 'destroy'])->name('slot_kasir.delete');
+
 
 

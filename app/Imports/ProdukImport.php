@@ -11,19 +11,13 @@ class ProdukImport implements ToModel, WithHeadingRow
 {
     public function model(array $row)
     {
-        // Cari ID kategori berdasarkan nama
-        $kategori = Kategori::where('nama_kategori', $row['nama_kategori'] ?? '')->first();
-    
-        // Skip baris jika kategori tidak ditemukan
-        if (!$kategori) {
-            return null;
-        }
-    
+        $kategori = Kategori::where('nama_kategori', $row['nama_kategori'] ?? null)->first();
+
         return new Produk([
-            'nama_produk' => $row['nama_produk'],
-            'harga'       => $row['harga'],
-            'stok'        => $row['stok'],
-            'kategori_id' => $kategori->id,
+            'nama_produk' => $row['nama_produk'] ?? null,
+            'harga'       => $row['harga'] ?? 0,
+            'stok'        => $row['stok'] ?? 0,
+            'kategori_id' => $row['kategori_id'],
             'foto'        => null,
         ]);
     }

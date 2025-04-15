@@ -256,7 +256,6 @@ $(document).ready(function() {
     });
 
     $(document).ready(function() {
-    var table = $('#yourTableID').DataTable();
 
     // Menambahkan placeholder ke input pencarian bawaan DataTables
     $('.dataTables_filter input').attr('placeholder', 'Cari data kategori...');

@@ -132,6 +132,14 @@
                                    </div>
                                </div>
            
+                               <!-- Nama Kasir -->
+                                <div class="row mb-2">
+                                    <div class="col-5 text-muted small">Nama Kasir</div>
+                                    <div class="col-auto small">:</div>
+                                    <div class="col-6 small fw-bold">
+                                        {{ $order->kasir->nama_kasir }}  <!-- Assuming the relationship is defined correctly -->
+                                    </div>
+                                </div>
                                <!-- Status Pesanan -->
                                <div class="row mb-3">
                                    <div class="col-5 text-muted small">Status Pesanan</div>
