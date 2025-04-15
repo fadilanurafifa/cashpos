@@ -20,6 +20,11 @@ class PenjualanController extends Controller
     // Menampilkan daftar penjualan dengan informasi pelanggan dan produk
     public function index()
     {
+        Log::info('Mengakses halaman daftar penjualan', [
+            'user' => Auth::user()->name ?? 'Guest',
+            'timestamp' => now()->toDateTimeString()
+        ]);
+    
         $pelanggan = Pelanggan::all(); // Ambil semua data pelanggan
         $penjualan = Penjualan::with('pelanggan')->paginate(10); // Ambil daftar penjualan dengan relasi pelanggan
         $produk = Produk::select('id', 'nama_produk', 'harga', 'foto')->get(); // Ambil daftar produk yang tersedia
@@ -30,6 +35,12 @@ class PenjualanController extends Controller
     // Menyimpan transaksi penjualan baru
     public function store(Request $request)
     {
+        Log::info('Permintaan untuk menyimpan penjualan diterima', [
+            'user' => Auth::user()->name ?? 'Guest',
+            'data' => $request->all(),
+            'timestamp' => now()->toDateTimeString()
+        ]);
+
         // Validasi input
         $validated = $request->validate([
             'pelanggan_id' => 'required', // Pastikan pelanggan dipilih
@@ -111,6 +122,12 @@ class PenjualanController extends Controller
             $penjualan->update(['total_bayar' => $totalBayar]);
     
             DB::commit(); // Simpan transaksi ke database
+
+            Log::info('Transaksi penjualan berhasil disimpan', [
+                'no_faktur' => $no_faktur,
+                'total' => $totalBayar,
+                'timestamp' => now()->toDateTimeString()
+            ]);
     
             return response()->json([
                 'success' => true,
@@ -120,8 +137,11 @@ class PenjualanController extends Controller
             ]);
         } catch (\Exception $e) {
             DB::rollback(); // Batalkan transaksi jika terjadi kesalahan
-            Log::error('Error Transaksi Penjualan:', ['message' => $e->getMessage(), 'trace' => $e->getTraceAsString()]);
-    
+            // logging error
+            Log::error('Gagal menyimpan transaksi penjualan', [
+                'error' => $e->getMessage(),
+                'timestamp' => now()->toDateTimeString()
+            ]);
             return response()->json([
                 'success' => false,
                 'error' => 'Gagal menyimpan transaksi. ' . $e->getMessage(),
@@ -132,6 +152,13 @@ class PenjualanController extends Controller
     // Menampilkan daftar notifikasi untuk kasir yang login
     public function notifications()
     {
+        $user = Auth::user();
+        
+        Log::info('User membuka halaman notifikasi', [
+            'user_id' => $user->id,
+            'user_name' => $user->name,
+            'timestamp' => now()->toDateTimeString()
+        ]);
         $notifications = Auth::user()->notifications; // Ambil notifikasi dari user yang sedang login
         return view('kasir.notifications', compact('notifications')); // Kirim data ke tampilan notifikasi
     }    

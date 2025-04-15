@@ -94,7 +94,7 @@
 </head>
 <body onload="window.print(); setTimeout(() => window.close(), 1000);">
   <div class="container">
-    <p class="title">Kasir Caffe</p>
+    <p class="title">Temu Rasa </p>
     <p class="subtitle">Jl. Merdeka Belajar No.12<br>Bandung - Jawa Barat</p>
     <div class="line"></div>
 
@@ -133,18 +133,18 @@
           <td><strong>Total</strong></td>
           <td class="right"><strong>Rp {{ number_format($transaksi->total_bayar, 0, ',', '.') }}</strong></td>
         </tr>
-        <tr>
+        {{-- <tr>
           <td>Bayar</td>
           <td class="right">Rp {{ number_format($transaksi->jumlah_bayar ?? 0, 0, ',', '.') }}</td>
         </tr>
         <tr>
           <td>Kembalian</td>
           <td class="right">Rp {{ number_format(max(($transaksi->jumlah_bayar ?? 0) - $transaksi->total_bayar, 0), 0, ',', '.') }}</td>
-        </tr>
+        </tr> --}}
       </table>
 
       <div class="line"></div>
-      <p class="footer">Terima Kasih atas kunjungan Anda!<br>~ Kasir Caffe ~</p>
+      <p class="footer">Terima Kasih atas kunjungan Anda!<br>~ Temu Rasa ~</p>
     @else
       <p>Data tidak tersedia.</p>
     @endif

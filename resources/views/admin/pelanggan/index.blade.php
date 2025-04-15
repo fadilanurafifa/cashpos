@@ -63,44 +63,42 @@
             transform: none !important; 
             transition: none !important;
         }
-            /* Pastikan parent container flex untuk mengatur posisi */
-.dataTables_wrapper .row:first-child {
-    display: flex !important;
-    justify-content: space-between !important;
-    align-items: center !important;
-    flex-wrap: wrap !important;
-    width: 100% !important;
-}
+        /* Pastikan parent container flex untuk mengatur posisi */
+        .dataTables_wrapper .row:first-child {
+            display: flex !important;
+            justify-content: space-between !important;
+            align-items: center !important;
+            flex-wrap: wrap !important;
+            width: 100% !important;
+        }
 
-/* Form Show tetap di kiri */
-.dataTables_length {
-    flex: none !important;
-}
+        /* Form Show tetap di kiri */
+        .dataTables_length {
+            flex: none !important;
+        }
 
-/* Pastikan form search tetap di kanan */
-.dataTables_filter {
-    display: flex !important;
-    justify-content: flex-end !important;
-    align-items: center !important;
-}
+        /* Pastikan form search tetap di kanan */
+        .dataTables_filter {
+            display: flex !important;
+            justify-content: flex-end !important;
+            align-items: center !important;
+        }
 
-/* Membuat teks "Cari" sejajar di sebelah kiri input */
-.dataTables_filter label {
-    display: flex !important;
-    align-items: center !important;
-    gap: 5px !important; /* Jarak antara teks dan input */
-    white-space: nowrap; /* Mencegah teks turun ke bawah */
-}
+        /* Membuat teks "Cari" sejajar di sebelah kiri input */
+        .dataTables_filter label {
+            display: flex !important;
+            align-items: center !important;
+            gap: 5px !important; /* Jarak antara teks dan input */
+            white-space: nowrap; /* Mencegah teks turun ke bawah */
+        }
 
-/* Menyesuaikan ukuran input */
-.dataTables_filter input {
-    width: 200px !important;
-    padding: 5px !important;
-    border-radius: 5px !important;
-    border: 1px solid #ccc !important;
-}
-
-
+        /* Menyesuaikan ukuran input */
+        .dataTables_filter input {
+            width: 200px !important;
+            padding: 5px !important;
+            border-radius: 5px !important;
+            border: 1px solid #ccc !important;
+        }
     </style>
     <div class="container">
         <div class="d-flex justify-content-between align-items-center">
@@ -128,7 +126,16 @@
                 </div>
             </div>
         </div>    
-
+        <div class="d-flex justify-content-end mb-3">
+            <form action="{{ route('pelanggan.import') }}" method="POST" enctype="multipart/form-data" class="d-flex gap-2">
+                @csrf
+                <input type="file" name="file" class="form-control" required style="width: 353px;">
+                <button class="btn" style="background-color: #4CAF50; color: white; font-size: 14px; padding: 5px 10px; border-radius: 6px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);">
+                    <i class="fas fa-file-excel"></i>
+                </button>                
+                           
+            </form>
+        </div>        
         <div class="card table-container">
             @if (session('success'))
                 <script>

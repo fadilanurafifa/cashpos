@@ -112,9 +112,9 @@
     <div class="kop-surat">
         <img src="{{ asset('assets/img/logoitem.png') }}" alt="Logo">
         <div class="kop-text">
-            <h1>Cash Caffe POS</h1>
+            <h1>Temu Rasa</h1>
             <p>Jl. Merdeka Belajar No. 10, Kota Bandung, Jawa Barat - Indonesia</p>
-            <p>Email: info@CashPOS.com | Telp: (021) 123456</p>
+            <p>Email: info@TemuRasaPOS.com | Telp: (021) 123456</p>
         </div>
     </div>
     <div class="garis"></div>

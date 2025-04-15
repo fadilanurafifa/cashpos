@@ -5,7 +5,7 @@
 @section('content')
 <!-- Bootstrap Icons CDN -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
-
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 @include('style')
     <style>
         .produk-container {
@@ -165,6 +165,26 @@
         margin: 20px 0;
         margin-top: 5px;
     }
+    .custom-dropdown {
+        width: 220px;
+        padding: 6px 10px;
+        border-radius: 8px;
+        border: 1px solid #ccc;
+        background-color: #fdfdfd;
+        font-size: 14px;
+        transition: 0.3s;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+
+    .custom-dropdown:focus {
+        border-color: #0d6efd;
+        box-shadow: 0 0 5px rgba(13, 110, 253, 0.3);
+        background-color: #fff;
+    }
+
+    label[for="kategoriDropdown"] {
+        color: #444;
+    }
     </style>
 
     <div class="container">
@@ -186,6 +206,18 @@
         </button>
 
         </div>
+        <form action="{{ route('produk.import') }}" method="POST" enctype="multipart/form-data">
+            @csrf
+            <div class="row justify-content-end">
+                <div class="col-md-4">
+                    <input type="file" name="file" class="form-control form-control-sm" required>
+                </div>
+                <div class="col-md-2">
+                    <button class="btn btn-success btn-sm">Import Produk</button>
+                </div>
+            </div>
+        </form>
+        
         <div class="divider"></div>
         @if(session('success'))
         <script>
@@ -199,19 +231,18 @@
         </script>
         @endif        
        <!-- Filter Kategori dan Input Pencarian -->
-       <div class="row mb-2" style="margin-bottom: 40px;">
+       <div class="row mb-4">
         <div class="col-lg-9">
-            <div class="d-flex flex-wrap gap-2 align-items-center" style="margin-bottom: 20px;">
-                <!-- Filter Kategori -->
-                <div class="d-flex gap-2">
-                    <button class="btn btn-sm btn-primary kategori-filter active" data-filter="all">Semua</button>
+            <div class="d-flex align-items-center gap-3">
+                <label for="kategoriDropdown" class="mb-0" style="font-weight: bold; font-size: 15px;">
+                    Filter Kategori:
+                </label>
+                <select id="kategoriDropdown" class="form-select form-select-sm custom-dropdown">
+                    <option value="all">Semua</option>
                     @foreach ($kategori as $kat)
-                        <button class="btn btn-sm btn-outline-primary kategori-filter"
-                            data-filter="{{ strtolower($kat->nama_kategori) }}">
-                            {{ $kat->nama_kategori }}
-                        </button>
+                        <option value="{{ strtolower($kat->nama_kategori) }}">{{ $kat->nama_kategori }}</option>
                     @endforeach
-                </div>
+                </select>
             </div>
         </div>
     </div>
@@ -352,31 +383,26 @@
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
     document.addEventListener("DOMContentLoaded", function () {
-    const filterButtons = document.querySelectorAll(".kategori-filter");
-    const productCards = document.querySelectorAll(".col[data-kategori]");
+        const dropdown = document.getElementById("kategoriDropdown");
+        const productCards = document.querySelectorAll(".col[data-kategori]");
 
-    filterButtons.forEach((button) => {
-        button.addEventListener("click", function () {
-            const filterValue = this.getAttribute("data-filter");
+        dropdown.addEventListener("change", function () {
+            const selectedCategory = this.value;
 
-            // Menghapus kelas 'active' dari semua tombol
-            filterButtons.forEach((btn) => btn.classList.remove("active"));
-            this.classList.add("active");
-
-            // Menampilkan atau menyembunyikan produk berdasarkan kategori
             productCards.forEach((card) => {
                 const productCategory = card.getAttribute("data-kategori");
 
-                if (filterValue === "all" || productCategory === filterValue) {
+                if (selectedCategory === "all" || productCategory === selectedCategory) {
                     card.style.display = "block";
                 } else {
                     card.style.display = "none";
                 }
             });
         });
-    });
-});
 
+        // Optional: trigger filter langsung saat halaman dibuka
+        dropdown.dispatchEvent(new Event('change'));
+    });
 </script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
@@ -459,7 +485,5 @@
             });
         });
     </script>
-    
-    
 @endpush
 @endsection

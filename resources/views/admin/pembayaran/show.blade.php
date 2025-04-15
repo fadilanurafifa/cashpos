@@ -98,7 +98,29 @@
         }
     </style>
 @endpush
-
+@if (session('jumlah_bayar') && session('kembalian'))
+<script>
+    Swal.fire({
+        icon: 'success',
+        title: '<span style="font-size:18px;">Detail Transaksi</span>',
+        html: `
+            <div style="font-size: 15px; line-height: 1.6;">
+                <b>Jumlah Bayar:</b> Rp {{ number_format(session('jumlah_bayar')) }} <br>
+                <b>Jumlah Kembalian:</b> Rp {{ number_format(session('kembalian')) }}
+            </div>
+        `,
+        showConfirmButton: true,
+        confirmButtonText: '<i class="fa-solid fa-check"></i> Berhasil!',
+        confirmButtonColor: '#27ae60', 
+        iconColor: '#2ecc71',
+        background: '#ffffff',
+        color: '#2d3436',
+        backdrop: 'rgba(0, 0, 0, 0.3)',
+        width: '360px',
+        padding: '1.4rem',
+    });
+</script>
+@endif
 <div class="container mt-4" style="margin-bottom: 30px;">
     <h1 class="h3 mb-4 text-gray-800">
         <i class="fas fa-receipt"></i> Pembayaran untuk Faktur <strong>#{{ $transaksi->no_faktur }}</strong>
@@ -110,7 +132,7 @@
         </div>
     @else
         <div class="alert alert-success">
-            <i class="fas fa-check-circle"></i> Pembayaran telah <strong>berhasil</strong>.
+            <i class="fas fa-check-circle"></i> Pembayaran telah <strong>berhasil</strong>
         </div>
     @endif
 
@@ -316,6 +338,5 @@
         kembalianView.textContent = "Rp 0";
     });
 });
-
 </script>
 @endpush

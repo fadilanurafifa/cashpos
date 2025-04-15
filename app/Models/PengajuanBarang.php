@@ -11,24 +11,22 @@ class PengajuanBarang extends Model
 
     protected $table = 'pengajuan_barang';
 
-    protected $fillable = [
-        'pelanggan_id',
-        'nama_pengaju',
-        'nama_barang',
-        'tanggal_pengajuan',
-        'qty',
-        'status',
-    ];
-
+    protected $guarded = [];
     public function pelanggan()
     {
         return $this->belongsTo(Pelanggan::class, 'pelanggan_id');
     }
+    // Method boot() akan dipanggil secara otomatis saat model diinisialisasi
     public static function boot() {
+        // Memanggil method boot() dari parent class (Eloquent Model)
         parent::boot();
+
+        // Menambahkan event listener untuk event "creating"
+        // Event ini dipicu saat instance model akan dibuat (sebelum disimpan ke database)
         static::creating(function ($pengajuan) {
+            // Saat model Pengajuan dibuat, otomatis mengisi field 'nama_pengaju'
+            // dengan nilai 'nama' dari relasi pelanggan (misal $pengajuan->pelanggan)
             $pengajuan->nama_pengaju = $pengajuan->pelanggan->nama;
         });
     }
-    
 }

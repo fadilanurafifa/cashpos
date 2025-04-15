@@ -80,15 +80,17 @@ class PengajuanBarangController extends Controller {
     // ✅ Update status dari pengajuan (terpenuhi / tidak terpenuhi)
     public function updateStatus(Request $request, $id) {  
         // Validasi status hanya boleh dua pilihan
+        Log::info($request->status);
         $request->validate([
             'status' => 'required|in:terpenuhi,tidak terpenuhi',
         ]);
 
         $pengajuan = PengajuanBarang::findOrFail($id);
         $oldStatus = $pengajuan->status;
-        $pengajuan->update(['status' => $request->status]); // Simpan status baru
+        Log::info($request->status);
+        $pengajuan->update(['status' => $request->status]); 
 
-        // Catat log perubahan status
+        // Log::info($pengajuan);
         LogActivity::add('Update Status', 'pengajuan_barangs', $id, ['status' => $oldStatus], ['status' => $request->status]);
 
         return response()->json([
@@ -97,7 +99,7 @@ class PengajuanBarangController extends Controller {
         ]);
     }
 
-    // ✅ Menghapus pengajuan barang dari database
+    // Menghapus pengajuan barang dari database
     public function destroy($id) {  
         $pengajuan = PengajuanBarang::findOrFail($id);
         $oldData = $pengajuan->toArray();
@@ -110,14 +112,14 @@ class PengajuanBarangController extends Controller {
             ->with('success', 'Pengajuan barang berhasil dihapus.');
     }
 
-    // ✅ Export semua data pengajuan ke file Excel
+    // Export semua data pengajuan ke file Excel
     public function exportExcel() {  
         LogActivity::add('Ekspor', 'pengajuan_barangs', null, null, 'User mengekspor daftar pengajuan barang ke Excel.');
 
         return Excel::download(new PengajuanExport, 'pengajuan_barang.xlsx'); // Unduh file Excel
     }
 
-    // ✅ Export semua data pengajuan ke file PDF
+    // Export semua data pengajuan ke file PDF
     public function exportPDF() {  
         $pengajuan = PengajuanBarang::all(); // Ambil semua data
 

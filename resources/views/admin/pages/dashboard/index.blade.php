@@ -72,15 +72,15 @@
                 <div class="row no-gutters align-items-center">
                     <div class="col mr-2">
                         <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
-                            Income (Pemasukan)
+                            Keuntungan Bersih
                         </div>
                         <div class="h5 mb-0 font-weight-bold text-gray-800">
-                            Rp {{ number_format($totalIncome, 0, ',', '.') }}
+                            Rp {{ number_format($totalIncome ?? 0, 0, ',', '.') }}
                         </div>
-                        <small class="text-muted">{{ number_format($incomePercentage, 2) }}% dari target</small>
+                        <small class="text-muted">{{ number_format(($incomePercentage ?? 0), 2) }}% dari target</small>
                     </div>
                     <div class="col-auto">
-                        <i class="fas fa-shopping-cart fa-2x text-gray-300"></i>
+                        <i class="fas fa-coins fa-2x text-warning"></i>
                     </div>
                 </div>
             </div>

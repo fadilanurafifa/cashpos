@@ -8,6 +8,8 @@ use App\Models\Produk;
 use App\Models\DetailPenjualan;
 use App\Models\Kategori;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Maatwebsite\Excel\Facades\Excel;
 
 class LaporanPenjualanController extends Controller
@@ -16,6 +18,13 @@ class LaporanPenjualanController extends Controller
     public function index(Request $request)
     {
         $kategori_id = $request->input('kategori_id'); // Ambil kategori yang dipilih dari request
+
+        // Log request kategori yang diterima
+        Log::info('Menampilkan laporan penjualan', [
+            'user' => Auth::user()->name ?? 'Guest',
+            'kategori_id' => $kategori_id ?? 'Tidak ada filter kategori',
+            'time' => now()->toDateTimeString()
+        ]);
     
         // Ambil daftar kategori untuk dropdown filter
         $kategoriList = Kategori::all();
@@ -34,7 +43,14 @@ class LaporanPenjualanController extends Controller
     public function cetakPDF(Request $request)
     {
         $kategori_id = $request->kategori_id; // Ambil kategori yang dipilih dari request
-    
+
+        // Log request cetak PDF
+        Log::info('Mencetak laporan penjualan ke PDF', [
+            'user' => Auth::user()->name ?? 'Guest',
+            'kategori_id' => $kategori_id ?? 'Tidak ada filter kategori',
+            'time' => now()->toDateTimeString()
+        ]);
+        
         // Query produk dengan relasi detailPenjualan, lalu filter berdasarkan kategori jika ada
         $laporan = Produk::with(['detailPenjualan'])
             ->when($kategori_id, function ($query) use ($kategori_id) {
@@ -58,6 +74,13 @@ class LaporanPenjualanController extends Controller
     public function exportExcel(Request $request)
     {
         $kategori_id = $request->kategori_id;
+
+         // Log request untuk ekspor Excel
+        Log::info('Mengekspor laporan penjualan ke Excel', [
+            'user' => Auth::user()->name ?? 'Guest',
+            'kategori_id' => $kategori_id ?? 'Tidak ada filter kategori',
+            'time' => now()->toDateTimeString()
+        ]);
         return Excel::download(new LaporanPenjualanExport($kategori_id), 'Laporan_Penjualan.xlsx');
     }
 }

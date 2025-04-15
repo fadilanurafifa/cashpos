@@ -39,24 +39,25 @@
             </div>
         </div>
 
-        <!-- Box Rata-rata Waktu Penyelesaian -->
+       <!-- Box Jumlah Pesanan Aktif -->
         <div class="col-md-6">
             <div class="card border-left-info shadow h-100 py-3">
                 <div class="card-body">
                     <div class="d-flex align-items-center">
                         <div class="flex-grow-1">
                             <div class="text-xs font-weight-bold text-info text-uppercase mb-1">
-                                Rata-rata Penyelesaian
+                                Jumlah Pesanan Aktif
                             </div>
                             <div class="h5 mb-0 font-weight-bold text-gray-800">
-                                {{ $averageCompletionTime ? round($averageCompletionTime, 2) . ' menit' : 'Belum ada data' }}
+                                {{ $activeOrdersCount > 0 ? $activeOrdersCount . ' Pesanan sedang diproses' : 'Tidak ada pesanan aktif' }}
                             </div>
                         </div>
-                        <i class="fas fa-clock fa-2x text-gray-300"></i>
+                        <i class="fas fa-concierge-bell fa-2x text-gray-300"></i>
                     </div>
                 </div>
             </div>
         </div>
+
     </div>
 
     <!-- Chart dan Menu Terlaris -->
@@ -136,80 +137,129 @@
 </script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
-    var ctx = document.getElementById('menuChart').getContext('2d');
+   var ctx = document.getElementById('menuChart').getContext('2d');
 
-    // Data awal dari PHP
-    var initialLabels = {!! json_encode($menuNames) !!}; // Nama menu
-    var initialData = {!! json_encode($menuOrders) !!}; // Total pesanan per menu
+var initialLabels = {!! json_encode($menuNames) !!};
+var initialData = {!! json_encode($menuOrders) !!};
 
-    var menuChart = new Chart(ctx, {
-        type: 'line',
-        data: {
-            labels: initialLabels,
-            datasets: [{
-                label: 'Jumlah Pesanan',
-                data: initialData,
-                borderColor: 'green',
-                backgroundColor: 'rgba(0, 255, 0, 0.2)',
-                pointBackgroundColor: 'green',
-                pointRadius: 5,
-                borderWidth: 2,
-                fill: false
-            }]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            scales: {
-                y: {
-                    beginAtZero: true
+var menuChart = new Chart(ctx, {
+    type: 'line',
+    data: {
+        labels: initialLabels,
+        datasets: [{
+            label: 'Jumlah Pesanan',
+            data: initialData,
+            borderColor: '#007bff', // Biru elegan
+            backgroundColor: 'rgba(0, 123, 255, 0.1)',
+            pointBackgroundColor: '#007bff',
+            pointRadius: 6,
+            pointHoverRadius: 8,
+            tension: 0.4, // Membuat garis melengkung (smooth)
+            borderWidth: 2,
+            fill: true
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+            legend: {
+                position: 'top',
+                labels: {
+                    color: '#333',
+                    font: {
+                        size: 14
+                    }
                 }
             },
-            plugins: {
-                legend: {
-                    position: 'top',
+            title: {
+                display: true,
+                text: 'Statistik Pesanan Menu',
+                font: {
+                    size: 18,
+                    weight: 'bold'
+                },
+                color: '#444',
+                padding: {
+                    top: 10,
+                    bottom: 20
+                }
+            },
+            tooltip: {
+                backgroundColor: '#343a40',
+                titleColor: '#fff',
+                bodyColor: '#fff',
+                padding: 10,
+                cornerRadius: 6
+            }
+        },
+        scales: {
+            x: {
+                ticks: {
+                    color: '#333'
+                },
+                grid: {
+                    display: true,
+                    color: '#e0e0e0'
+                }
+            },
+            y: {
+                beginAtZero: true,
+                ticks: {
+                    color: '#333'
+                },
+                grid: {
+                    display: true,
+                    color: '#e0e0e0'
                 }
             }
         }
-    });
+    }
+});
 
-    // Event ketika menu diklik
+</script>
+<script>
     document.querySelectorAll('.menu-item').forEach(item => {
-        item.addEventListener('click', function() {
+        item.addEventListener('click', function () {
             var selectedMenu = this.getAttribute('data-menu');
             var totalOrders = this.getAttribute('data-total');
 
-            // Cari index dari menu yang diklik
             var index = initialLabels.indexOf(selectedMenu);
 
             if (index !== -1) {
-                // Buat dataset baru untuk menyorot menu yang diklik
                 var newDataset = {
-                    label: 'Jumlah Pesanan - ' + selectedMenu,
+                    label: ' ' + selectedMenu + '',
                     data: initialData.map((value, i) => i === index ? value : null),
-                    borderColor: 'red',
-                    backgroundColor: 'rgba(255, 0, 0, 0.2)',
-                    pointBackgroundColor: 'red',
-                    pointRadius: 10,  // Ukuran titik lebih besar
-                    borderWidth: 2, // Ketebalan garis tetap
+                    borderColor: '#00008B', // biru dongker
+                    backgroundColor: 'rgba(0, 0, 139, 0.1)', // biru dongker transparan
+                    pointBackgroundColor: '#00008B',
+                    pointRadius: 10,
+                    borderWidth: 2,
                     fill: false
                 };
 
-                // Reset dataset sebelum menambahkan yang baru
-                menuChart.data.datasets = [{
-                    label: 'Jumlah Pesanan',
-                    data: initialData,
-                    borderColor: 'green',
-                    backgroundColor: 'rgba(0, 255, 0, 0.2)',
-                    pointBackgroundColor: 'green',
-                    pointRadius: 5,
-                    borderWidth: 2,
-                    fill: false
-                }, newDataset];
+                menuChart.data.datasets = [
+                    {
+                        label: 'Jumlah Pesanan',
+                        data: initialData,
+                        borderColor: '#007bff',
+                        backgroundColor: 'rgba(0, 123, 255, 0.1)',
+                        pointBackgroundColor: '#007bff',
+                        pointRadius: 6,
+                        tension: 0.4,
+                        borderWidth: 2,
+                        fill: true
+                    },
+                    newDataset
+                ];
+
+                // Update judul chart
+                menuChart.options.plugins.title.text = 'Statistik Pesanan - ' + selectedMenu;
 
                 menuChart.update();
             }
         });
     });
 </script>
+
 @endpush

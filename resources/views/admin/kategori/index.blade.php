@@ -120,8 +120,16 @@
                 <i class="fas fa-file-pdf"></i> Export PDF
             </a>
         </div>
-    </div>    
-    
+    </div>  
+    <div class="d-flex justify-content-end mb-3">
+        <form action="{{ route('kategori.import') }}" method="POST" enctype="multipart/form-data" class="d-flex gap-2">
+            @csrf
+            <input type="file" name="file" class="form-control" required style="width: 340px;">
+            <button class="btn" style="background-color: #4CAF50; color: white; font-size: 14px; padding: 5px 10px; border-radius: 6px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);">
+                <i class="fas fa-file-excel"></i>
+            </button>                                 
+        </form>
+    </div>          
     <div class="card table-container">
         <div class="card-body">
             <div class="table-responsive">

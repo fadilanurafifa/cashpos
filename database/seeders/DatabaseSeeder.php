@@ -17,32 +17,31 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-          User::create([
-            'name' => 'Admin',
-            'email' => 'admin@caffe.com',
-            'password' => Hash::make('password'),
-            'role' => 'admin',
-            'status' => 'aktif'
-        ]);
+        //   User::create([
+        //     'name' => 'Admin',
+        //     'email' => 'admin@caffe.com',
+        //     'password' => Hash::make('password'),
+        //     'role' => 'admin',
+        //     'status' => 'aktif'
+        // ]);
 
-        User::create([
-            'name' => 'Kasir',
-            'email' => 'kasir@caffe.com',
-            'password' => Hash::make('password'),
-            'role' => 'kasir',
-            'status' => 'aktif'
-        ]);
+        // User::create([
+        //     'name' => 'Kasir',
+        //     'email' => 'kasir@caffe.com',
+        //     'password' => Hash::make('password'),
+        //     'role' => 'kasir',
+        //     'status' => 'aktif'
+        // ]);
 
-        // Tambah akun kasir
-        User::create([
-            'name' => 'Owner',
-            'email' => 'owner@caffe.com',
-            'password' => Hash::make('password'),
-            'role' => 'owner',
-            'status' => 'aktif'
-        ]);
+        // // Tambah akun kasir
+        // User::create([
+        //     'name' => 'Owner',
+        //     'email' => 'owner@caffe.com',
+        //     'password' => Hash::make('password'),
+        //     'role' => 'owner',
+        //     'status' => 'aktif'
+        // ]);
 
-         // Tambah akun kasir
         // User::create([
         //     'name' => 'Chef',
         //     'email' => 'chef@caffe.com',
@@ -51,10 +50,9 @@ class DatabaseSeeder extends Seeder
         //     'status' => 'aktif'
         // ]);
 
-
         // $this->call([
         //     KategoriSeeder::class,
-        // //     ProdukSeeder::class
+        //     ProdukSeeder::class
         // ]);
     }
      

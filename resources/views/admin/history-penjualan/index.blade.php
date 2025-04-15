@@ -81,43 +81,43 @@
     .bold {
         font-weight: bold;
     }
-        /* Pastikan parent container flex untuk mengatur posisi */
-.dataTables_wrapper .row:first-child {
-    display: flex !important;
-    justify-content: space-between !important;
-    align-items: center !important;
-    flex-wrap: wrap !important;
-    width: 100% !important;
-}
+    /* Pastikan parent container flex untuk mengatur posisi */
+    .dataTables_wrapper .row:first-child {
+        display: flex !important;
+        justify-content: space-between !important;
+        align-items: center !important;
+        flex-wrap: wrap !important;
+        width: 100% !important;
+    }
 
-/* Form Show tetap di kiri */
-.dataTables_length {
-    flex: none !important;
-}
+    /* Form Show tetap di kiri */
+    .dataTables_length {
+        flex: none !important;
+    }
 
-/* Pastikan form search tetap di kanan */
-.dataTables_filter {
-    display: flex !important;
-    justify-content: flex-end !important;
-    align-items: center !important;
-}
+    /* Pastikan form search tetap di kanan */
+    .dataTables_filter {
+        display: flex !important;
+        justify-content: flex-end !important;
+        align-items: center !important;
+    }
 
-/* Membuat teks "Cari" sejajar di sebelah kiri input */
-.dataTables_filter label {
-    display: flex !important;
-    align-items: center !important;
-    gap: 5px !important; /* Jarak antara teks dan input */
-    white-space: nowrap; /* Mencegah teks turun ke bawah */
-}
+    /* Membuat teks "Cari" sejajar di sebelah kiri input */
+    .dataTables_filter label {
+        display: flex !important;
+        align-items: center !important;
+        gap: 5px !important; /* Jarak antara teks dan input */
+        white-space: nowrap; /* Mencegah teks turun ke bawah */
+    }
 
-/* Menyesuaikan ukuran input */
-.dataTables_filter input {
-    width: 200px !important;
-    padding: 5px !important;
-    border-radius: 5px !important;
-    border: 1px solid #ccc !important;
-}
-.input-xs {
+    /* Menyesuaikan ukuran input */
+    .dataTables_filter input {
+        width: 200px !important;
+        padding: 5px !important;
+        border-radius: 5px !important;
+        border: 1px solid #ccc !important;
+    }
+    .input-xs {
         padding: 0.25rem 0.4rem;
         font-size: 0.75rem;
         line-height: 1.2;
@@ -155,8 +155,6 @@
         color: #a71d2a;
         text-decoration: underline;
     }
-
-
 </style>
 @endpush
 
@@ -318,13 +316,14 @@
                 </table>
             
                 <!-- Tambahan informasi nama kasir -->
-                <p class="mt-2" style="font-size: 14px;">
-                    <strong>Nama Kasir:</strong> {{ $penjualan->kasir->nama_kasir ?? '-' }}
-                </p>
-                <p class="mt-2" style="font-size: 14px;">
-                    <strong>Slot Kasir:</strong> {{ $penjualan->kasir->slot_kasir ?? '-' }}
-                </p>                
-                
+                <div class="d-flex justify-content-between mt-2" style="font-size: 14px;">
+                    <p>
+                        <strong>Nama Kasir:</strong> {{ $penjualan->kasir->nama_kasir ?? '-' }}
+                    </p>
+                    <p>
+                        <strong>Slot Kasir:</strong> {{ $penjualan->kasir->slot_kasir ?? '-' }}
+                    </p>
+                </div>                
             
                 <p class="mt-2" style="font-size: 14px; background-color: #d1ecf1; padding: 6px 12px; border-radius: 5px; color: #0c5460; font-weight: bold;">
                     <strong>Status Pembayaran :</strong> {{ ucfirst($penjualan->status_pembayaran) }}
@@ -425,7 +424,7 @@
                     </style>
 
                     <!-- STRUK CONTENT -->
-                    <p class="title">Kasir Caffe</p>
+                    <p class="title">Temu Rasa</p>
                     <p class="subtitle">Jl. Merdeka Belajar No.12<br>Bandung - Jawa Barat</p>
                     <div class="line"></div>
 
@@ -465,19 +464,19 @@
                             <td><strong>Total</strong></td>
                             <td class="right"><strong>Rp {{ number_format($penjualan->total_bayar ?? 0, 0, ',', '.') }}</strong></td>
                         </tr>
-                        <tr>
+                        {{-- <tr>
                             <td>Bayar</td>
                             <td class="right">Rp {{ number_format($penjualan->jumlah_bayar ?? 0, 0, ',', '.') }}</td>
                         </tr>
                         <tr>
                             <td>Kembalian</td>
                             <td class="right">Rp {{ number_format(($penjualan->jumlah_bayar ?? 0) - ($penjualan->total_bayar ?? 0), 0, ',', '.') }}</td>
-                        </tr>
+                        </tr> --}}
                     </table>
 
                     <div class="line"></div>
 
-                    <p class="footer">Terima Kasih atas kunjungan Anda!<br>~ Kasir Caffe ~</p>
+                    <p class="footer">Terima Kasih atas kunjungan Anda!<br>~ Temu Rasa ~</p>
                 </div>
 
                 <!-- Tombol Cetak -->

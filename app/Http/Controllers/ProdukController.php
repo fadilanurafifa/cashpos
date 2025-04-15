@@ -2,16 +2,26 @@
 
 namespace App\Http\Controllers;
 
+use App\Imports\ProdukImport;
 use App\Models\Kategori; // Menggunakan model Kategori untuk mengambil kategori produk
 use Illuminate\Http\Request;
 use App\Models\Produk; // Menggunakan model Produk untuk mengambil dan mengelola produk
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage; // Menggunakan Storage untuk mengelola file yang diunggah
+use Maatwebsite\Excel\Facades\Excel;
 
 class ProdukController extends Controller
 {
     // Menampilkan daftar produk dan kategori
     public function index(Request $request)
     {
+        Log::info('Akses halaman daftar produk', [
+            'user_id' => Auth::user()->id,
+            'filter_kategori' => $request->kategori_id,
+            'timestamp' => now()->toDateTimeString()
+        ]);
+
         $kategori = Kategori::all(); // Mengambil semua data kategori dari database
 
         // Mengambil produk berdasarkan kategori jika ada filter yang dipilih
@@ -28,6 +38,12 @@ class ProdukController extends Controller
     // Menyimpan produk baru ke database
     public function store(Request $request)
     {
+        Log::info('Permintaan simpan produk baru diterima', [
+            'user_id' => Auth::user()->id,
+            'input_data' => $request->all(),
+            'timestamp' => now()->toDateTimeString()
+        ]);
+
         // Validasi input untuk memastikan data yang dikirim benar
         $request->validate([
             'nama_produk' => 'required|string|max:255', // Nama produk harus berupa string dengan maksimal 255 karakter
@@ -55,6 +71,12 @@ class ProdukController extends Controller
             ]);
         }
 
+        Log::info('Produk berhasil disimpan', [
+            'nama_produk' => $request->nama_produk,
+            'user_id' => Auth::user()->id,
+            'timestamp' => now()->toDateTimeString()
+        ]);
+
         // Redirect kembali ke halaman daftar produk dengan pesan sukses
         return redirect()->route('admin.produk.index')->with('success', 'Produk berhasil ditambahkan');
     }
@@ -62,6 +84,13 @@ class ProdukController extends Controller
     // Memperbarui stok produk berdasarkan ID
     public function updateStok(Request $request, $id)
     {
+        Log::info('Permintaan update stok diterima', [
+            'user_id' => Auth::user()->id,
+            'produk_id' => $id,
+            'input_stok' => $request->stok,
+            'timestamp' => now()->toDateTimeString()
+        ]);
+
         // Validasi input agar stok minimal 0
         $request->validate([
             'stok' => 'required|integer|min:0'
@@ -84,6 +113,13 @@ class ProdukController extends Controller
         // Mencari produk berdasarkan ID
         $produk = Produk::findOrFail($id);
 
+        Log::info('Permintaan hapus produk diterima', [
+            'user_id' => Auth::user()->id,
+            'produk_id' => $id,
+            'produk_nama' => $produk->nama_produk,
+            'timestamp' => now()->toDateTimeString()
+        ]);
+
         // Jika produk memiliki foto, hapus file foto dari penyimpanan
         if ($produk->foto) {
             $filePath = public_path('assets/produk_fotos/' . $produk->foto); // Menentukan path file
@@ -95,10 +131,25 @@ class ProdukController extends Controller
         // Menghapus produk dari database
         $produk->delete();
 
+        Log::info('Produk berhasil dihapus dari database', [
+            'produk_id' => $id
+        ]);
+
         // Mengembalikan response JSON bahwa produk berhasil dihapus
         return response()->json([
             'status' => 'success',
             'message' => 'Produk berhasil dihapus!'
         ]);
+    }
+
+    public function import(Request $request)
+    {
+        $request->validate([
+            'file' => 'required|mimes:xlsx,csv,xls'
+        ]);
+    
+        Excel::import(new ProdukImport, $request->file('file'));
+    
+        return redirect()->back()->with('success', 'Data produk berhasil diimport!');
     }
 }

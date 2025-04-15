@@ -66,6 +66,8 @@ Route::put('/admin/kategori/{id}', [KategoriController::class, 'update'])->name(
 Route::get('/admin/kategori/export-excel', [KategoriController::class, 'exportExcel'])->name('kategori.exportExcel');
 Route::get('/admin/kategori/export-pdf', [KategoriController::class, 'exportPDF'])->name('kategori.exportPDF');
 
+Route::post('/import-kategori', [KategoriController::class, 'import'])->name('kategori.import');  
+
 // Route::group(['middleware' => ['role:admin']], function () {
 // produk
 Route::prefix('admin')->group(function () {
@@ -76,6 +78,7 @@ Route::prefix('admin')->group(function () {
         'edit' => 'admin.produk.edit',
         'destroy' => 'admin.produk.destroy',
     ]);
+    Route::post('/produk/import', [ProdukController::class, 'import'])->name('produk.import');
 
     // Rute khusus untuk memperbarui stok saja
     Route::put('produk/{produk}/update-stok', [ProdukController::class, 'updateStok'])
@@ -94,7 +97,8 @@ Route::group(['middleware' => ['role:kasir,admin']], function () {
     Route::put('/pelanggan/{id}', [PelangganController::class, 'update'])->name('pelanggan.update');
     Route::delete('/pelanggan/{id}', [PelangganController::class, 'destroy'])->name('pelanggan.destroy');
     Route::get('/pelanggan/export-excel', [PelangganController::class, 'exportExcel'])->name('pelanggan.exportExcel');
-    Route::get('/pelanggan/export-pdf', [PelangganController::class, 'exportPdf'])->name('pelanggan.exportPdf');    
+    Route::get('/pelanggan/export-pdf', [PelangganController::class, 'exportPdf'])->name('pelanggan.exportPdf'); 
+    Route::post('/import-pelanggan', [PelangganController::class, 'import'])->name('pelanggan.import');   
 
     // pembayaran 
     Route::prefix('admin')->name('admin.')->group(function () {

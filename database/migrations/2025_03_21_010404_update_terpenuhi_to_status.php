@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Schema;
 return new class extends Migration {
     public function up() {
         Schema::table('pengajuan_barang', function (Blueprint $table) {
-            $table->enum('status', ['terpenuhi', 'tidak terpenuhi'])->default('tidak terpenuhi')->change();
+            $table->enum('terpenuhi', ['terpenuhi', 'tidak terpenuhi'])->default('tidak terpenuhi')->change();
         });
     }
 
