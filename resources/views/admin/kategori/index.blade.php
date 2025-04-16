@@ -136,7 +136,7 @@
                 <table id="kategoriTable" class="table table-bordered">
                     <thead class="thead-light">
                         <tr class="text-center">
-                            <th>#</th>
+                            <th></th>
                             <th>Nama Kategori</th>
                             <th>Aksi</th>
                         </tr>

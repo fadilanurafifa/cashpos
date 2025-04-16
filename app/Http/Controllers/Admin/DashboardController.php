@@ -13,8 +13,9 @@ class DashboardController extends Controller // Mendefinisikan class DashboardCo
     {
         $totalIncome = DB::table('detail_penjualan')
         ->join('produk', 'detail_penjualan.produk_id', '=', 'produk.id')
-        ->select(DB::raw('SUM((produk.harga - produk.harga_pokok) * detail_penjualan.jumlah) as total_keuntungan'))
-        ->value('total_keuntungan');
+        ->select(DB::raw('SUM((COALESCE(produk.harga, 0) - COALESCE(produk.harga_pokok, 0)) * COALESCE(detail_penjualan.jumlah, 0)) as total_keuntungan'))
+        ->value('total_keuntungan') ?? 0;
+    
     
         // Menentukan target pemasukan yang ingin dicapai
         $targetIncome = 10000000; 

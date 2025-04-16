@@ -1,6 +1,7 @@
 <?php
 
 use App\Exports\ProdukExport;
+use App\Http\Controllers\AbsensiKerjaController;
 use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\BarangController;
@@ -166,6 +167,25 @@ Route::middleware(['web', 'auth', 'role:kasir,admin'])->group(function () {
 Route::get('/slot_kasir', [SlotKasirController::class, 'index'])->name('slot_kasir.index');
 Route::post('/slot_kasir/update/{id}', [SlotKasirController::class, 'update'])->name('slot_kasir.update');
 Route::delete('/slot_kasir/delete/{id}', [SlotKasirController::class, 'destroy'])->name('slot_kasir.delete');
+
+// absensi kerja
+Route::get('/absensi', [AbsensiKerjaController::class, 'index'])->name('absensi.index');
+Route::post('/absensi', [AbsensiKerjaController::class, 'store'])->name('absensi.store');
+Route::post('/absensi/{id}/selesai', [AbsensiKerjaController::class, 'selesaiKerja'])->name('absensi.selesai');
+Route::delete('/absensi/{id}', [AbsensiKerjaController::class, 'destroy'])->name('absensi.destroy');
+Route::put('/absensi/{id}/update-data', [AbsensiKerjaController::class, 'updateDataAbsensi'])->name('absensi.update.data');
+Route::put('/absensi/{id}/update-status', [AbsensiKerjaController::class, 'updateStatus'])->name('absensi.update.status');
+
+// export absensi kerja
+Route::get('/absensi/export/excel', [AbsensiKerjaController::class, 'exportExcel'])->name('absensi.export.excel');
+Route::get('/absensi/export-pdf', [AbsensiKerjaController::class, 'exportPDF'])->name('absensi.export.pdf');
+// Route untuk import data absensi
+Route::post('/absensi/import', [AbsensiKerjaController::class, 'import'])->name('absensi.import');
+
+
+// update status langsung pada table
+Route::put('/absensi/{id}', [AbsensiKerjaController::class, 'updateStatus'])->name('absensi.updateStatus');
+
 
 
 

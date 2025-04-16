@@ -11,16 +11,16 @@ return new class extends Migration
      */
     public function up()
     {
-        // Schema::table('penjualan', function (Blueprint $table) {
-        //     $table->string('kasir_nama')->nullable()->after('kasir_slot');
-        // });
+        Schema::table('tbl_absen_kerja', function (Blueprint $table) {
+            $table->date('tanggal_masuk')->after('user_id')->nullable();
+        });
     }
     
     public function down()
     {
-        // Schema::table('penjualan', function (Blueprint $table) {
-        //     $table->dropColumn([ 'kasir_nama']);
-        // });
+        Schema::table('tbl_absen_kerja', function (Blueprint $table) {
+            $table->dropColumn('tanggal_masuk');
+        });
     }
     
 };

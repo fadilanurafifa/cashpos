@@ -11,18 +11,18 @@ class CreateActivityLogsTable extends Migration
      */
     public function up(): void
     {
-        Schema::create('activity_logs', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('user_id')->nullable()->constrained('users')->onDelete('set null'); // Bisa null jika user sudah dihapus
-            $table->string('action'); // Contoh: 'create', 'update', 'delete'
-            $table->string('table_name'); // Nama tabel yang dimodifikasi
-            $table->unsignedBigInteger('record_id')->nullable(); // ID data yang dimodifikasi
-            $table->json('old_data')->nullable(); // Data sebelum perubahan
-            $table->json('new_data')->nullable(); // Data setelah perubahan
-            $table->ipAddress('ip_address')->nullable();
-            $table->text('user_agent')->nullable(); // Info browser/user agent
-            $table->timestamps();
-        });
+        // Schema::create('activity_logs', function (Blueprint $table) {
+        //     $table->id();
+        //     $table->foreignId('user_id')->nullable()->constrained('users')->onDelete('set null'); // Bisa null jika user sudah dihapus
+        //     $table->string('action'); // Contoh: 'create', 'update', 'delete'
+        //     $table->string('table_name'); // Nama tabel yang dimodifikasi
+        //     $table->unsignedBigInteger('record_id')->nullable(); // ID data yang dimodifikasi
+        //     $table->json('old_data')->nullable(); // Data sebelum perubahan
+        //     $table->json('new_data')->nullable(); // Data setelah perubahan
+        //     $table->ipAddress('ip_address')->nullable();
+        //     $table->text('user_agent')->nullable(); // Info browser/user agent
+        //     $table->timestamps();
+        // });
     }
 
     /**

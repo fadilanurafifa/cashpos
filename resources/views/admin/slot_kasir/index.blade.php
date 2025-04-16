@@ -3,6 +3,8 @@
 @section('title', 'Slot Kasir')
 
 @section('content')
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+
 <div class="container mt-4">
     @if (session('success'))
     <script>
@@ -16,6 +18,17 @@
     </script>
 @endif
 <div>
+    @if (session('error'))
+<script>
+    Swal.fire({
+        icon: 'error',
+        title: 'Gagal!',
+        text: '{{ session('error') }}',
+        timer: 3000,
+        showConfirmButton: false
+    });
+</script>
+@endif
     <h1 class="h3 text-gray-800">
         <i class="fas fa-fw fa-user"></i> Manajemen Slot Kasir
     </h1>    
@@ -29,15 +42,15 @@
             <div class="table-responsive">
                 <table id="kasirTable" class="table table-bordered">
                     <thead class="thead-light">
-                        <tr class="text-center">
-                            <th>No</th>
-                            <th>Nama Kasir</th>
-                            <th>Slot Kasir</th>
-                            {{-- <th>Dibuat</th>
-                            <th>Diupdate</th> --}}
-                            <th>Aksi</th>
+                        <tr>
+                            <th class="text-center">No</th>
+                            <th class="text-center">Nama Kasir</th>
+                            <th class="text-center">Slot Kasir</th>
+                            {{-- <th class="text-center">Dibuat</th>
+                            <th class="text-center">Diupdate</th> --}}
+                            <th class="text-center">Aksi</th>
                         </tr>
-                    </thead>
+                    </thead>                    
                     <tbody>
                         @foreach($kasirs as $index => $kasir)
                         <tr class="text-center">
@@ -63,34 +76,37 @@
                                 </form>
 
                                 <!-- Modal Edit -->
-                                <div class="modal fade" id="editModal{{ $kasir->id }}" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
-                                    <div class="modal-dialog">
-                                        <form action="{{ route('slot_kasir.update', $kasir->id) }}" method="POST">
-                                            @csrf
-                                            <div class="modal-content">
-                                                <div class="modal-header">
-                                                    <h5 class="modal-title" id="editModalLabel">Edit Slot Kasir</h5>
+                                <div class="modal fade" id="editModal{{ $kasir->id }}" tabindex="-1" aria-labelledby="editModalLabel{{ $kasir->id }}" aria-hidden="true">
+                                    <div class="modal-dialog modal-dialog-centered">
+                                        <div class="modal-content shadow rounded-4 border-0">
+                                            <form action="{{ route('slot_kasir.update', $kasir->id) }}" method="POST">
+                                                @csrf
+                                                <div class="modal-header border-0">
+                                                    <h5 class="modal-title fw-semibold" id="editModalLabel{{ $kasir->id }}">Edit Slot Kasir</h5>
                                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                                 </div>
                                                 <div class="modal-body">
-                                                    <div class="mb-3">
-                                                        <label for="nama_kasir">Nama Kasir</label>
+                                                    <div class="mb-3 text-start">
+                                                        <label for="nama_kasir" class="form-label">Nama Kasir :</label>
                                                         <input type="text" name="nama_kasir" class="form-control" value="{{ $kasir->nama_kasir }}" required>
                                                     </div>
-                                                    <div class="mb-3">
-                                                        <label for="slot_kasir">Slot Kasir</label>
+                                                    <div class="mb-3 text-start">
+                                                        <label for="slot_kasir" class="form-label">Slot Kasir :</label>
                                                         <input type="text" name="slot_kasir" class="form-control" value="{{ $kasir->slot_kasir }}" required>
                                                     </div>
                                                 </div>
-                                                <div class="modal-footer">
-                                                    <button type="submit" class="btn btn-success">Simpan</button>
-                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                                                <div class="modal-footer border-0">
+                                                    <button type="button" class="btn btn-secondary d-flex align-items-center gap-1" data-bs-dismiss="modal">
+                                                        <i class="bi bi-x-circle"></i> Batal
+                                                    </button>
+                                                    <button type="submit" class="btn btn-primary d-flex align-items-center gap-1">
+                                                        <i class="fas fa-save me-1"></i> Simpan
+                                                    </button>
                                                 </div>
-                                            </div>
-                                        </form>
+                                            </form>
+                                        </div>
                                     </div>
                                 </div>
-                                
                                 <!-- End Modal -->
                             </td>
                         </tr>

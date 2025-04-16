@@ -269,6 +269,20 @@
             </div>
             @endif
 
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseAbsensi"
+                aria-expanded="true" aria-controls="collapseTwo">
+                <i class="fas fa-fw fa-check-circle"></i>
+                 <span>Absensi Kerja</span>
+             </a>
+                <div id="collapseAbsensi" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        <h6 class="collapse-header">Manajemen Absensi:</h6>
+                        <a class="collapse-item" href="{{ route('absensi.index') }}">Absensi</a>
+                    </div>
+                </div>
+            </li>
+
             <!-- Nav Item - Pages Collapse Menu -->
             @if (Auth::user()->role === 'admin' || (Auth::user()->role === 'kasir'))
             <li class="nav-item">

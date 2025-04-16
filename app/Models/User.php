@@ -25,6 +25,13 @@ class User extends Authenticatable
         'status'
     ];
 
+    // User.php
+            public function kasir()
+        {
+            return $this->hasOne(Kasir::class, 'id');
+        }
+
+    
     /**
      * The attributes that should be hidden for serialization.
      *
@@ -47,4 +54,5 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
 }

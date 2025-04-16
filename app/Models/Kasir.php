@@ -14,4 +14,12 @@ class Kasir extends Model
     {
         return $this->hasMany(Penjualan::class);
     }
+
+     // Kasir.php
+     public function user()
+     {
+         return $this->belongsTo(User::class);
+     }
+     
+
 }
